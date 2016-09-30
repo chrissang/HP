@@ -1,0 +1,250 @@
+{
+    "A": {
+        "large-feature-module": {
+            "item": 42160,
+            "image": {
+                "customImage": "//www.uncommongoods.com/images/items/42100/42160_3_1200px.jpg",
+                "link": "/this-just-in"
+            },
+            "headline": {
+                "text": "Toast to the Road Less Traveled",
+                "link": "/kitchen-bar?view=all"
+            },
+            "cta": {
+                "text": "shop kitchen & bar",
+                "link": "/kitchen-bar?view=all"
+            }
+        }
+    },
+    "B": {
+        "image-link-double-module": {
+            "intro": {
+                "text": "Top Categories",
+                "link": ""
+            },
+            "sections": [
+                {
+                    "item": 42577,
+                    "image": {
+                        "customImage": "",
+                        "link": "/this-just-in"
+                    },
+                    "cta": {
+                        "text": "this just in",
+                        "link": "/this-just-in"
+                    }
+                },
+                {
+                    "item": 41085,
+                    "image": {
+                        "customImage": "",
+                        "link": "/curated/uncommon-collection"
+                    },
+                    "cta": {
+                        "text": "uncommon collection",
+                        "link": "/curated/uncommon-collection"
+                    }
+                },
+                {
+                    "item": 24370,
+                    "image": {
+                        "customImage": "",
+                        "link": "/kitchen-bar/kitchen-tools?view=all"
+                    },
+                    "cta": {
+                        "text": "kitchen tools",
+                        "link": "/kitchen-bar/kitchen-tools?view=all"
+                    }
+                },
+                {
+                    "item": 41202,
+                    "image": {
+                        "customImage": "",
+                        "link": "/jewelry?view=all"
+                    },
+                    "cta": {
+                        "text": "jewelry",
+                        "link": "/jewelry?view=all"
+                    }
+                },
+                {
+                    "item": 42542,
+                    "image": {
+                        "customImage": "",
+                        "link": "/fun?view=all"
+                    },
+                    "cta": {
+                        "text": "fun",
+                        "link": "/fun?view=all"
+                    }
+                },
+                {
+                    "item": 27213,
+                    "image": {
+                        "customImage": "",
+                        "link": "/sale"
+                    },
+                    "cta": {
+                        "text": "sale",
+                        "link": "/sale"
+                    }
+                }
+            ]
+        }
+    },
+    "C": {
+        "text-link-module": {
+            "intro": {
+                "text": "Shop by Recipient",
+                "link": "/gifts/by-recipient"
+            },
+            "sections": [
+                {
+                    "ctaLeft": {
+                        "text": "for her",
+                        "link": "/for-kids"
+                    },
+                    "ctaRight": {
+                        "text": "for him",
+                        "link": "/gifts/by-recipient/gifts-for-men"
+                    }
+                },
+                {
+                    "ctaLeft": {
+                        "text": "for couples",
+                        "link": "/gifts/by-recipient/gifts-for-couples"
+                    },
+                    "ctaRight": {
+                        "text": "for kids",
+                        "link": "/gifts/by-recipient/gifts-for-kids"
+                    }
+                }
+            ]
+        }
+    },
+    "D": {
+        "extended-story-module": {
+            "item": 42802,
+            "image": {
+                "customImage": "",
+                "link": "/artist?artistId=25084"
+            },
+            "intro": {
+                "text": "Coming Soon",
+                "link": "/artist?artistId=25084"
+            },
+            "headline": {
+                "text": "Cute Counterparts",
+                "link": "/artist?artistId=25084"
+            },
+            "cta": {
+                "text": "pre-order today!",
+                "link": "/artist?artistId=25084"
+            },
+            "copy": {
+                "text": "Cats and dogs play nice in Christine Schmidt’s adorably mismatched earrings and enameled pendants. Sets for book lovers and stargazers add geeky glamour to this exclusive collection.",
+                "link": "//blog.uncommongoods.com/2016/christine-schmidt-maker-story/"
+            }
+        }
+    },
+    "E": {
+        "button-link-double-module": {
+            "intro": {
+                "text": "",
+                "link": ""
+            },
+            "sections": [
+                {
+                    "item": 25208,
+                    "image": {
+                        "customImage": "",
+                        "link": "/gifts/wedding-gifts?view=all"
+                    },
+                    "cta": {
+                        "text": "wedding gifts",
+                        "link": "/gifts/wedding-gifts?view=all"
+                    }
+                },
+                {
+                    "item": 19835,
+                    "image": {
+                        "customImage": "",
+                        "link": "/sets/handmade-gifts"
+                    },
+                    "cta": {
+                        "text": "handmade gifts",
+                        "link": "/sets/handmade-gifts"
+                    }
+                },
+                {
+                    "item": 26468,
+                    "image": {
+                        "customImage": "",
+                        "link": "/gifts/anniversary-gifts/anniversary-gifts"
+                    },
+                    "cta": {
+                        "text": "anniversary gifts",
+                        "link": "/gifts/anniversary-gifts/anniversary-gifts"
+                    }
+                },
+                {
+                    "item": 24870,
+                    "image": {
+                        "customImage": "",
+                        "link": "/gifts/birthday-gifts?view=all"
+                    },
+                    "cta": {
+                        "text": "birthday gifts",
+                        "link": "/gifts/birthday-gifts?view=all"
+                    }
+                }
+            ]
+        }
+    },
+    "F": {
+        "collection-grid-module": {
+            "intro": {
+                "text": "",
+                "link": ""
+            },
+            "headline": {
+                "text": "Our Most Wish-for Goods",
+                "link": "/sets/most-wishlisted"
+            },
+            "cta": {
+                "text": "Start Wishing!",
+                "link": "/sets/most-wishlisted"
+            },
+            "sections": [
+                {
+                    "item": "21223",
+                    "image": {
+                        "customImage": "",
+                        "link": "/sets/most-wishlisted"
+                    }
+                },
+                {
+                    "item": "26772",
+                    "image": {
+                        "customImage": "",
+                        "link": "/sets/most-wishlisted"
+                    }
+                },
+                {
+                    "item": "27242",
+                    "image": {
+                        "customImage": "",
+                        "link": "/sets/most-wishlisted"
+                    }
+                },
+                {
+                    "item": "30384",
+                    "image": {
+                        "customImage": "",
+                        "link": "/sets/most-wishlisted"
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,1097 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="node_modules/responsively-lazy/responsivelyLazy.min.css">
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="node_modules/swiper/dist/js/swiper.min.js"></script>
+    <script src="node_modules/knockout/build/output/knockout-latest.debug.js"></script>
+
+    <script>
+        var urlParams = location.search.split(/[?&]/).slice(1).map(function(paramPair) {
+            return paramPair.split(/=(.+)?/).slice(0, 2);
+        }).reduce(function (obj, pairArray) {
+            obj[pairArray[0]] = pairArray[1];
+            return obj;
+        }, {});
+        var testdate = urlParams.testdate;
+        var currentDate = new Date().toISOString().slice(0,10);
+        var mapping;
+        if (testdate == null || testdate == undefined) {
+        	testdate = "";
+        	currentDate = new Date().toISOString().slice(0,10);
+        } else {
+        	currentDate = new Date(testdate).toISOString().slice(0,10);
+        };
+        //Template for all modules with sample data
+        if(currentDate >= new Date('2016-08-29').toISOString().slice(0,10)){
+            mappingOrder = {
+               "A": {
+                  "large-feature-module": {
+                     "showDesktop": true,
+                     "sections": [
+                         {
+                             "item": 42160,
+                             "image": {
+                                "customImage": {
+                                    "small": "https://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg",
+                                    "large": "../images/large.jpg"
+                                },
+                                "link": "/this-just-in"
+                             },
+                             "headline": {
+                                "text": "Toast to the Road Less Traveled",
+                                "link": "/kitchen-bar?view=all"
+                             },
+                             "cta": {
+                                "text": "shop kitchen & bar",
+                                "link": "/kitchen-bar?view=all"
+                            }
+                        }
+                     ]
+                  }
+               },
+               "B": {
+                  "small-feature-module": {
+                     "showDesktop": true,
+                     "intro": {
+                        "text": "Section Intro",
+                        "link": ""
+                     },
+                     "sections": [
+                        {
+                           "item": "24066",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/3-stone-sea-glass-necklace"
+                           },
+                           "headline": {
+                              "text": "Our Favorite inspirational Jewelry Gifts",
+                              "link": "/jewelry?view=all"
+                           },
+                           "cta": {
+                              "text": "shop the gift guide",
+                              "link": "/jewelry?view=all"
+                           }
+                        },
+                        {
+                           "item": "40433",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/adventurer-multi-tool-clip-watch"
+                           },
+                           "headline": {
+                              "text": "15 Groomsmen Gifts Your Guys Will Use",
+                              "link": "/gifts/wedding-gifts/groomsmen-gifts"
+                           },
+                           "cta": {
+                              "text": "shop the gift guide",
+                              "link": "/gifts/wedding-gifts/groomsmen-gifts"
+                           }
+                        },
+                        {
+                           "item": "23847",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/elwood-the-rainbow-unicorn-mug"
+                           },
+                           "headline": {
+                              "text": "Unforgettable Birthday Gifts for Everyone",
+                              "link": "/gifts/birthday-gifts?view=all"
+                           },
+                           "cta": {
+                              "text": "shop the gift guide",
+                              "link": "/gifts/birthday-gifts?view=all"
+                           }
+                        }
+                     ]
+                  }
+               },
+               "C": {
+                  "basic-story-module": {
+                     "showDesktop": true,
+                     "item": "42160",
+                     "intro": {
+                        "text": "Section Intro",
+                        "link": ""
+                     },
+                     "image": {
+                         "customImage": {
+                             "small": "http://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg",
+                             "large": "http://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg"
+                         },
+                        "link": "/kitchen-bar/kitchen-tools"
+                     },
+                     "headline": {
+                        "text": "City Bike Map Glasses - Set of 2",
+                        "link": "/product/city-bike-map-glasses-set-of-2"
+                     },
+                     "cta": {
+                        "text": "see more",
+                        "link": "/product/city-bike-map-glasses-set-of-2"
+                     }
+                  }
+               },
+               "D": {
+                  "extended-story-module": {
+                     "showDesktop": true,
+                     "item": "42121",
+                     "intro": {
+                        "text": "coming soon",
+                        "link": "/product/nightbulb"
+                     },
+                     "image": {
+                         "customImage": {
+                             "small": "",
+                             "large": ""
+                         },
+                        "link": "/product/nightbulb"
+                     },
+                     "headline": {
+                        "text": "Introducing the Nightbulb",
+                        "link": "/product/nightbulb"
+                     },
+                     "cta": {
+                        "text": "pre-order now",
+                        "link": "/product/nightbulb"
+                     },
+                     "copy": {
+                        "text": "Designers Liz Ross and David Westby set out to create a snow globe-inspired light, only to find that lightbulbs and flurry-filled domes already shared some design history.",
+                        "link": "/product/nightbulb"
+                     }
+                  }
+               },
+               "E": {
+                  "collection-grid-module": {
+                     "showDesktop": true,
+                     "intro": {
+                        "text": "Section Intro",
+                        "link": ""
+                     },
+                     "headline": {
+                        "text": "something for everyone",
+                        "link": "/fun/by-interest"
+                     },
+                     "cta": {
+                        "text": "shop by interest",
+                        "link": "/fun/by-interest"
+                     },
+                     "sections": [
+                        {
+                           "item": "42230",
+                           "image": {
+                              "customImage": "",
+                              "link": "/product/timbrefone-acoustic-phone-amp"
+                           }
+                        },
+                        {
+                           "item": "42173",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/bike-today-work-tomorrow-paperweight"
+                           }
+                        },
+                        {
+                           "item": "27160",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/you-help-me-grow-planter"
+                           }
+                        },
+                        {
+                           "item": "41680",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/block-printed-robe"
+                           }
+                        }
+                     ]
+                  }
+               },
+               "F": {
+                  "carousel-module": {
+                     "showDesktop": true,
+                     "intro": {
+                        "text": "Section Intro",
+                        "link": ""
+                     },
+                     "headline": {
+                        "text": "collection headline",
+                        "link": "/kitchen-bar/kitchen-tools"
+                     },
+                     "cta": {
+                        "text": "call to action",
+                        "link": "/kitchen-bar/kitchen-tools"
+                     },
+                     "sections": [
+                        {
+                           "item": "27234",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/productivity-timing-hourglass"
+                           }
+                        },
+                        {
+                           "item": "41601",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/personalized-amp-doormat"
+                           }
+                        },
+                        {
+                           "item": "41087",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/personalized-my-alphabet-letter-blanket"
+                           }
+                        },
+                        {
+                           "item": "22195",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/equation-geek-watch"
+                           }
+                        },
+                        {
+                           "item": "26739",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/musical-skyline-art-large"
+                           }
+                        },
+                        {
+                           "item": "23960",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/personalized-whiskey-barrel"
+                           }
+                        }
+                     ]
+                  }
+               },
+               "G": {
+                  "text-link-module": {
+                     "showDesktop": true,
+                     "intro": {
+                        "text": "shop by recipient",
+                        "link": "/gifts/by-recipient"
+                     },
+                     "sections": [
+                        {
+                           "ctaLeft": {
+                              "text": "for him",
+                              "link": "/gifts/by-recipient/gifts-for-men"
+                           },
+                           "ctaRight": {
+                              "text": "for her",
+                              "link": "/gifts/by-recipient/gifts-for-women"
+                           }
+                        },
+                        {
+                           "ctaLeft": {
+                              "text": "for couples",
+                              "link": "/gifts/by-recipient/gifts-for-couples"
+                           },
+                           "ctaRight": {
+                              "text": "for kids",
+                              "link": "/gifts/by-recipient/gifts-for-kids"
+                           }
+                        },
+                        {
+                           "ctaLeft": {
+                              "text": "gifts under $25",
+                              "link": "/gifts/by-price/gifts-under-25"
+                           },
+                           "ctaRight": {
+                              "text": "gifts under $50",
+                              "link": "/gifts/by-price/gifts-under-50"
+                           }
+                        },
+                        {
+                           "ctaLeft": {
+                              "text": "wedding gifts",
+                              "link": "/gifts/wedding-gifts?view=all"
+                           },
+                           "ctaRight": {
+                              "text": "this just in",
+                              "link": "/this-just-in"
+                           }
+                        },
+                        {
+                           "ctaLeft": {
+                              "text": "handmade",
+                              "link": "/sets/handmade-gifts"
+                           },
+                           "ctaRight": {
+                              "text": "home decor",
+                              "link": "/home-garden/home-decor?view=all"
+                           }
+                        },
+                        {
+                           "ctaLeft": {
+                              "text": "sale",
+                              "link": "/sale"
+                           },
+                           "ctaRight": {
+                              "text": "jewelry",
+                              "link": "/jewelry?view=all"
+                           }
+                        }
+                     ]
+                  }
+               },
+               "H": {
+                  "image-link-single-module": {
+                     "showDesktop": true,
+                     "intro": {
+                        "text": "Section Intro",
+                        "link": ""
+                     },
+                     "item": "42733",
+                     "image": {
+                         "customImage": {
+                             "small": "",
+                             "large": ""
+                         },
+                        "link": "/product/personalized-flex-time-clock"
+                     },
+                     "copy": {
+                        "text": "Flex Time",
+                        "link": "/product/personalized-flex-time-clock"
+                     }
+                  }
+               },
+               "I": {
+                  "image-link-double-module": {
+                     "showDesktop": true,
+                     "intro": {
+                        "text": "Top Categories",
+                        "link": "/gifts/by-recipient"
+                     },
+                     "sections": [
+                        {
+                           "item": "42159",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/bioluminescent-mini-aquarium"
+                           },
+                           "cta": {
+                              "text": "fun",
+                              "link": "/product/bioluminescent-mini-aquarium"
+                           }
+                        },
+                        {
+                           "item": "26827",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/barnwood-state-side-tables"
+                           },
+                           "cta": {
+                              "text": "home",
+                              "link": "/product/barnwood-state-side-tables"
+                           }
+                        },
+                        {
+                           "item": "24008",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/pedestal-jewelry-holder"
+                           },
+                           "cta": {
+                              "text": "jewelry",
+                              "link": "/product/pedestal-jewelry-holder"
+                           }
+                        },
+                        {
+                           "item": "40340",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/nautical-whiskey-stones"
+                           },
+                           "cta": {
+                              "text": "kitchen & bar",
+                              "link": "/product/nautical-whiskey-stones"
+                           }
+                        },
+                        {
+                           "item": "42511",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/a-couple-of-gardeners-hanging-sculptures"
+                           },
+                           "cta": {
+                              "text": "this just in",
+                              "link": "/product/a-couple-of-gardeners-hanging-sculptures"
+                           }
+                        },
+                        {
+                           "item": "26208",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/pyramid-tea-bag-set"
+                           },
+                           "cta": {
+                              "text": "sale",
+                              "link": "/product/pyramid-tea-bag-set"
+                           }
+                        }
+                     ]
+                  }
+               },
+               "J": {
+                  "button-link-single-module": {
+                     "showDesktop": true,
+                     "intro": {
+                        "text": "Section Intro",
+                        "link": ""
+                     },
+                     "sections": [
+                        {
+                           "item": "20154",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/personalized-cursive-wedding-vase"
+                           },
+                           "copy": {
+                              "text": "wedding gifts",
+                              "link": "/gifts/wedding-gifts?view=all"
+                           }
+                        },
+                        {
+                           "item": "41007",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/constant-sparkling-champagne-flutes-set-of-4"
+                           },
+                           "copy": {
+                              "text": "anniversary gifts",
+                              "link": "/gifts/anniversary-gifts/anniversary-gifts"
+                           }
+                        },
+                        {
+                           "item": "22272",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/product/intersection-of-love-photo-print"
+                           },
+                           "copy": {
+                              "text": "personalized gifts",
+                              "link": "/gifts/personalized/personalized-gifts"
+                           }
+                        }
+                     ]
+                  }
+               },
+               "K": {
+                  "button-link-double-module": {
+                     "showDesktop": true,
+                     "intro": {
+                        "text": "Section Intro",
+                        "link": ""
+                     },
+                     "sections": [
+                        {
+                           "item": "25208",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/gifts/wedding-gifts?view=all"
+                           },
+                           "cta": {
+                              "text": "wedding Gifts",
+                              "link": "/gifts/wedding-gifts?view=all"
+                           }
+                        },
+                        {
+                           "item": "19835",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/sets/handmade-gifts"
+                           },
+                           "cta": {
+                              "text": "handmade Gifts",
+                              "link": "/sets/handmade-gifts"
+                           }
+                        },
+                        {
+                           "item": "26468",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/gifts/anniversary-gifts/anniversary-gifts"
+                           },
+                           "cta": {
+                              "text": "anniversary Gifts",
+                              "link": "/gifts/anniversary-gifts/anniversary-gifts"
+                           }
+                        },
+                        {
+                           "item": "24870",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/gifts/birthday-gifts?view=all"
+                           },
+                           "cta": {
+                              "text": "birthday Gifts",
+                              "link": "/gifts/birthday-gifts?view=all"
+                           }
+                        }
+                     ]
+                  }
+               },
+               "L": {
+                  "extended-story-module": {
+                     "showDesktop": true,
+                     "item": "42161",
+                     "intro": {
+                        "text": "meet the maker",
+                        "link": "/product/common-edge-3d-printed-initial-necklace"
+                     },
+                     "image": {
+                        "customImage": {
+                            "small": "http://www.uncommongoods.com/images/items/42100/42161_2_640px.jpg",
+                            "large": "http://www.uncommongoods.com/images/items/42100/42161_2_640px.jpg"
+                        },
+                        "link": "/product/common-edge-3d-printed-initial-necklace"
+                     },
+                     "headline": {
+                        "text": "Andrea Panico",
+                        "link": "/product/common-edge-3d-printed-initial-necklace"
+                     },
+                     "cta": {
+                        "text": "read more",
+                        "link": "/product/common-edge-3d-printed-initial-necklace"
+                     },
+                     "copy": {
+                        "text": "Andrea combines her architectural approach to jewelry design with 3D printing technology to create her Common Edge initial Necklace.",
+                        "link": "/product/common-edge-3d-printed-initial-necklace"
+                     },
+                     "artistId": "26401"
+                  }
+               }
+            }
+        };
+        //Template ends
+        if(currentDate >= new Date('2016-09-02').toISOString().slice(0,10)){
+            mappingOrder = {
+               "A": {
+                  "large-feature-module": {
+                    "showDesktop": true,
+                    "sections": [
+                        {
+                            "item": 42160,
+                            "image": {
+                               "customImage": {
+                                   "small": "https://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg",
+                                   "large": "../images/large.jpg"
+                               },
+                               "link": "/this-just-in"
+                            },
+                            "headline": {
+                               "text": "Toast to the Road Less Traveled",
+                               "link": "/kitchen-bar?view=all"
+                            },
+                            "cta": {
+                               "text": "shop kitchen & bar",
+                               "link": "/kitchen-bar?view=all"
+                           }
+                       },
+                       {
+                           "item": 42160,
+                           "image": {
+                               "customImage": {
+                                   "small": "https://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg",
+                                   "large": "https://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg"
+                               },
+                              "link": "/this-just-in"
+                           },
+                           "headline": {
+                              "text": "Toast to the Road Less Traveled",
+                              "link": "/kitchen-bar?view=all"
+                           },
+                           "cta": {
+                              "text": "shop kitchen & bar",
+                              "link": "/kitchen-bar?view=all"
+                          }
+                      },
+                      {
+                          "item": 42160,
+                          "image": {
+                              "customImage": {
+                                  "small": "https://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg",
+                                  "large": "https://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg"
+                              },
+                             "link": "/this-just-in"
+                          },
+                          "headline": {
+                             "text": "Toast to the Road Less Traveled",
+                             "link": "/kitchen-bar?view=all"
+                          },
+                          "cta": {
+                             "text": "shop kitchen & bar",
+                             "link": "/kitchen-bar?view=all"
+                         }
+                     }
+                    ]
+                  }
+               },
+               "B": {
+                  "image-link-double-module": {
+                     "showDesktop": true,
+                     "intro": {
+                        "text": "Top Categories",
+                        "link": ""
+                     },
+                     "sections": [
+                        {
+                           "item": 42577,
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/this-just-in"
+                           },
+                           "cta": {
+                              "text": "this just in",
+                              "link": "/this-just-in"
+                           }
+                        },
+                        {
+                           "item": 41085,
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/curated/uncommon-collection"
+                           },
+                           "cta": {
+                              "text": "uncommon collection",
+                              "link": "/curated/uncommon-collection"
+                           }
+                        },
+                        {
+                           "item": 24370,
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/kitchen-bar/kitchen-tools?view=all"
+                           },
+                           "cta": {
+                              "text": "kitchen tools",
+                              "link": "/kitchen-bar/kitchen-tools?view=all"
+                           }
+                        },
+                        {
+                           "item": 41202,
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/jewelry?view=all"
+                           },
+                           "cta": {
+                              "text": "jewelry",
+                              "link": "/jewelry?view=all"
+                           }
+                        },
+                        {
+                           "item": 42542,
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/fun?view=all"
+                           },
+                           "cta": {
+                              "text": "fun",
+                              "link": "/fun?view=all"
+                           }
+                        },
+                        {
+                           "item": 27213,
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/sale"
+                           },
+                           "cta": {
+                              "text": "sale",
+                              "link": "/sale"
+                           }
+                        }
+                     ]
+                  }
+               },
+               "C": {
+                  "text-link-module": {
+                     "showDesktop": false,
+                     "intro": {
+                        "text": "Shop by Recipient",
+                        "link": "/gifts/by-recipient"
+                     },
+                     "sections": [
+                        {
+                           "ctaLeft": {
+                              "text": "for her",
+                              "link": "/for-kids"
+                           },
+                           "ctaRight": {
+                              "text": "for him",
+                              "link": "/gifts/by-recipient/gifts-for-men"
+                           }
+                        },
+                        {
+                           "ctaLeft": {
+                              "text": "for couples",
+                              "link": "/gifts/by-recipient/gifts-for-couples"
+                           },
+                           "ctaRight": {
+                              "text": "for kids",
+                              "link": "/gifts/by-recipient/gifts-for-kids"
+                           }
+                        }
+                     ]
+                  }
+               },
+               "D": {
+                  "extended-story-module": {
+                     "showDesktop": true,
+                     "item": 42802,
+                     "image": {
+                         "customImage": {
+                             "small": "",
+                             "large": ""
+                         },
+                        "link": "/artist?artistId=25084"
+                     },
+                     "intro": {
+                        "text": "Coming Soon",
+                        "link": "/artist?artistId=25084"
+                     },
+                     "headline": {
+                        "text": "Cute Counterparts",
+                        "link": "/artist?artistId=25084"
+                     },
+                     "cta": {
+                        "text": "pre-order today!",
+                        "link": "/artist?artistId=25084"
+                     },
+                     "copy": {
+                        "text": "Cats and dogs play nice in Christine Schmidt’s adorably mismatched earrings and enameled pendants. Sets for book lovers and stargazers add geeky glamour to this exclusive collection.",
+                        "link": "//blog.uncommongoods.com/2016/christine-schmidt-maker-story/"
+                     }
+                  }
+               },
+               "E": {
+                  "button-link-double-module": {
+                     "showDesktop": true,
+                     "intro": {
+                        "text": "",
+                        "link": ""
+                     },
+                     "sections": [
+                        {
+                           "item": 25208,
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/gifts/wedding-gifts?view=all"
+                           },
+                           "cta": {
+                              "text": "wedding gifts",
+                              "link": "/gifts/wedding-gifts?view=all"
+                           }
+                        },
+                        {
+                           "item": 19835,
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/sets/handmade-gifts"
+                           },
+                           "cta": {
+                              "text": "handmade gifts",
+                              "link": "/sets/handmade-gifts"
+                           }
+                        },
+                        {
+                           "item": 26468,
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/gifts/anniversary-gifts/anniversary-gifts"
+                           },
+                           "cta": {
+                              "text": "anniversary gifts",
+                              "link": "/gifts/anniversary-gifts/anniversary-gifts"
+                           }
+                        },
+                        {
+                           "item": 24870,
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/gifts/birthday-gifts?view=all"
+                           },
+                           "cta": {
+                              "text": "birthday gifts",
+                              "link": "/gifts/birthday-gifts?view=all"
+                           }
+                        }
+                     ]
+                  }
+               },
+               "F": {
+                  "collection-grid-module": {
+                     "showDesktop": true,
+                     "intro": {
+                        "text": "",
+                        "link": ""
+                     },
+                     "headline": {
+                        "text": "Our Most Wish-for Goods",
+                        "link": "/sets/most-wishlisted"
+                     },
+                     "cta": {
+                        "text": "Start Wishing!",
+                        "link": "/sets/most-wishlisted"
+                     },
+                     "sections": [
+                        {
+                           "item": "26530",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/sets/most-wishlisted"
+                          }
+                        },
+                        {
+                           "item": "27242",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/sets/most-wishlisted"
+                          },
+                          "subImageTop": {
+                              "item": "24244",
+                              "customImage": {
+                                  "small": "",
+                                  "large": ""
+                              },
+                              "link": "/sets/most-wishlisted"
+                          },
+                          "subImageBottom": {
+                              "item": "26772",
+                              "customImage": {
+                                  "small": "",
+                                  "large": ""
+                              },
+                              "link": "/sets/most-wishlisted"
+                          }
+                        },
+                        {
+                           "item": "26444",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/sets/most-wishlisted"
+                          },
+                          "subImageTop": {
+                              "item": "24244",
+                              "customImage": {
+                                  "small": "",
+                                  "large": ""
+                              },
+                              "link": "/sets/most-wishlisted"
+                          },
+                          "subImageBottom": {
+                              "item": "26772",
+                              "customImage": {
+                                  "small": "",
+                                  "large": ""
+                              },
+                              "link": "/sets/most-wishlisted"
+                          }
+                        },
+                        {
+                           "item": "21223",
+                           "image": {
+                               "customImage": {
+                                   "small": "",
+                                   "large": ""
+                               },
+                              "link": "/sets/most-wishlisted"
+                           }
+                        }
+                     ]
+                  }
+              },
+              "G": {
+                 "large-feature-module": {
+                   "showDesktop": false,
+                   "sections": [
+                      {
+                          "item": 42160,
+                          "image": {
+                              "customImage": {
+                                  "small": "https://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg",
+                                  "large": "https://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg"
+                              },
+                             "link": "/this-just-in"
+                          },
+                          "headline": {
+                             "text": "Toast to the Road Less Traveled",
+                             "link": "/kitchen-bar?view=all"
+                          },
+                          "cta": {
+                             "text": "shop kitchen & bar",
+                             "link": "/kitchen-bar?view=all"
+                         }
+                     },
+                     {
+                         "item": 42160,
+                         "image": {
+                             "customImage": {
+                                 "small": "https://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg",
+                                 "large": "https://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg"
+                             },
+                            "link": "/this-just-in"
+                         },
+                         "headline": {
+                            "text": "Toast to the Road Less Traveled",
+                            "link": "/kitchen-bar?view=all"
+                         },
+                         "cta": {
+                            "text": "shop kitchen & bar",
+                            "link": "/kitchen-bar?view=all"
+                        }
+                    },
+                    {
+                        "item": 42160,
+                        "image": {
+                            "customImage": {
+                                "small": "https://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg",
+                                "large": "https://www.uncommongoods.com/images/items/42100/42160_3_640px.jpg"
+                            },
+                           "link": "/this-just-in"
+                        },
+                        "headline": {
+                           "text": "Toast to the Road Less Traveled",
+                           "link": "/kitchen-bar?view=all"
+                        },
+                        "cta": {
+                           "text": "shop kitchen & bar",
+                           "link": "/kitchen-bar?view=all"
+                       }
+                    }
+                   ]
+                 }
+             }
+            }
+        };
+    </script>
+</head>
+<body>
+    <div data-bind="component: { name: 'homePage-container', params: { data: mappingOrder } }" class="homePage-container"></div>
+    <script src="js/homePage-m.js"></script>
+    <script async src="node_modules/responsively-lazy/responsivelyLazy.min.js"></script>
+</body>
+</html>
