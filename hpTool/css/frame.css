@@ -15676,3 +15676,8 @@ body:before {
     content: "xlarge";
   }
 }
+/* line 1, ../scss/mobileHpTool.scss */
+.sortable-ghost {
+  opacity: .5;
+  background-color: #048D8A;
+}
