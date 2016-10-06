@@ -1,8 +1,10 @@
 
 
+var selectedModules = [];
+
 class Dependents {
     constructor(params) {
-      this.modulesArry = ko.observableArray();
+
       this.bindingHandlers = {
           init: $(function () {
             $(document).foundation({
@@ -17,6 +19,7 @@ class Dependents {
       };
     }
 }
+
 function createModule(moduleType) {
     console.log('moduleType ',moduleType);
 }
@@ -25,8 +28,8 @@ ko.components.register('large-feature-module', {
     viewModel: class LargeFeatureModuleComponentModel extends Dependents {
         constructor(params) {
           super(params);
-          this.modulesArry.push('large-feature-module');
-          console.log('this ', this.modulesArry());
+          this.accordionIndex = selectedModules.length;
+          console.log('selectedModules ',selectedModules.length);
         }
     },
     template: `
@@ -35,9 +38,9 @@ ko.components.register('large-feature-module', {
         <div class="small-12 columns">
           <dl class="accordion small-12 columns" data-accordion="" role="tablist">
               <dd class="accordion-navigation">
-                <a  role="tab" href="#item-undefined" id="item-undefined-heading">Accordion 1</a>
+                <a data-bind="attr: { href: '#accordion'+accordionIndex, id: 'accordion-heading'+accordionIndex }" role="tab">Accordion 1</a>
 
-                <div role="tabpanel" id="item-undefined" aria-labelledby="item-undefined-heading" class="content">
+                <div data-bind="attr: { id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex }" class="content" role="tabpanel">
                   <div class="row">
                       <div class="small-12 medium-4 columns">
                           <label>Item #</label>
@@ -76,9 +79,7 @@ ko.components.register('large-feature-module', {
               </dd>
           </dl>
         </div>
-      </div>
-
-        `, synchronous: true
+      </div>`, synchronous: true
 });
 
 ko.components.register('small-feature-module', {
@@ -154,10 +155,10 @@ ko.components.register('homePageTool', {
             {name: 'Button Link Double (BD)', value: 'button-link-double-module'}
         ];
         this.selectedModule = ko.observable();
-        this.selectedModules = ko.observableArray();
+        this.displayModules = ko.observableArray();
         this.handleClick = function (e) {
-            this.selectedModules.push(this.selectedModule());
-            console.log('create ', this.selectedModules());
+            selectedModules.push(this.selectedModule());
+            this.displayModules.push(this.selectedModule());
         }
       }
     },
@@ -176,14 +177,14 @@ ko.components.register('homePageTool', {
             </div>
         </div>
 
-        <!-- ko foreach: selectedModules() -->
+        <!-- ko foreach: displayModules() -->
             <div class="row">
                 <div class="small-12 columns">
                     <p data-bind="text: $data"></p>
                 </div>
             </div>
 
-            <!-- ko component: {name: $data } --><!-- /ko -->
+            <!-- ko component: {name: $data, params: { data: $parent } } --><!-- /ko -->
         <!-- /ko --> `, synchronous: true
 });
 
