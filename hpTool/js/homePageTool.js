@@ -1,6 +1,8 @@
 
 
 var selectedModules = [];
+var moduleOrder = {}
+var dict = {}
 
 class Dependents {
     constructor(params) {
@@ -53,20 +55,19 @@ class Dependents {
                     // setData: function (dataTransfer, dragEl) {
                     //     dataTransfer.setData('Text', dragEl.textContent);
                     // },
-                    //
+
                     // // dragging started
                     onStart: function (evt) {
                         evt.oldIndex;  // element index within parent
                         // console.log(viewModel.itemNumber() )
-                        
-                        console.log(evt.item )
 
-                        // var elements = document.querySelectorAll('.content');
-                        //
-                        // elements.forEach((el,index) => {
-                        //     //el.className += " content-shrink";
+                        console.log(evt.item)
 
-                        // })
+                        var elements = document.querySelectorAll('.active');
+                        elements.forEach((el, index) => {
+                            console.log(el);
+                            el.className = el.className.replace("active", "wasActive");
+                        })
                     },
                     //
                     // // dragging ended
@@ -75,24 +76,25 @@ class Dependents {
                     //     evt.newIndex;  // element's new index within parent
                     // },
                     //
-                    // // Element is dropped into the list from another list
+                    // Element is dropped into the list from another list
                     // onAdd: function (/**Event*/evt) {
                     //     var itemEl = evt.item;  // dragged HTMLElement
                     //     evt.from;  // previous list
                     //     // + indexes from onEnd
                     // },
-                    //
+
                     // // Changed sorting within list
                     // onUpdate: function (/**Event*/evt) {
                     //     var itemEl = evt.item;  // dragged HTMLElement
                     //     // + indexes from onEnd
                     // },
                     //
-                    // // Called by any change to the list (add / update / remove)
+                    // Called by any change to the list (add / update / remove)
                     // onSort: function (/**Event*/evt) {
                     //     // same properties as onUpdate
+                    //     // console.log('onSort ',selectedModules);
                     // },
-                    //
+
                     // // Element is removed from the list into another list
                     // onRemove: function (/**Event*/evt) {
                     //     // same properties as onUpdate
@@ -104,16 +106,33 @@ class Dependents {
                     // },
                     //
                     // // Event when you move an item in the list or between lists
-                    // onMove: function (/**Event*/evt) {
-                    //     // Example: http://jsbin.com/tuyafe/1/edit?js,output
-                    //     evt.dragged; // dragged HTMLElement
-                    //     evt.draggedRect; // TextRectangle {left, top, right и bottom}
-                    //     evt.related; // HTMLElement on which have guided
-                    //     evt.relatedRect; // TextRectangle
-                    //     // return false; — for cancel
-                    // }
+                    onMove: function (/**Event*/evt) {
+                        // Example: http://jsbin.com/tuyafe/1/edit?js,output
+                        evt.dragged; // dragged HTMLElement
+                        evt.draggedRect; // TextRectangle {left, top, right и bottom}
+                        evt.related; // HTMLElement on which have guided
+                        evt.relatedRect; // TextRectangle
+                        // return false; — for cancel
+                    }
 
                 });
+            },
+            update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+                var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                var alphaChar = alpha.charAt(valueAccessor()-1);
+                var moduleType = bindingContext.$parent;
+
+                moduleOrder[alphaChar] = {};
+                moduleOrder[alphaChar][moduleType] = {};
+
+                switch (moduleType) {
+                    case 'large-feature-module':
+                        moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
+                    break;
+                }
+
+                moduleOrder[alphaChar][moduleType]['item']
+                //console.log(moduleOrder);
             }
         };
     }
@@ -135,7 +154,7 @@ ko.components.register('large-feature-module', {
                     <dd class="accordion-navigation">
                         <a data-bind="text: 'Large Feature Module '+accordionIndex, attr: { href: '#accordion'+accordionIndex, id: 'accordion-heading'+accordionIndex, role: 'tab' }" class="draggable"></a>
 
-                        <div data-bind="sortable: $parent, attr: { id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
+                        <div data-bind="sortable: accordionIndex, attr: { id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
                             <div class="row">
                                 <div class="small-12 medium-4 columns">
                                     <label>Item #</label>
@@ -192,7 +211,7 @@ ko.components.register('small-feature-module', {
                     <dd class="accordion-navigation">
                         <a data-bind="text: 'Small Feature Module '+accordionIndex, attr: { href: '#accordion'+accordionIndex, id: 'accordion-heading'+accordionIndex, role: 'tab' }" class="draggable"></a>
 
-                        <div data-bind="attr: { id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
+                        <div data-bind="sortable: accordionIndex, attr: { id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
                             <div class="row">
                                 <div class="small-12 medium-4 columns">
                                     <label>Item #</label>
@@ -249,8 +268,8 @@ ko.components.register('small-feature-module', {
 ko.components.register('homePageTool', {
   viewModel: class HomePageToolComponentModel extends Dependents {
       constructor(params) {
-        super(params);
-        this.modueTypes = [
+          super(params);
+          this.modueTypes = [
             {name: 'Large Feature (LF)', value: 'large-feature-module'},
             {name: 'Small Feature (SF)', value: 'small-feature-module'},
             {name: 'Basic Story (BS)', value: 'basic-story-module'},
@@ -263,11 +282,11 @@ ko.components.register('homePageTool', {
             {name: 'Button Link Single (BI)', value: 'button-link-single-module'},
             {name: 'Button Link Double (BD)', value: 'button-link-double-module'}
         ];
-        this.selectedModule = ko.observable();
-        this.displayModules = ko.observableArray([]);
-        this.handleClick = function (e) {
-            selectedModules.push(this.selectedModule());
-            this.displayModules.push(this.selectedModule());
+            this.selectedModule = ko.observable();
+            this.displayModules = ko.observableArray([]);
+            this.handleClick = function (e) {
+                selectedModules.push(this.selectedModule());
+                this.displayModules.push(this.selectedModule());
         }
 
 
