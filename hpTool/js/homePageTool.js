@@ -1,16 +1,16 @@
 
 
-var selectedModules = [];
+// var selectedModules = [];
 var moduleOrder = {}
 var dict = {}
 
 class Dependents {
     constructor(params) {
-        this.accordionIndex = selectedModules.length;
+        this.selectedModules = ko.observableArray([]);
         this.itemNumber = ko.observable("");
         this.itemUrl = ko.observable("");
         this.imageUrl = ko.observable("");
-
+        self = this;
         this.bindingHandlers = {
             init: $(function () {
                 $(document).foundation({
@@ -25,7 +25,7 @@ class Dependents {
         };
 
         ko.bindingHandlers.sortable = {
-            init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+            update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 var el = document.getElementById('sortableContainer');
 
                 var sortable = new Sortable(el, {
@@ -42,7 +42,7 @@ class Dependents {
                     //draggable: ".item",  // Specifies which items inside the element should be sortable
                     ghostClass: "sortable-ghost",  // Class name for the drop placeholder
                     // chosenClass: "sortable-chosen",  // Class name for the chosen item
-                    // dataIdAttr: 'data-id',
+                    dataIdAttr: 'data-id',
                     //
                     // forceFallback: false,  // ignore the HTML5 DnD behaviour and force the fallback to kick in
                     // fallbackClass: "sortable-fallback"  // Class name for the cloned DOM Element when using forceFallback
@@ -58,15 +58,13 @@ class Dependents {
 
                     // // dragging started
                     onStart: function (evt) {
-                        evt.oldIndex;  // element index within parent
+                        //evt.oldIndex;  // element index within parent
                         // console.log(viewModel.itemNumber() )
 
-                        console.log(evt.item)
 
                         var elements = document.querySelectorAll('.active');
                         elements.forEach((el, index) => {
-                            console.log(el);
-                            el.className = el.className.replace("active", "wasActive");
+                            el.className = el.className.replace("active", "");
                         })
                     },
                     //
@@ -87,12 +85,14 @@ class Dependents {
                     // onUpdate: function (/**Event*/evt) {
                     //     var itemEl = evt.item;  // dragged HTMLElement
                     //     // + indexes from onEnd
-                    // },
+                    //     //console.log('itemEl ',itemEl )
                     //
+                    // },
+
                     // Called by any change to the list (add / update / remove)
                     // onSort: function (/**Event*/evt) {
                     //     // same properties as onUpdate
-                    //     // console.log('onSort ',selectedModules);
+                    //
                     // },
 
                     // // Element is removed from the list into another list
@@ -107,6 +107,12 @@ class Dependents {
                     //
                     // // Event when you move an item in the list or between lists
                     onMove: function (/**Event*/evt) {
+                        var beforeSortableOrder = ko.dataFor(evt.dragged).params.data.selectedModules();
+                        // console.log('onStart ',evt.dragged );
+                        // console.log('viewModel ',ko.dataFor(evt.dragged));
+                        // console.log('data ',ko.dataFor(evt.dragged).itemNumber() );
+                        console.log('beforeSortableOrder ',beforeSortableOrder );
+
                         // Example: http://jsbin.com/tuyafe/1/edit?js,output
                         evt.dragged; // dragged HTMLElement
                         evt.draggedRect; // TextRectangle {left, top, right и bottom}
@@ -116,8 +122,9 @@ class Dependents {
                     }
 
                 });
-            },
-            update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+
+
+
                 var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
                 var alphaChar = alpha.charAt(valueAccessor()-1);
                 var moduleType = bindingContext.$parent;
@@ -144,7 +151,8 @@ ko.components.register('large-feature-module', {
     viewModel: class LargeFeatureModuleComponentModel extends Dependents {
         constructor(params) {
           super(params);
-
+          this.params = params;
+          this.accordionIndex = params.data.selectedModules().length;
         }
     },
     template: `
@@ -154,7 +162,7 @@ ko.components.register('large-feature-module', {
                     <dd class="accordion-navigation">
                         <a data-bind="text: 'Large Feature Module '+accordionIndex, attr: { href: '#accordion'+accordionIndex, id: 'accordion-heading'+accordionIndex, role: 'tab' }" class="draggable"></a>
 
-                        <div data-bind="sortable: accordionIndex, attr: { id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
+                        <div data-bind="sortable: accordionIndex, attr: { 'data-id': accordionIndex, id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
                             <div class="row">
                                 <div class="small-12 medium-4 columns">
                                     <label>Item #</label>
@@ -199,9 +207,11 @@ ko.components.register('large-feature-module', {
 });
 
 ko.components.register('small-feature-module', {
-    viewModel: class LargeFeatureModuleComponentModel extends Dependents {
+    viewModel: class SmallFeatureModuleComponentModel extends Dependents {
         constructor(params) {
           super(params);
+          this.params = params;
+          this.accordionIndex = params.data.selectedModules().length;
         }
     },
     template: `
@@ -211,11 +221,11 @@ ko.components.register('small-feature-module', {
                     <dd class="accordion-navigation">
                         <a data-bind="text: 'Small Feature Module '+accordionIndex, attr: { href: '#accordion'+accordionIndex, id: 'accordion-heading'+accordionIndex, role: 'tab' }" class="draggable"></a>
 
-                        <div data-bind="sortable: accordionIndex, attr: { id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
+                        <div data-bind="sortable: accordionIndex, attr: { 'data-id': accordionIndex, id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
                             <div class="row">
                                 <div class="small-12 medium-4 columns">
                                     <label>Item #</label>
-                                    <input type="text" placeholder="Item #">
+                                    <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
                                 </div>
 
                                 <div class="small-12 medium-4 columns">
@@ -283,10 +293,10 @@ ko.components.register('homePageTool', {
             {name: 'Button Link Double (BD)', value: 'button-link-double-module'}
         ];
             this.selectedModule = ko.observable();
-            this.displayModules = ko.observableArray([]);
+
             this.handleClick = function (e) {
-                selectedModules.push(this.selectedModule());
-                this.displayModules.push(this.selectedModule());
+
+                this.selectedModules.push(this.selectedModule());
         }
 
 
@@ -309,7 +319,7 @@ ko.components.register('homePageTool', {
             </div>
         </div>
 
-        <div data-bind="foreach: displayModules()" id="sortableContainer">
+        <div data-bind="foreach: selectedModules()" id="sortableContainer">
             <!-- ko component: {name: $data, params: { data: $parent } } --><!-- /ko -->
         </div>`, synchronous: true
 });
