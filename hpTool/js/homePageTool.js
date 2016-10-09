@@ -34,7 +34,17 @@ class Dependents {
                     delay: 0, // time in milliseconds to define when the sorting should start
                     // disabled: false, // Disables the sortable if set to true.
                     // store: {
+                    //     get: function (sortable) {
+                    //       var order = localStorage.getItem(sortable.options.group);
                     //
+                    //       return order ? order.split('|') : [];
+                    //     },
+                    //
+                    //     // Saving the acquired sorting (called each time upon sorting modification)
+                    //     set: function (sortable) {
+                    //       var order = sortable.toArray();
+                    //       localStorage.setItem(sortable.options.group, order.join('|'));
+                    //     }
                     // },
                     animation: 150,  // ms, animation speed moving items when sorting, `0` — without animation
                     handle: ".draggable",  // Drag handle selector within list items
@@ -53,14 +63,12 @@ class Dependents {
                     // scrollSpeed: 10, // px
 
                     // setData: function (dataTransfer, dragEl) {
-                    //     dataTransfer.setData('Text', dragEl.textContent);
+                    //     //dataTransfer.setData('Text', dragEl.textContent);
                     // },
 
                     // // dragging started
                     onStart: function (evt) {
-                        //evt.oldIndex;  // element index within parent
-                        // console.log(viewModel.itemNumber() )
-
+                        //evt.oldIndex;  //element index within parent
 
                         var elements = document.querySelectorAll('.active');
                         elements.forEach((el, index) => {
@@ -69,11 +77,20 @@ class Dependents {
                     },
                     //
                     // // dragging ended
-                    // onEnd: function (/**Event*/evt) {
-                    //     evt.oldIndex;  // element's old index within parent
-                    //     evt.newIndex;  // element's new index within parent
-                    // },
-                    //
+                    onEnd: function (/**Event*/evt) {
+                        evt.oldIndex;  // element's old index within parent
+                        evt.newIndex;  // element's new index within parent
+                        var indexValue = evt.item.attributes[2].value;
+                        var sortableOrder = ko.dataFor(evt.item).params.data.selectedModules();
+                        sortableOrder.splice(evt.oldIndex, 1)
+                        sortableOrder.splice(evt.newIndex, 0, indexValue)
+
+                        // console.log(beforeSortableOrder);
+                        //console.log('drag end sortableOrder ',sortableOrder);
+                        // console.log('drag end ',moduleOrder);
+
+                    },
+
                     // Element is dropped into the list from another list
                     // onAdd: function (/**Event*/evt) {
                     //     var itemEl = evt.item;  // dragged HTMLElement
@@ -81,12 +98,10 @@ class Dependents {
                     //     // + indexes from onEnd
                     // },
 
-                    // // Changed sorting within list
+                    // Changed sorting within list
                     // onUpdate: function (/**Event*/evt) {
                     //     var itemEl = evt.item;  // dragged HTMLElement
-                    //     // + indexes from onEnd
-                    //     //console.log('itemEl ',itemEl )
-                    //
+                    //     + indexes from onEnd
                     // },
 
                     // Called by any change to the list (add / update / remove)
@@ -106,27 +121,29 @@ class Dependents {
                     // },
                     //
                     // // Event when you move an item in the list or between lists
-                    onMove: function (/**Event*/evt) {
-                        var beforeSortableOrder = ko.dataFor(evt.dragged).params.data.selectedModules();
-                        // console.log('onStart ',evt.dragged );
-                        // console.log('viewModel ',ko.dataFor(evt.dragged));
-                        // console.log('data ',ko.dataFor(evt.dragged).itemNumber() );
-                        console.log('beforeSortableOrder ',beforeSortableOrder );
-
-                        // Example: http://jsbin.com/tuyafe/1/edit?js,output
-                        evt.dragged; // dragged HTMLElement
-                        evt.draggedRect; // TextRectangle {left, top, right и bottom}
-                        evt.related; // HTMLElement on which have guided
-                        evt.relatedRect; // TextRectangle
-                        // return false; — for cancel
-                    }
+                    // onMove: function (/**Event*/evt) {
+                    //     //var beforeSortableOrder = ko.dataFor(evt.dragged).params.data.selectedModules();
+                    //     // console.log('onStart ',evt.dragged );
+                    //     // console.log('viewModel ',ko.dataFor(evt.dragged));
+                    //     // console.log('data ',ko.dataFor(evt.dragged).itemNumber() );
+                    //
+                    //
+                    //     // Example: http://jsbin.com/tuyafe/1/edit?js,output
+                    //     evt.dragged; // dragged HTMLElement
+                    //     evt.draggedRect; // TextRectangle {left, top, right и bottom}
+                    //     evt.related; // HTMLElement on which have guided
+                    //     evt.relatedRect; // TextRectangle
+                    //     // return false; — for cancel
+                    // }
 
                 });
 
 
+                console.log('before drag ',viewModel.params.data.selectedModules());
 
                 var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                var alphaChar = alpha.charAt(valueAccessor()-1);
+                var modulePosition = viewModel.params.data.selectedModules().length-1;
+                var alphaChar = alpha.charAt(modulePosition);
                 var moduleType = bindingContext.$parent;
 
                 moduleOrder[alphaChar] = {};
@@ -134,6 +151,9 @@ class Dependents {
 
                 switch (moduleType) {
                     case 'large-feature-module':
+                        moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
+                    break;
+                    case 'small-feature-module':
                         moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
                     break;
                 }
@@ -156,13 +176,13 @@ ko.components.register('large-feature-module', {
         }
     },
     template: `
-        <div class="row">
+        <div class="row" data-bind="attr: { 'data-id': 'large-feature-module' }">
             <div class="small-12 columns">
                 <dl class="accordion small-12 columns" data-accordion="" role="tablist">
                     <dd class="accordion-navigation">
                         <a data-bind="text: 'Large Feature Module '+accordionIndex, attr: { href: '#accordion'+accordionIndex, id: 'accordion-heading'+accordionIndex, role: 'tab' }" class="draggable"></a>
 
-                        <div data-bind="sortable: accordionIndex, attr: { 'data-id': accordionIndex, id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
+                        <div data-bind="sortable: accordionIndex, attr: { id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
                             <div class="row">
                                 <div class="small-12 medium-4 columns">
                                     <label>Item #</label>
@@ -215,13 +235,13 @@ ko.components.register('small-feature-module', {
         }
     },
     template: `
-        <div class="row">
+        <div class="row" data-bind="attr: { 'data-id': 'small-feature-module' }">
             <div class="small-12 columns">
                 <dl class="accordion small-12 columns" data-accordion="" role="tablist">
                     <dd class="accordion-navigation">
                         <a data-bind="text: 'Small Feature Module '+accordionIndex, attr: { href: '#accordion'+accordionIndex, id: 'accordion-heading'+accordionIndex, role: 'tab' }" class="draggable"></a>
 
-                        <div data-bind="sortable: accordionIndex, attr: { 'data-id': accordionIndex, id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
+                        <div data-bind="sortable: accordionIndex, attr: { id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
                             <div class="row">
                                 <div class="small-12 medium-4 columns">
                                     <label>Item #</label>
