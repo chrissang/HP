@@ -6,10 +6,10 @@ var dict = {}
 
 class Dependents {
     constructor(params) {
-        this.selectedModules = ko.observableArray([]);
         this.itemNumber = ko.observable("");
         this.itemUrl = ko.observable("");
         this.imageUrl = ko.observable("");
+        this.alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         self = this;
         this.bindingHandlers = {
             init: $(function () {
@@ -27,7 +27,6 @@ class Dependents {
         ko.bindingHandlers.sortable = {
             update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 var el = document.getElementById('sortableContainer');
-
                 var sortable = new Sortable(el, {
                     // group: "name",  // or { name: "...", pull: [true, false, clone], put: [true, false, array] }
                     sort: true,  // sorting inside list
@@ -80,15 +79,18 @@ class Dependents {
                     onEnd: function (/**Event*/evt) {
                         evt.oldIndex;  // element's old index within parent
                         evt.newIndex;  // element's new index within parent
-                        var indexValue = evt.item.attributes[2].value;
-                        var sortableOrder = ko.dataFor(evt.item).params.data.selectedModules();
-                        sortableOrder.splice(evt.oldIndex, 1)
-                        sortableOrder.splice(evt.newIndex, 0, indexValue)
-
-                        // console.log(beforeSortableOrder);
-                        //console.log('drag end sortableOrder ',sortableOrder);
-                        // console.log('drag end ',moduleOrder);
-
+                        // var indexValue = evt.item.attributes[2].value;
+                        // var originalOrder = ko.dataFor(evt.item).params.data.selectedModules();
+                        //
+                        // console.log('remove ',evt.oldIndex);
+                        // originalOrder.splice(evt.oldIndex, 1);
+                        // originalOrder.splice(evt.newIndex, 0, indexValue);
+                        //
+                        // ko.dataFor(evt.item).params.data.selectedModules(originalOrder)
+                        //
+                        // console.log('modified ',ko.dataFor(evt.item).params.data.selectedModules());
+                        var order = sortable.toArray();
+                        ko.dataFor(evt.item).params.data.selectedModulesModified(order);
                     },
 
                     // Element is dropped into the list from another list
@@ -139,40 +141,17 @@ class Dependents {
                 });
 
 
-                console.log('before drag ',viewModel.params.data.selectedModules());
-
-                var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                var modulePosition = viewModel.params.data.selectedModules().length-1;
-                var alphaChar = alpha.charAt(modulePosition);
-                var moduleType = bindingContext.$parent;
-
-                moduleOrder[alphaChar] = {};
-                moduleOrder[alphaChar][moduleType] = {};
-
-                switch (moduleType) {
-                    case 'large-feature-module':
-                        moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
-                    break;
-                    case 'small-feature-module':
-                        moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
-                    break;
-                }
-
-                moduleOrder[alphaChar][moduleType]['item']
-                //console.log(moduleOrder);
             }
         };
     }
 }
-
-
 
 ko.components.register('large-feature-module', {
     viewModel: class LargeFeatureModuleComponentModel extends Dependents {
         constructor(params) {
           super(params);
           this.params = params;
-          this.accordionIndex = params.data.selectedModules().length;
+          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
         }
     },
     template: `
@@ -180,9 +159,9 @@ ko.components.register('large-feature-module', {
             <div class="small-12 columns">
                 <dl class="accordion small-12 columns" data-accordion="" role="tablist">
                     <dd class="accordion-navigation">
-                        <a data-bind="text: 'Large Feature Module '+accordionIndex, attr: { href: '#accordion'+accordionIndex, id: 'accordion-heading'+accordionIndex, role: 'tab' }" class="draggable"></a>
+                        <a data-bind="text: 'Large Feature Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
-                        <div data-bind="sortable: accordionIndex, attr: { id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
+                        <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
                             <div class="row">
                                 <div class="small-12 medium-4 columns">
                                     <label>Item #</label>
@@ -231,7 +210,7 @@ ko.components.register('small-feature-module', {
         constructor(params) {
           super(params);
           this.params = params;
-          this.accordionIndex = params.data.selectedModules().length;
+          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
         }
     },
     template: `
@@ -239,9 +218,9 @@ ko.components.register('small-feature-module', {
             <div class="small-12 columns">
                 <dl class="accordion small-12 columns" data-accordion="" role="tablist">
                     <dd class="accordion-navigation">
-                        <a data-bind="text: 'Small Feature Module '+accordionIndex, attr: { href: '#accordion'+accordionIndex, id: 'accordion-heading'+accordionIndex, role: 'tab' }" class="draggable"></a>
+                        <a data-bind="text: 'Small Feature Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
-                        <div data-bind="sortable: accordionIndex, attr: { id: 'accordion'+accordionIndex, 'aria-labelledby': 'accordion-heading'+accordionIndex, role: 'tabpanel' }" class="content">
+                        <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
                             <div class="row">
                                 <div class="small-12 medium-4 columns">
                                     <label>Item #</label>
@@ -299,28 +278,70 @@ ko.components.register('homePageTool', {
   viewModel: class HomePageToolComponentModel extends Dependents {
       constructor(params) {
           super(params);
+          this.selectedModules = ko.observableArray([]);
+          this.selectedModulesModified = ko.observableArray();
           this.modueTypes = [
-            {name: 'Large Feature (LF)', value: 'large-feature-module'},
-            {name: 'Small Feature (SF)', value: 'small-feature-module'},
-            {name: 'Basic Story (BS)', value: 'basic-story-module'},
-            {name: 'Extended Story (ES)', value: 'extended-story-module'},
-            {name: 'Collection Grid (CG)', value: 'collection-grid-module'},
-            {name: 'Carousel (CL)', value: 'carousel-module'},
-            {name: 'Text Link (TL)', value: 'text-link-module'},
-            {name: 'Image Link Single (LS)', value: 'image-link-single-module'},
-            {name: 'Image Link Double (LD)', value: 'image-link-double-module'},
-            {name: 'Button Link Single (BI)', value: 'button-link-single-module'},
-            {name: 'Button Link Double (BD)', value: 'button-link-double-module'}
-        ];
-            this.selectedModule = ko.observable();
+              {name: 'Large Feature (LF)', value: 'large-feature-module'},
+              {name: 'Small Feature (SF)', value: 'small-feature-module'},
+              {name: 'Basic Story (BS)', value: 'basic-story-module'},
+              {name: 'Extended Story (ES)', value: 'extended-story-module'},
+              {name: 'Collection Grid (CG)', value: 'collection-grid-module'},
+              {name: 'Carousel (CL)', value: 'carousel-module'},
+              {name: 'Text Link (TL)', value: 'text-link-module'},
+              {name: 'Image Link Single (LS)', value: 'image-link-single-module'},
+              {name: 'Image Link Double (LD)', value: 'image-link-double-module'},
+              {name: 'Button Link Single (BI)', value: 'button-link-single-module'},
+              {name: 'Button Link Double (BD)', value: 'button-link-double-module'}
+          ];
+          this.selectedModule = ko.observable();
+          this.handleClick = function (e) {
+              if (this.selectedModule()) {
+                  this.selectedModules.push(this.selectedModule());
+              }
 
-            this.handleClick = function (e) {
+          }
+          this.createJson = function (e) {
+              var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+              var order = this.selectedModules();
+              var sortedOrder = this.selectedModulesModified();
 
-                this.selectedModules.push(this.selectedModule());
-        }
-
-
-
+              // if (sortedOrder.length != 0) {
+              //     sortedOrder.forEach((el,index) => {
+              //         var alphaChar = alpha.charAt(index);
+              //         var moduleType = el;
+              //
+              //         moduleOrder[alphaChar] = {};
+              //         moduleOrder[alphaChar][moduleType] = {};
+              //
+              //       //   switch (moduleType) {
+              //       //     case 'large-feature-module':
+              //       //         moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
+              //       //         break;
+              //       //     case 'small-feature-module':
+              //       //         moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
+              //       //         break;
+              //       // }
+              //     })
+              // } else {
+              //     order.forEach((el,index) => {
+              //         var alphaChar = alpha.charAt(index);
+              //         var moduleType = el;
+              //
+              //       //   moduleOrder[alphaChar] = {};
+              //       //   moduleOrder[alphaChar][moduleType] = {};
+              //       //
+              //       //   switch (moduleType) {
+              //       //     case 'large-feature-module':
+              //       //         moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
+              //       //         break;
+              //       //     case 'small-feature-module':
+              //       //         moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
+              //       //         break;
+              //       // }
+              //     })
+              // }
+               console.log(moduleOrder);
+          }
       }
     },
     template: `
@@ -336,6 +357,7 @@ ko.components.register('homePageTool', {
             </div>
             <div class="small-6 columns end">
                 <button data-bind="event:{ click: handleClick }">Create Module</button>
+                <button data-bind="event:{ click: createJson }">Preview Order</button>
             </div>
         </div>
 

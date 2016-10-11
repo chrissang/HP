@@ -15702,3 +15702,8 @@ body:before {
 .accordion .accordion-navigation > .content, .accordion dd > .content {
   padding-top: 0;
 }
+
+/* line 21, ../scss/mobileHpTool.scss */
+ul {
+  list-style-type: none;
+}
