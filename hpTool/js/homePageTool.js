@@ -1,15 +1,42 @@
 
-
-// var selectedModules = [];
-var moduleOrder = {}
+// var moduleOrder = {}
 var dict = {}
 
 class Dependents {
     constructor(params) {
+        this.mappingOrder = {};
+        this.uniqueIdModified = ko.observableArray();
         this.itemNumber = ko.observable("");
         this.itemUrl = ko.observable("");
         this.imageUrl = ko.observable("");
-        this.alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        this.uniqueId = new Date().getTime();
+        this.sortMappingOrder = function() {
+            var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            var uniqueIdReordered = this.uniqueIdModified()
+
+            function reorderAlpha(obj, curr, updated) {
+                var jsonString = JSON.stringify(obj);
+                jsonString = jsonString.replace(curr, updated);
+                var jsonObj = JSON.parse(jsonString);
+                //console.log(jsonString);
+                //console.log(jsonObj);
+                return jsonObj;
+                //return JSON.parse(jsonString);
+            }
+            // TODO: have to swap the uniqueIdReordered as well as the alpha chars
+            console.log('uniqueIdReordered ',uniqueIdReordered)
+            uniqueIdReordered.forEach((el,index) => {
+                var alphaChar = alpha.charAt(index);
+                //console.log('each ',Object.keys(this.mappingOrder[el]), alphaChar);
+                if (Object.keys(this.mappingOrder[el]) != alphaChar) {
+                    var curr = Object.keys(this.mappingOrder[el])[0];
+                    this.mappingOrder[el] = reorderAlpha(this.mappingOrder[el],curr, alphaChar);
+
+                }
+                console.log('after reorder ',this.mappingOrder)
+            })
+
+        }
         self = this;
         this.bindingHandlers = {
             init: $(function () {
@@ -31,116 +58,53 @@ class Dependents {
                     // group: "name",  // or { name: "...", pull: [true, false, clone], put: [true, false, array] }
                     sort: true,  // sorting inside list
                     delay: 0, // time in milliseconds to define when the sorting should start
-                    // disabled: false, // Disables the sortable if set to true.
-                    // store: {
-                    //     get: function (sortable) {
-                    //       var order = localStorage.getItem(sortable.options.group);
-                    //
-                    //       return order ? order.split('|') : [];
-                    //     },
-                    //
-                    //     // Saving the acquired sorting (called each time upon sorting modification)
-                    //     set: function (sortable) {
-                    //       var order = sortable.toArray();
-                    //       localStorage.setItem(sortable.options.group, order.join('|'));
-                    //     }
-                    // },
                     animation: 150,  // ms, animation speed moving items when sorting, `0` — without animation
                     handle: ".draggable",  // Drag handle selector within list items
-                    // filter: ".ignore-elements",  // Selectors that do not lead to dragging (String or Function)
-                    //draggable: ".item",  // Specifies which items inside the element should be sortable
                     ghostClass: "sortable-ghost",  // Class name for the drop placeholder
-                    // chosenClass: "sortable-chosen",  // Class name for the chosen item
                     dataIdAttr: 'data-id',
-                    //
-                    // forceFallback: false,  // ignore the HTML5 DnD behaviour and force the fallback to kick in
-                    // fallbackClass: "sortable-fallback"  // Class name for the cloned DOM Element when using forceFallback
-                    // fallbackOnBody: false  // Appends the cloned DOM Element into the Document's Body
-                    //
-                    // scroll: true, // or HTMLElement
-                    // scrollSensitivity: 30, // px, how near the mouse must be to an edge to start scrolling.
-                    // scrollSpeed: 10, // px
-
-                    // setData: function (dataTransfer, dragEl) {
-                    //     //dataTransfer.setData('Text', dragEl.textContent);
-                    // },
-
                     // // dragging started
                     onStart: function (evt) {
-                        //evt.oldIndex;  //element index within parent
-
                         var elements = document.querySelectorAll('.active');
                         elements.forEach((el, index) => {
                             el.className = el.className.replace("active", "");
                         })
                     },
-                    //
                     // // dragging ended
                     onEnd: function (/**Event*/evt) {
                         evt.oldIndex;  // element's old index within parent
                         evt.newIndex;  // element's new index within parent
-                        // var indexValue = evt.item.attributes[2].value;
-                        // var originalOrder = ko.dataFor(evt.item).params.data.selectedModules();
-                        //
-                        // console.log('remove ',evt.oldIndex);
-                        // originalOrder.splice(evt.oldIndex, 1);
-                        // originalOrder.splice(evt.newIndex, 0, indexValue);
-                        //
-                        // ko.dataFor(evt.item).params.data.selectedModules(originalOrder)
-                        //
-                        // console.log('modified ',ko.dataFor(evt.item).params.data.selectedModules());
                         var order = sortable.toArray();
-                        ko.dataFor(evt.item).params.data.selectedModulesModified(order);
+                        // ko.dataFor(evt.item).params.data.selectedModules(order);
+                        ko.dataFor(evt.item).params.data.uniqueIdModified(order);
+                        ko.dataFor(evt.item).params.data.sortMappingOrder();
                     },
-
-                    // Element is dropped into the list from another list
-                    // onAdd: function (/**Event*/evt) {
-                    //     var itemEl = evt.item;  // dragged HTMLElement
-                    //     evt.from;  // previous list
-                    //     // + indexes from onEnd
-                    // },
-
                     // Changed sorting within list
-                    // onUpdate: function (/**Event*/evt) {
-                    //     var itemEl = evt.item;  // dragged HTMLElement
-                    //     + indexes from onEnd
-                    // },
+                    onUpdate: function (/**Event*/evt) {
+                        var itemEl = evt.item;  // dragged HTMLElement
+                        // + indexes from onEnd
 
-                    // Called by any change to the list (add / update / remove)
-                    // onSort: function (/**Event*/evt) {
-                    //     // same properties as onUpdate
-                    //
-                    // },
-
-                    // // Element is removed from the list into another list
-                    // onRemove: function (/**Event*/evt) {
-                    //     // same properties as onUpdate
-                    // },
-                    //
-                    // // Attempt to drag a filtered element
-                    // onFilter: function (/**Event*/evt) {
-                    //     var itemEl = evt.item;  // HTMLElement receiving the `mousedown|tapstart` event.
-                    // },
-                    //
-                    // // Event when you move an item in the list or between lists
-                    // onMove: function (/**Event*/evt) {
-                    //     //var beforeSortableOrder = ko.dataFor(evt.dragged).params.data.selectedModules();
-                    //     // console.log('onStart ',evt.dragged );
-                    //     // console.log('viewModel ',ko.dataFor(evt.dragged));
-                    //     // console.log('data ',ko.dataFor(evt.dragged).itemNumber() );
-                    //
-                    //
-                    //     // Example: http://jsbin.com/tuyafe/1/edit?js,output
-                    //     evt.dragged; // dragged HTMLElement
-                    //     evt.draggedRect; // TextRectangle {left, top, right и bottom}
-                    //     evt.related; // HTMLElement on which have guided
-                    //     evt.relatedRect; // TextRectangle
-                    //     // return false; — for cancel
-                    // }
-
+                    }
                 });
 
+                var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                var sortedOrder = viewModel.params.data.uniqueIdModified();
+                var uniqueId = viewModel.uniqueId;
+                var alphaChar = alpha.charAt(viewModel.accordionIndex());
+                var moduleType = bindingContext.$parent;
 
+                viewModel.params.data.mappingOrder[uniqueId] = {};
+                viewModel.params.data.mappingOrder[uniqueId][alphaChar] = {};
+                viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType] = {};
+
+                switch (moduleType) {
+                    case 'large-feature-module':
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['item'] = viewModel.itemNumber();
+                        break;
+                    case 'small-feature-module':
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['item'] = viewModel.itemNumber();
+                        break;
+                }
+                //console.log('mappingOrder ',viewModel.params.data.mappingOrder);
             }
         };
     }
@@ -155,7 +119,7 @@ ko.components.register('large-feature-module', {
         }
     },
     template: `
-        <div class="row" data-bind="attr: { 'data-id': 'large-feature-module' }">
+        <div class="row" data-bind="attr: { 'data-id': uniqueId }">
             <div class="small-12 columns">
                 <dl class="accordion small-12 columns" data-accordion="" role="tablist">
                     <dd class="accordion-navigation">
@@ -214,7 +178,7 @@ ko.components.register('small-feature-module', {
         }
     },
     template: `
-        <div class="row" data-bind="attr: { 'data-id': 'small-feature-module' }">
+        <div class="row" data-bind="attr: { 'data-id': uniqueId }">
             <div class="small-12 columns">
                 <dl class="accordion small-12 columns" data-accordion="" role="tablist">
                     <dd class="accordion-navigation">
@@ -278,9 +242,9 @@ ko.components.register('homePageTool', {
   viewModel: class HomePageToolComponentModel extends Dependents {
       constructor(params) {
           super(params);
-          this.selectedModules = ko.observableArray([]);
-          this.selectedModulesModified = ko.observableArray();
-          this.modueTypes = [
+          this.selection = ko.observable();
+          this.selectedModules = ko.observableArray();
+          this.moduleTypes = [
               {name: 'Large Feature (LF)', value: 'large-feature-module'},
               {name: 'Small Feature (SF)', value: 'small-feature-module'},
               {name: 'Basic Story (BS)', value: 'basic-story-module'},
@@ -293,55 +257,66 @@ ko.components.register('homePageTool', {
               {name: 'Button Link Single (BI)', value: 'button-link-single-module'},
               {name: 'Button Link Double (BD)', value: 'button-link-double-module'}
           ];
-          this.selectedModule = ko.observable();
+
           this.handleClick = function (e) {
-              if (this.selectedModule()) {
-                  this.selectedModules.push(this.selectedModule());
+              if (this.selection()) {
+                  this.selectedModules.push(this.selection());
+
+                //   console.log('handleClick ',this.uniqueId);
+                //   var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                //   var order = this.selectedModules();
+                  //
+                //   order.forEach((el,index) => {
+                //       var alphaChar = alpha.charAt(index);
+                //       var moduleType = el;
+                //
+                //       this.mappingOrder[alphaChar] = {};
+                //       this.mappingOrder[alphaChar][moduleType] = {};
+                //
+                //   })
+                //   console.log('created ',this.mappingOrder);
               }
-
           }
-          this.createJson = function (e) {
-              var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-              var order = this.selectedModules();
-              var sortedOrder = this.selectedModulesModified();
-
-              // if (sortedOrder.length != 0) {
-              //     sortedOrder.forEach((el,index) => {
-              //         var alphaChar = alpha.charAt(index);
-              //         var moduleType = el;
-              //
-              //         moduleOrder[alphaChar] = {};
-              //         moduleOrder[alphaChar][moduleType] = {};
-              //
-              //       //   switch (moduleType) {
-              //       //     case 'large-feature-module':
-              //       //         moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
-              //       //         break;
-              //       //     case 'small-feature-module':
-              //       //         moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
-              //       //         break;
-              //       // }
-              //     })
-              // } else {
-              //     order.forEach((el,index) => {
-              //         var alphaChar = alpha.charAt(index);
-              //         var moduleType = el;
-              //
-              //       //   moduleOrder[alphaChar] = {};
-              //       //   moduleOrder[alphaChar][moduleType] = {};
-              //       //
-              //       //   switch (moduleType) {
-              //       //     case 'large-feature-module':
-              //       //         moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
-              //       //         break;
-              //       //     case 'small-feature-module':
-              //       //         moduleOrder[alphaChar][moduleType]['item'] = viewModel.itemNumber();
-              //       //         break;
-              //       // }
-              //     })
-              // }
-               console.log(moduleOrder);
-          }
+        //   this.createJson = function(e) {
+        //       var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        //       var order = this.selectedModules();
+        //       var sortedOrder = this.selectedModulesModified();
+          //
+        //       if (sortedOrder.length != 0) {
+        //             sortedOrder.forEach((el,index) => {
+        //                 var alphaChar = alpha.charAt(index);
+        //                 var moduleType = el;
+          //
+        //                 this.mappingOrder[alphaChar] = {};
+        //                 this.mappingOrder[alphaChar][moduleType] = {};
+        //             })
+        //         } else {
+        //             order.forEach((el,index) => {
+        //                 var alphaChar = alpha.charAt(index);
+        //                 var moduleType = el;
+          //
+        //                 this.mappingOrder[alphaChar] = {};
+        //                 this.mappingOrder[alphaChar][moduleType] = {};
+          //
+        //                 //  switch (moduleType) {
+        //                 //      case 'large-feature-module':
+        //                 //         this.mappingOrder[alphaChar][moduleType]['item'] = '';
+        //                 //         break;
+        //                 //     case 'small-feature-module':
+        //                 //         this.mappingOrder[alphaChar][moduleType]['item'] = '';
+        //                 //         break;
+        //                 // }
+        //             })
+        //         }
+          //
+          //
+        //   }
+        //   ko.virtualElements.allowedBindings.viewAdded = true;
+        //   ko.bindingHandlers.viewAdded = {
+        //       update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        //           //console.log(bindingContext )
+        //       }
+        //   }
       }
     },
     template: `
@@ -353,11 +328,11 @@ ko.components.register('homePageTool', {
 
         <div class="row">
             <div class="small-6 columns end">
-                <select data-bind="options: modueTypes, value: selectedModule ,optionsText: 'name', optionsValue: 'value', optionsCaption: 'Choose Module Type'"></select>
+                <select data-bind="options: moduleTypes, value: selection ,optionsText: 'name', optionsValue: 'value', optionsCaption: 'Choose Module Type'"></select>
             </div>
             <div class="small-6 columns end">
                 <button data-bind="event:{ click: handleClick }">Create Module</button>
-                <button data-bind="event:{ click: createJson }">Preview Order</button>
+                <button data-bind="">Preview Order</button>
             </div>
         </div>
 
