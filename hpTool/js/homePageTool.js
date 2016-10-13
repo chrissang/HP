@@ -1,6 +1,5 @@
 
-// var moduleOrder = {}
-var dict = {}
+const hpJson = {}
 
 class Dependents {
     constructor(params) {
@@ -18,13 +17,9 @@ class Dependents {
                 var jsonString = JSON.stringify(obj);
                 jsonString = jsonString.replace(curr, updated);
                 var jsonObj = JSON.parse(jsonString);
-                //console.log(jsonString);
-                //console.log(jsonObj);
+
                 return jsonObj;
-                //return JSON.parse(jsonString);
-            }
-            // TODO: have to swap the uniqueIdReordered as well as the alpha chars
-            console.log('uniqueIdReordered ',uniqueIdReordered)
+            };
             uniqueIdReordered.forEach((el,index) => {
                 var alphaChar = alpha.charAt(index);
                 //console.log('each ',Object.keys(this.mappingOrder[el]), alphaChar);
@@ -33,9 +28,7 @@ class Dependents {
                     this.mappingOrder[el] = reorderAlpha(this.mappingOrder[el],curr, alphaChar);
 
                 }
-                console.log('after reorder ',this.mappingOrder)
-            })
-
+            });
         }
         self = this;
         this.bindingHandlers = {
@@ -77,12 +70,6 @@ class Dependents {
                         // ko.dataFor(evt.item).params.data.selectedModules(order);
                         ko.dataFor(evt.item).params.data.uniqueIdModified(order);
                         ko.dataFor(evt.item).params.data.sortMappingOrder();
-                    },
-                    // Changed sorting within list
-                    onUpdate: function (/**Event*/evt) {
-                        var itemEl = evt.item;  // dragged HTMLElement
-                        // + indexes from onEnd
-
                     }
                 });
 
@@ -104,7 +91,6 @@ class Dependents {
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['item'] = viewModel.itemNumber();
                         break;
                 }
-                //console.log('mappingOrder ',viewModel.params.data.mappingOrder);
             }
         };
     }
@@ -261,62 +247,16 @@ ko.components.register('homePageTool', {
           this.handleClick = function (e) {
               if (this.selection()) {
                   this.selectedModules.push(this.selection());
-
-                //   console.log('handleClick ',this.uniqueId);
-                //   var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                //   var order = this.selectedModules();
-                  //
-                //   order.forEach((el,index) => {
-                //       var alphaChar = alpha.charAt(index);
-                //       var moduleType = el;
-                //
-                //       this.mappingOrder[alphaChar] = {};
-                //       this.mappingOrder[alphaChar][moduleType] = {};
-                //
-                //   })
-                //   console.log('created ',this.mappingOrder);
               }
           }
-        //   this.createJson = function(e) {
-        //       var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        //       var order = this.selectedModules();
-        //       var sortedOrder = this.selectedModulesModified();
-          //
-        //       if (sortedOrder.length != 0) {
-        //             sortedOrder.forEach((el,index) => {
-        //                 var alphaChar = alpha.charAt(index);
-        //                 var moduleType = el;
-          //
-        //                 this.mappingOrder[alphaChar] = {};
-        //                 this.mappingOrder[alphaChar][moduleType] = {};
-        //             })
-        //         } else {
-        //             order.forEach((el,index) => {
-        //                 var alphaChar = alpha.charAt(index);
-        //                 var moduleType = el;
-          //
-        //                 this.mappingOrder[alphaChar] = {};
-        //                 this.mappingOrder[alphaChar][moduleType] = {};
-          //
-        //                 //  switch (moduleType) {
-        //                 //      case 'large-feature-module':
-        //                 //         this.mappingOrder[alphaChar][moduleType]['item'] = '';
-        //                 //         break;
-        //                 //     case 'small-feature-module':
-        //                 //         this.mappingOrder[alphaChar][moduleType]['item'] = '';
-        //                 //         break;
-        //                 // }
-        //             })
-        //         }
-          //
-          //
-        //   }
-        //   ko.virtualElements.allowedBindings.viewAdded = true;
-        //   ko.bindingHandlers.viewAdded = {
-        //       update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        //           //console.log(bindingContext )
-        //       }
-        //   }
+          this.previewOrder = function(e) {
+              var obj = this.mappingOrder;
+              Object.keys(obj).forEach(function(key) {
+                //   hpJson[obj[key]]
+                  console.log(key, obj[key]);
+              });
+              console.log('previewOrder ',this.mappingOrder);
+          }
       }
     },
     template: `
@@ -332,7 +272,7 @@ ko.components.register('homePageTool', {
             </div>
             <div class="small-6 columns end">
                 <button data-bind="event:{ click: handleClick }">Create Module</button>
-                <button data-bind="">Preview Order</button>
+                <button data-bind="event:{ click: previewOrder }">Preview Order</button>
             </div>
         </div>
 

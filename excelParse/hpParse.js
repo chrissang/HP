@@ -65,7 +65,7 @@ class MappingConfig {
                     case 'basic-story-module':
                         Object.keys(data[letter]).forEach((k, i) => {
                             props['item'] = data[letter][k].ITEMNUMBER;
-                            props['intro'] = {
+                            props['section'] = {
                                 "text": data[letter][k].SECTIONINTRO,
                                 "link": data[letter][k].SECTIONINTROURL
                             };
@@ -92,7 +92,7 @@ class MappingConfig {
                                 "customImage": data[letter][k].IMAGEURL,
                                 "link": data[letter][k].ITEMURL
                             };
-                            props['intro'] = {
+                            props['section'] = {
                                 "text": data[letter][k].SECTIONINTRO,
                                 "link": data[letter][k].SECTIONINTROURL
                             };
@@ -113,7 +113,7 @@ class MappingConfig {
                     break;
 
                     case 'collection-grid-module':
-                        props['intro'] = {
+                        props['section'] = {
                             "text": data[letter][0].SECTIONINTRO,
                             "link": data[letter][0].SECTIONINTROURL
                         };
@@ -145,7 +145,7 @@ class MappingConfig {
                     break;
 
                     case 'carousel-module':
-                        props['intro'] = {
+                        props['section'] = {
                             "text":data[letter][0].SECTIONINTRO,
                             "link": data[letter][0].SECTIONINTROURL
                         };
@@ -178,7 +178,7 @@ class MappingConfig {
                     break;
 
                     case 'text-link-module':
-                        props['intro'] = {
+                        props['section'] = {
                             "text": data[letter][0].SECTIONINTRO,
                             "link": data[letter][0].SECTIONINTROURL
                         };
@@ -220,7 +220,7 @@ class MappingConfig {
                     case 'image-link-single-module':
                         Object.keys(data[letter]).forEach((k, i) => {
                             props['item'] = data[letter][k].ITEMNUMBER;
-                            props['intro'] = {
+                            props['section'] = {
                                 "text": data[letter][k].SECTIONINTRO,
                                 "link": data[letter][k].SECTIONINTROURL
                             };
@@ -228,16 +228,16 @@ class MappingConfig {
                                 "text": data[letter][k].IMAGEURL,
                                 "link": data[letter][k].ITEMURL
                             };
-                            props['copy'] = {
-                                "text": data[letter][k].COPY,
-                                "link": data[letter][k].COPYURL
+                            props['cta'] = {
+                                "text": data[letter][k].CTA,
+                                "link": data[letter][k].CTAURL
                             };
                         })
                         dict[letter][moduleType] = props;
                     break;
 
                     case 'image-link-double-module':
-                        props['intro'] = {
+                        props['section'] = {
                             "text": data[letter][0].SECTIONINTRO,
                             "link": data[letter][0].SECTIONINTROURL
                         };
@@ -261,7 +261,7 @@ class MappingConfig {
                     break;
 
                     case 'button-link-single-module':
-                        props['intro'] = {
+                        props['section'] = {
                             "text": data[letter][0].SECTIONINTRO,
                             "link": data[letter][0].SECTIONINTROURL
                         };
@@ -274,9 +274,9 @@ class MappingConfig {
                                         'customImage': data[letter][k].IMAGEURL,
                                         'link': data[letter][k].ITEMURL
                                     },
-                                    'copy': {
-                                        'text': data[letter][k].COPY,
-                                        'link': data[letter][k].COPYURL
+                                    'cta': {
+                                        'text': data[letter][k].CTA,
+                                        'link': data[letter][k].CTAURL
                                     }
                                 }
                             )
@@ -285,7 +285,7 @@ class MappingConfig {
                     break;
 
                     case 'button-link-double-module':
-                        props['intro'] = {
+                        props['section'] = {
                             "text": data[letter][0].SECTIONINTRO,
                             "link": data[letter][0].SECTIONINTROURL
                         };
@@ -309,7 +309,7 @@ class MappingConfig {
                     break;
 
                     case 'small-feature-module':
-                        props['intro'] = {
+                        props['section'] = {
                             "text": data[letter][0].SECTIONINTRO,
                             "link": data[letter][0].SECTIONINTROURL
                         };
@@ -323,8 +323,8 @@ class MappingConfig {
                                         'link': data[letter][k].ITEMURL
                                     },
                                     'headline': {
-                                        'text': data[letter][k].INTRO,
-                                        'link': data[letter][k].INTROURL
+                                        'text': data[letter][k].HEADLINE,
+                                        'link': data[letter][k].HEADLINEURL
                                     },
                                     'cta': {
                                         'text': data[letter][k].CTA,
