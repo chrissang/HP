@@ -1,5 +1,5 @@
 
-const hpJson = {}
+var hpJson = {};
 
 class Dependents {
     constructor(params) {
@@ -8,6 +8,13 @@ class Dependents {
         this.itemNumber = ko.observable("");
         this.itemUrl = ko.observable("");
         this.imageUrl = ko.observable("");
+        this.headline = ko.observable("");
+        this.headlineUrl = ko.observable("");
+        this.cta = ko.observable("");
+        this.ctaUrl = ko.observable("");
+        this.section = ko.observable("");
+        this.sectionUrl = ko.observable("");
+
         this.uniqueId = new Date().getTime();
         this.sortMappingOrder = function() {
             var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -64,12 +71,33 @@ class Dependents {
                     },
                     // // dragging ended
                     onEnd: function (/**Event*/evt) {
-                        evt.oldIndex;  // element's old index within parent
-                        evt.newIndex;  // element's new index within parent
+                        var oldIndex = evt.oldIndex;  // element's old index within parent
+                        var newIndex = evt.newIndex;  // element's new index within parent
                         var order = sortable.toArray();
                         // ko.dataFor(evt.item).params.data.selectedModules(order);
                         ko.dataFor(evt.item).params.data.uniqueIdModified(order);
                         ko.dataFor(evt.item).params.data.sortMappingOrder();
+
+
+                        var sorted = ko.dataFor(evt.item).params.data.selectedModules();
+                        var module = bindingContext.$parent;
+
+                        var reorderAray = ko.dataFor(evt.item).params.data.selectedModules();
+
+                        console.log('old ',oldIndex);
+                        console.log('new ',newIndex);
+                        console.log('reorderAray ',reorderAray);
+
+                        if (reorderAray[newIndex] != module) {
+                            sorted.splice(oldIndex,1);
+                            sorted.splice(newIndex,0,module);
+                            ko.dataFor(evt.item).params.data.selectedModules(sorted);
+                            console.log('sorted ',ko.dataFor(evt.item).params.data.selectedModules());
+                        }
+                        // console.log('old ',oldIndex;
+                        // console.log('new ',newIndex);
+                        // console.log('item ',bindingContext.$parent);
+                        // console.log(ko.dataFor(evt.item).params.data.selectedModules());
                     }
                 });
 
@@ -86,9 +114,42 @@ class Dependents {
                 switch (moduleType) {
                     case 'large-feature-module':
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['item'] = viewModel.itemNumber();
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['image'] = {
+                            "customImage": viewModel.imageUrl(),
+                            "link": viewModel.itemUrl()
+                        };
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['headline'] = {
+                            "text": viewModel.headline(),
+                            "link": viewModel.headlineUrl()
+                        };
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['cta'] = {
+                            "text": viewModel.cta(),
+                            "link": viewModel.ctaUrl()
+                        };
                         break;
                     case 'small-feature-module':
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['item'] = viewModel.itemNumber();
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                            "text": viewModel.section(),
+                            "link": viewModel.sectionUrl()
+                        };
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                            {
+                                'item': viewModel.itemNumber(),
+                                'image': {
+                                    'customImage': viewModel.imageUrl(),
+                                    'link': viewModel.itemUrl()
+                                },
+                                'headline': {
+                                    'text': viewModel.headline(),
+                                    'link': viewModel.headlineUrl()
+                                },
+                                'cta': {
+                                    'text': viewModel.cta(),
+                                    'link': viewModel.ctaUrl()
+                                }
+                            }
+                        ]
                         break;
                 }
             }
@@ -124,31 +185,30 @@ ko.components.register('large-feature-module', {
                                 </div>
                                 <div class="small-12 medium-4 columns">
                                     <label>Image URL</label>
-                                    <input type="text" placeholder="Image URL"></input>
+                                    <input data-bind="textInput: imageUrl" type="text" placeholder="Image URL"></input>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="small-12 medium-6 columns">
                                     <label>Headline</label>
-                                    <input type="text" placeholder="Headline">
+                                    <input data-bind="textInput: headline" type="text" placeholder="Headline">
                                 </div>
                                 <div class="small-12 medium-6 columns">
                                     <label>Headline URL</label>
-                                    <input type="text" placeholder="Headline URL">
+                                    <input data-bind="textInput: headlineUrl" type="text" placeholder="Headline URL">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="small-12 medium-6 columns">
                                     <label>CTA</label>
-                                    <input type="text" placeholder="CTA">
+                                    <input data-bind="textInput: cta" type="text" placeholder="CTA">
                                 </div>
                                 <div class="small-12 medium-6 columns">
                                     <label>CTA URL</label>
-                                    <input type="text" placeholder="CTA URL">
+                                    <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
                                 </div>
                             </div>
                         </div>
-
                     </dd>
                 </dl>
             </div>
@@ -179,42 +239,42 @@ ko.components.register('small-feature-module', {
 
                                 <div class="small-12 medium-4 columns">
                                     <label>Item URL</label>
-                                    <input type="text" placeholder="Item URL">
+                                    <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL">
                                 </div>
 
                                 <div class="small-12 medium-4 columns">
                                     <label>Image URL</label>
-                                    <input type="text" placeholder="Image URL">
+                                    <input data-bind="textInput: imageUrl" type="text" placeholder="Image URL">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="small-12 medium-6 columns">
                                     <label>Section</label>
-                                    <input type="text" placeholder="Section">
+                                    <input data-bind="textInput: section" type="text" placeholder="Section">
                                 </div>
                                 <div class="small-12 medium-6 columns">
                                     <label>Section URL</label>
-                                    <input type="text" placeholder="Section URL">
+                                    <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="small-12 medium-6 columns">
                                     <label>Headline</label>
-                                    <input type="text" placeholder="Headline">
+                                    <input data-bind="textInput: headline" type="text" placeholder="Headline">
                                 </div>
                                 <div class="small-12 medium-6 columns">
                                     <label>Headline URL</label>
-                                    <input type="text" placeholder="Headline URL">
+                                    <input data-bind="textInput: headlineUrl" type="text" placeholder="Headline URL">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="small-12 medium-6 columns">
                                     <label>CTA</label>
-                                    <input type="text" placeholder="CTA">
+                                    <input data-bind="textInput: cta" type="text" placeholder="CTA">
                                 </div>
                                 <div class="small-12 medium-6 columns">
                                     <label>CTA URL</label>
-                                    <input type="text" placeholder="CTA URL">
+                                    <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
                                 </div>
                             </div>
                         </div>
@@ -223,6 +283,16 @@ ko.components.register('small-feature-module', {
             </div>
         </div>`, synchronous: true
 });
+
+// reducerFilter(acc, xs) {
+//   xs.map((item, index)=> {
+//       if (xs[index] === xs[index+1]) {
+//       } else {
+//           acc.push(item);
+//       }
+//   })
+//   //return acc;
+// }
 
 ko.components.register('homePageTool', {
   viewModel: class HomePageToolComponentModel extends Dependents {
@@ -251,11 +321,22 @@ ko.components.register('homePageTool', {
           }
           this.previewOrder = function(e) {
               var obj = this.mappingOrder;
-              Object.keys(obj).forEach(function(key) {
-                //   hpJson[obj[key]]
-                  console.log(key, obj[key]);
+              var filter = [];
+              Object.keys(obj).forEach(function(key,index) {
+                 Object.assign(hpJson, obj[key]);
               });
-              console.log('previewOrder ',this.mappingOrder);
+
+              Object.keys(hpJson).forEach(function(key,index) {
+                  Object.keys(hpJson[key]).forEach(function(key,index) {
+                     //console.log(key,hpJson[key][key]);
+                    // if (k === xs[index+1]) {
+                    //
+                    // }
+
+                  });
+              });
+
+              console.log('hpJson ', hpJson);
           }
       }
     },

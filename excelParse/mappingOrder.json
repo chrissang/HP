@@ -4,21 +4,21 @@
             "item": 42160,
             "image": {
                 "customImage": "//www.uncommongoods.com/images/items/42100/42160_3_1200px.jpg",
-                "link": "/this-just-in"
+                "link": "/kitchen-bar?view=all"
             },
             "headline": {
-                "text": "Toast to the Road Less Traveled",
+                "text": "Toast to the Road Less Traveled // Shop Kitchen & Bar",
                 "link": "/kitchen-bar?view=all"
             },
             "cta": {
-                "text": "shop kitchen & bar",
+                "text": "Shop Kitchen & Bar",
                 "link": "/kitchen-bar?view=all"
             }
         }
     },
     "B": {
         "image-link-double-module": {
-            "intro": {
+            "section": {
                 "text": "Top Categories",
                 "link": ""
             },
@@ -30,19 +30,19 @@
                         "link": "/this-just-in"
                     },
                     "cta": {
-                        "text": "this just in",
+                        "text": "This Just In",
                         "link": "/this-just-in"
                     }
                 },
                 {
-                    "item": 41085,
+                    "item": 27022,
                     "image": {
                         "customImage": "",
-                        "link": "/curated/uncommon-collection"
+                        "link": "/home-garden/garden?view=all"
                     },
                     "cta": {
-                        "text": "uncommon collection",
-                        "link": "/curated/uncommon-collection"
+                        "text": "Garden",
+                        "link": "/home-garden/garden?view=all"
                     }
                 },
                 {
@@ -52,7 +52,7 @@
                         "link": "/kitchen-bar/kitchen-tools?view=all"
                     },
                     "cta": {
-                        "text": "kitchen tools",
+                        "text": "Kitchen Tools",
                         "link": "/kitchen-bar/kitchen-tools?view=all"
                     }
                 },
@@ -63,7 +63,7 @@
                         "link": "/jewelry?view=all"
                     },
                     "cta": {
-                        "text": "jewelry",
+                        "text": "Jewelry",
                         "link": "/jewelry?view=all"
                     }
                 },
@@ -74,7 +74,7 @@
                         "link": "/fun?view=all"
                     },
                     "cta": {
-                        "text": "fun",
+                        "text": "Fun",
                         "link": "/fun?view=all"
                     }
                 },
@@ -85,7 +85,7 @@
                         "link": "/sale"
                     },
                     "cta": {
-                        "text": "sale",
+                        "text": "Sale",
                         "link": "/sale"
                     }
                 }
@@ -93,63 +93,114 @@
         }
     },
     "C": {
-        "text-link-module": {
-            "intro": {
-                "text": "Shop by Recipient",
-                "link": "/gifts/by-recipient"
+        "basic-story-module": {
+            "item": 42160,
+            "section": {
+                "text": "",
+                "link": ""
+            },
+            "image": {
+                "customImage": "",
+                "link": "/kitchen-bar/kitchen-tools"
+            },
+            "headline": {
+                "text": "City Bike Map Glasses - Set of 2",
+                "link": "/product/city-bike-map-glasses-set-of-2"
+            },
+            "cta": {
+                "text": "see more",
+                "link": "/product/city-bike-map-glasses-set-of-2"
+            }
+        }
+    },
+    "D": {
+        "extended-story-module": {
+            "item": 42121,
+            "image": {
+                "customImage": "",
+                "link": "/product/nightbulb"
+            },
+            "section": {
+                "text": "coming soon",
+                "link": "/product/nightbulb"
+            },
+            "headline": {
+                "text": "Introducing the Nightbulb",
+                "link": "/product/nightbulb"
+            },
+            "cta": {
+                "text": "pre-order now",
+                "link": "/product/nightbulb"
+            },
+            "copy": {
+                "text": "Designers Liz Ross and David Westby set out to create a snow globe-inspired light, only to find that lightbulbs and flurry-filled domes already shared some design history.",
+                "link": "/product/nightbulb"
+            }
+        }
+    },
+    "E": {
+        "image-link-single-module": {
+            "item": 42733,
+            "section": {
+                "text": "",
+                "link": ""
+            },
+            "image": {
+                "text": "",
+                "link": "/product/personalized-flex-time-clock"
+            },
+            "cta": {
+                "text": "",
+                "link": ""
+            }
+        }
+    },
+    "F": {
+        "button-link-single-module": {
+            "section": {
+                "text": "",
+                "link": ""
             },
             "sections": [
                 {
-                    "ctaLeft": {
-                        "text": "for her",
-                        "link": "/for-kids"
+                    "item": 20154,
+                    "image": {
+                        "customImage": "",
+                        "link": "/product/personalized-cursive-wedding-vase"
                     },
-                    "ctaRight": {
-                        "text": "for him",
-                        "link": "/gifts/by-recipient/gifts-for-men"
+                    "cta": {
+                        "text": "wedding",
+                        "link": "/gifts/wedding-gifts?view=all"
                     }
                 },
                 {
-                    "ctaLeft": {
-                        "text": "for couples",
-                        "link": "/gifts/by-recipient/gifts-for-couples"
+                    "item": 41007,
+                    "image": {
+                        "customImage": "",
+                        "link": "/product/constant-sparkling-champagne-flutes-set-of-4"
                     },
-                    "ctaRight": {
-                        "text": "for kids",
-                        "link": "/gifts/by-recipient/gifts-for-kids"
+                    "cta": {
+                        "text": "anniversary",
+                        "link": "/gifts/anniversary-gifts/anniversary-gifts"
+                    }
+                },
+                {
+                    "item": 22272,
+                    "image": {
+                        "customImage": "",
+                        "link": "/product/intersection-of-love-photo-print"
+                    },
+                    "cta": {
+                        "text": "personalized",
+                        "link": "/gifts/personalized/personalized-gifts"
                     }
                 }
             ]
         }
     },
-    "D": {
-        "extended-story-module": {
-            "item": 42802,
-            "image": {
-                "customImage": "",
-                "link": "/artist?artistId=25084"
-            },
-            "intro": {
-                "text": "Coming Soon",
-                "link": "/artist?artistId=25084"
-            },
-            "headline": {
-                "text": "Cute Counterparts",
-                "link": "/artist?artistId=25084"
-            },
-            "cta": {
-                "text": "pre-order today!",
-                "link": "/artist?artistId=25084"
-            },
-            "copy": {
-                "text": "Cats and dogs play nice in Christine Schmidt’s adorably mismatched earrings and enameled pendants. Sets for book lovers and stargazers add geeky glamour to this exclusive collection.",
-                "link": "//blog.uncommongoods.com/2016/christine-schmidt-maker-story/"
-            }
-        }
-    },
-    "E": {
+    "G": {
         "button-link-double-module": {
-            "intro": {
+            "section": {
                 "text": "",
                 "link": ""
             },
@@ -161,7 +212,7 @@
                         "link": "/gifts/wedding-gifts?view=all"
                     },
                     "cta": {
-                        "text": "wedding gifts",
+                        "text": "wedding",
                         "link": "/gifts/wedding-gifts?view=all"
                     }
                 },
@@ -172,7 +223,7 @@
                         "link": "/sets/handmade-gifts"
                     },
                     "cta": {
-                        "text": "handmade gifts",
+                        "text": "Handmade",
                         "link": "/sets/handmade-gifts"
                     }
                 },
@@ -183,7 +234,7 @@
                         "link": "/gifts/anniversary-gifts/anniversary-gifts"
                     },
                     "cta": {
-                        "text": "anniversary gifts",
+                        "text": "Anniversary",
                         "link": "/gifts/anniversary-gifts/anniversary-gifts"
                     }
                 },
@@ -194,54 +245,199 @@
                         "link": "/gifts/birthday-gifts?view=all"
                     },
                     "cta": {
-                        "text": "birthday gifts",
+                        "text": "Birthday",
                         "link": "/gifts/birthday-gifts?view=all"
                     }
                 }
             ]
         }
     },
-    "F": {
-        "collection-grid-module": {
-            "intro": {
+    "H": {
+        "text-link-module": {
+            "section": {
+                "text": "Shop by Recipient",
+                "link": "/gifts/by-recipient"
+            },
+            "sections": [
+                {
+                    "ctaLeft": {
+                        "text": "for him",
+                        "link": "/gifts/by-recipient/gifts-for-men"
+                    },
+                    "ctaRight": {
+                        "text": " for her",
+                        "link": " /gifts/by-recipient/gifts-for-women"
+                    }
+                },
+                {
+                    "ctaLeft": {
+                        "text": "for couples",
+                        "link": "/gifts/by-recipient/gifts-for-couples"
+                    },
+                    "ctaRight": {
+                        "text": " for kids",
+                        "link": " /gifts/by-recipient/gifts-for-kids"
+                    }
+                }
+            ]
+        }
+    },
+    "I": {
+        "carousel-module": {
+            "section": {
                 "text": "",
                 "link": ""
             },
             "headline": {
-                "text": "Our Most Wish-for Goods",
-                "link": "/sets/most-wishlisted"
+                "text": "collection headline",
+                "link": "/kitchen-bar/kitchen-tools"
             },
             "cta": {
-                "text": "Start Wishing!",
-                "link": "/sets/most-wishlisted"
+                "text": "call to action",
+                "link": "/kitchen-bar/kitchen-tools"
             },
             "sections": [
                 {
-                    "item": "21223",
+                    "item": "27234",
                     "image": {
                         "customImage": "",
-                        "link": "/sets/most-wishlisted"
+                        "link": "/product/productivity-timing-hourglass"
                     }
                 },
                 {
-                    "item": "26772",
+                    "item": "41601",
                     "image": {
                         "customImage": "",
-                        "link": "/sets/most-wishlisted"
+                        "link": "/product/personalized-amp-doormat"
                     }
                 },
                 {
-                    "item": "27242",
+                    "item": " 41087",
                     "image": {
                         "customImage": "",
-                        "link": "/sets/most-wishlisted"
+                        "link": "/product/personalized-my-alphabet-letter-blanket"
                     }
                 },
                 {
-                    "item": "30384",
+                    "item": " 22195",
                     "image": {
                         "customImage": "",
-                        "link": "/sets/most-wishlisted"
+                        "link": "/product/equation-geek-watch"
+                    }
+                },
+                {
+                    "item": " 26739",
+                    "image": {
+                        "customImage": "",
+                        "link": "/product/musical-skyline-art-large"
+                    }
+                },
+                {
+                    "item": " 23960",
+                    "image": {
+                        "customImage": "",
+                        "link": "/product/personalized-whiskey-barrel"
+                    }
+                }
+            ]
+        }
+    },
+    "J": {
+        "collection-grid-module": {
+            "section": {
+                "text": "",
+                "link": ""
+            },
+            "headline": {
+                "text": "collection headline",
+                "link": "/kitchen-bar/kitchen-tools"
+            },
+            "cta": {
+                "text": "call to action",
+                "link": "/kitchen-bar/kitchen-tools"
+            },
+            "sections": [
+                {
+                    "item": "42230",
+                    "image": {
+                        "customImage": "",
+                        "link": "/product/productivity-timing-hourglass"
+                    }
+                },
+                {
+                    "item": "42173",
+                    "image": {
+                        "customImage": "",
+                        "link": "/product/personalized-amp-doormat"
+                    }
+                },
+                {
+                    "item": "27160",
+                    "image": {
+                        "customImage": "",
+                        "link": "/product/personalized-my-alphabet-letter-blanket"
+                    }
+                },
+                {
+                    "item": "41680",
+                    "image": {
+                        "customImage": "",
+                        "link": "/product/equation-geek-watch"
+                    }
+                }
+            ]
+        }
+    },
+    "K": {
+        "small-feature-module": {
+            "section": {
+                "text": "",
+                "link": ""
+            },
+            "sections": [
+                {
+                    "item": 24066,
+                    "image": {
+                        "customImage": "",
+                        "link": "/product/3-stone-sea-glass-necklace"
+                    },
+                    "headline": {
+                        "text": "Our Favorite inspirational Jewelry Gifts",
+                        "link": "/jewelry?view=all"
+                    },
+                    "cta": {
+                        "text": "shop the gift guide",
+                        "link": "/jewelry?view=all"
+                    }
+                },
+                {
+                    "item": 40433,
+                    "image": {
+                        "customImage": "",
+                        "link": "/product/adventurer-multi-tool-clip-watch"
+                    },
+                    "headline": {
+                        "text": "15 Groomsmen Gifts Your Guys Will Use",
+                        "link": "/gifts/wedding-gifts/groomsmen-gifts"
+                    },
+                    "cta": {
+                        "text": "shop the gift guide",
+                        "link": "/gifts/wedding-gifts/groomsmen-gifts"
+                    }
+                },
+                {
+                    "item": 23847,
+                    "image": {
+                        "customImage": "",
+                        "link": "/product/elwood-the-rainbow-unicorn-mug"
+                    },
+                    "headline": {
+                        "text": "Unforgettable Birthday Gifts for Everyone",
+                        "link": "/gifts/birthday-gifts?view=all"
+                    },
+                    "cta": {
+                        "text": "shop the gift guide",
+                        "link": "/gifts/birthday-gifts?view=all"
                     }
                 }
             ]
