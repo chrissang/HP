@@ -1,10 +1,9 @@
 
 var hpJson = {};
+var filterJson = {};
 
 class Dependents {
     constructor(params) {
-        this.mappingOrder = {};
-        this.uniqueIdModified = ko.observableArray();
         this.itemNumber = ko.observable("");
         this.itemUrl = ko.observable("");
         this.imageUrl = ko.observable("");
@@ -14,11 +13,14 @@ class Dependents {
         this.ctaUrl = ko.observable("");
         this.section = ko.observable("");
         this.sectionUrl = ko.observable("");
+        this.moduleType = ko.observable("");
 
+        this.alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        this.mappingOrder = {};
+        this.uniqueIdModified = ko.observable("");
         this.uniqueId = new Date().getTime();
         this.sortMappingOrder = function() {
-            var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            var uniqueIdReordered = this.uniqueIdModified()
+            var uniqueIdReordered = this.uniqueIdModified();
 
             function reorderAlpha(obj, curr, updated) {
                 var jsonString = JSON.stringify(obj);
@@ -28,12 +30,10 @@ class Dependents {
                 return jsonObj;
             };
             uniqueIdReordered.forEach((el,index) => {
-                var alphaChar = alpha.charAt(index);
-                //console.log('each ',Object.keys(this.mappingOrder[el]), alphaChar);
+                var alphaChar = this.alpha.charAt(index);
                 if (Object.keys(this.mappingOrder[el]) != alphaChar) {
                     var curr = Object.keys(this.mappingOrder[el])[0];
                     this.mappingOrder[el] = reorderAlpha(this.mappingOrder[el],curr, alphaChar);
-
                 }
             });
         }
@@ -74,42 +74,36 @@ class Dependents {
                         var oldIndex = evt.oldIndex;  // element's old index within parent
                         var newIndex = evt.newIndex;  // element's new index within parent
                         var order = sortable.toArray();
-                        // ko.dataFor(evt.item).params.data.selectedModules(order);
                         ko.dataFor(evt.item).params.data.uniqueIdModified(order);
                         ko.dataFor(evt.item).params.data.sortMappingOrder();
 
+                        // console.log('uniqueIdModified ',ko.dataFor(evt.item).params.data.uniqueIdModified());
+                        // console.log('order ',order);
 
-                        var sorted = ko.dataFor(evt.item).params.data.selectedModules();
-                        var module = bindingContext.$parent;
-
-                        var reorderAray = ko.dataFor(evt.item).params.data.selectedModules();
-
-                        console.log('old ',oldIndex);
-                        console.log('new ',newIndex);
-                        console.log('reorderAray ',reorderAray);
-
-                        if (reorderAray[newIndex] != module) {
-                            sorted.splice(oldIndex,1);
-                            sorted.splice(newIndex,0,module);
-                            ko.dataFor(evt.item).params.data.selectedModules(sorted);
-                            console.log('sorted ',ko.dataFor(evt.item).params.data.selectedModules());
-                        }
-                        // console.log('old ',oldIndex;
-                        // console.log('new ',newIndex);
-                        // console.log('item ',bindingContext.$parent);
-                        // console.log(ko.dataFor(evt.item).params.data.selectedModules());
+                        // var sorted = ko.dataFor(evt.item).params.data.selectedModules();
+                        // var module = ko.dataFor(evt.item).moduleType();
+                        // var reorderAray = ko.dataFor(evt.item).params.data.selectedModules();
+                        //
+                        // if (reorderAray[newIndex] != module) {
+                        //     sorted.splice(oldIndex,1);
+                        //     sorted.splice(newIndex,0,module);
+                        //     ko.dataFor(evt.item).params.data.selectedModules(sorted);
+                        //     console.log('sorted ',ko.dataFor(evt.item).params.data.selectedModules());
+                        // }
                     }
                 });
 
-                var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                var sortedOrder = viewModel.params.data.uniqueIdModified();
+                //viewModel.params.data.uniqueIdModified(viewModel.uniqueId);
                 var uniqueId = viewModel.uniqueId;
-                var alphaChar = alpha.charAt(viewModel.accordionIndex());
+                var alphaChar = viewModel.alpha.charAt(viewModel.accordionIndex());
                 var moduleType = bindingContext.$parent;
+                viewModel.moduleType(bindingContext.$parent);
 
                 viewModel.params.data.mappingOrder[uniqueId] = {};
                 viewModel.params.data.mappingOrder[uniqueId][alphaChar] = {};
                 viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType] = {};
+
+
 
                 switch (moduleType) {
                     case 'large-feature-module':
@@ -284,15 +278,17 @@ ko.components.register('small-feature-module', {
         </div>`, synchronous: true
 });
 
-// reducerFilter(acc, xs) {
-//   xs.map((item, index)=> {
-//       if (xs[index] === xs[index+1]) {
-//       } else {
-//           acc.push(item);
-//       }
-//   })
-//   //return acc;
-// }
+function reducerFilter(acc, xs) {
+  xs.map((item, index)=> {
+      if (xs[index] === xs[index+1]) {
+
+      } else {
+          acc.push(item);
+      }
+  })
+  console.log('acc ',acc)
+  return acc;
+}
 
 ko.components.register('homePageTool', {
   viewModel: class HomePageToolComponentModel extends Dependents {
@@ -321,22 +317,20 @@ ko.components.register('homePageTool', {
           }
           this.previewOrder = function(e) {
               var obj = this.mappingOrder;
-              var filter = [];
+              var filterObj = [];
               Object.keys(obj).forEach(function(key,index) {
-                 Object.assign(hpJson, obj[key]);
+                 Object.assign(filterJson, obj[key]);
               });
 
-              Object.keys(hpJson).forEach(function(key,index) {
-                  Object.keys(hpJson[key]).forEach(function(key,index) {
-                     //console.log(key,hpJson[key][key]);
-                    // if (k === xs[index+1]) {
-                    //
-                    // }
-
-                  });
+              Object.keys(filterJson).forEach(function(key,index) {
+                  console.log( Object.keys(filterJson[key])[0] );
+                  filterObj.push(Object.keys(filterJson[key])[0]);
               });
 
-              console.log('hpJson ', hpJson);
+
+               //reducerFilter([], filterObj);
+              console.log('filterObj ', filterObj);
+              //console.log('filterJson ', filterJson);
           }
       }
     },
