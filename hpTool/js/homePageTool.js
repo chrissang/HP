@@ -1,6 +1,6 @@
 
 var hpJson = {};
-var filterJson = {};
+var cleanJson = {};
 
 class Dependents {
     constructor(params) {
@@ -279,15 +279,38 @@ ko.components.register('small-feature-module', {
 });
 
 function reducerFilter(acc, xs) {
-  xs.map((item, index)=> {
+  xs.map((item, index) => {
       if (xs[index] === xs[index+1]) {
-
+          if (xs[index] === 'large-feature-module') {
+              acc.push(item);
+          }
       } else {
           acc.push(item);
       }
   })
-  console.log('acc ',acc)
+  console.log('acc ',acc);
   return acc;
+}
+
+function reducerObjFilter(acc, xs) {
+    Object.keys(xs).reduce(function(previous, current, index, array){
+        //return previous + o[key].value;
+        console.log('previous ',previous);
+        console.log('current ',current);
+        console.log('index ',index);
+        console.log('array ',array);
+    });
+
+  // xs.map((item, index) => {
+  //     //console.log(item.hasOwnProperty('large-feature-module'));
+  //     //console.log('hasOwnProperty ',item.hasOwnProperty(xs[index]));
+  //
+  //     if (item.hasOwnProperty(Object.keys(xs[index+1])) === item.hasOwnProperty(Object.keys(xs[index+1])[0])) {
+  //         console.log('hasOwnProperty ',Object.keys(xs[index])[0]);
+  //     } else {
+  //         console.log('else');
+  //     }
+  // })
 }
 
 ko.components.register('homePageTool', {
@@ -317,20 +340,24 @@ ko.components.register('homePageTool', {
           }
           this.previewOrder = function(e) {
               var obj = this.mappingOrder;
-              var filterObj = [];
-              Object.keys(obj).forEach(function(key,index) {
-                 Object.assign(filterJson, obj[key]);
+              var filterJson = [];
+
+              //gets the order
+              Object.keys(obj).forEach(function(key) {
+                 Object.assign(cleanJson, obj[key]);
+              });
+              //find duplicates
+              Object.keys(cleanJson).forEach(function(key,index) {
+                //   filterJson.push(Object.keys(cleanJson[key])[0]);
+
+                filterJson.push(cleanJson[key]);
               });
 
-              Object.keys(filterJson).forEach(function(key,index) {
-                  console.log( Object.keys(filterJson[key])[0] );
-                  filterObj.push(Object.keys(filterJson[key])[0]);
-              });
-
-
-               //reducerFilter([], filterObj);
-              console.log('filterObj ', filterObj);
-              //console.log('filterJson ', filterJson);
+              console.log(filterJson);
+              reducerObjFilter([], filterJson);
+              //reducerFilter([], filterJson);
+              //console.log('filterObj ', filterObj);
+              //console.log('cleanJson ', cleanJson);
           }
       }
     },
