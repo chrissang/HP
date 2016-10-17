@@ -348,13 +348,33 @@ ko.components.register('homePageTool', {
               });
               //find duplicates
               Object.keys(cleanJson).forEach(function(key,index) {
-                //   filterJson.push(Object.keys(cleanJson[key])[0]);
-
                 filterJson.push(cleanJson[key]);
               });
+            //    && filterJson.indexOf(filterJson[index+1]) != -1
+              filterJson.forEach((obj,index) => {
 
-              console.log(filterJson);
-              reducerObjFilter([], filterJson);
+                  var sectionsArray = [];
+                  if (Object.keys(obj)[0] != 'large-feature-module') {
+                      if(filterJson[index+1] === 'undfined'){
+                          sectionsArray.push(filterJson[index][Object.keys(filterJson[index])[0]].sections[0]);
+                      }
+                      
+                      if (Object.keys(filterJson[index])[0] === Object.keys(filterJson[index+1])[0]) {
+                          //console.log(filterJson[index][Object.keys(filterJson[index])[0]].sections);
+                          //sectionsArray.concat(filterJson[index][Object.keys(filterJson[index])[0]].sections,filterJson[index+1][Object.keys(filterJson[index+1])[0]].sections);
+                          //console.log(filterJson[index][Object.keys(filterJson[index])[0]].sections.concat(filterJson[index+1][Object.keys(filterJson[index+1])[0]].sections));
+                          sectionsArray.push(filterJson[index][Object.keys(filterJson[index])[0]].sections[0]);
+                          sectionsArray.push(filterJson[index+1][Object.keys(filterJson[index+1])[0]].sections[0]);
+
+                      }
+
+                  }
+                  console.log(sectionsArray);
+              })
+              //filterJson[index+1] != undefined
+            //console.log('filterJson ',filterJson);
+            //     console.log('cleanJson ',cleanJson);
+            //   reducerFilter([], filterJson);
               //reducerFilter([], filterJson);
               //console.log('filterObj ', filterObj);
               //console.log('cleanJson ', cleanJson);
