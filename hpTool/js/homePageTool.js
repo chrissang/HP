@@ -106,7 +106,6 @@ class Dependents {
                         };
                         break;
                     case 'small-feature-module':
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['item'] = viewModel.itemNumber();
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
                             "text": viewModel.section(),
                             "link": viewModel.sectionUrl()
@@ -313,7 +312,7 @@ ko.components.register('homePageTool', {
               Object.keys(obj).forEach(function(key) {
                  Object.assign(cleanJson, obj[key]);
               });
-              //console.log('cleanJson ',cleanJson);
+              console.log('cleanJson ',cleanJson);
 
               Object.keys(cleanJson).forEach(function(key,index) {
                   duplicateModuleNames.push(Object.keys(cleanJson[key])[0]);
@@ -328,11 +327,19 @@ ko.components.register('homePageTool', {
               adjecentCombine.forEach((el,index) => {
                   var moduleType = Object.keys(duplicateObjects[index])[0];
                   if (el === 'concat') {
-                      concatArray = duplicateObjects[index][moduleType].sections.concat(duplicateObjects[index+1][moduleType].sections);
-                      console.log('concatArray ',concatArray);
+                    concatArray.push(duplicateObjects[index][moduleType].sections[0]);
+                    duplicateObjects.splice(index,1,'');
+
+                    console.log('if ',duplicateObjects);
+                  } else {
+                      concatArray.push(duplicateObjects[index][moduleType].sections[0]);
+                    //   duplicateObjects[index][moduleType].sections = [];
+                    //   duplicateObjects[index][moduleType].sections.push(concatArray);
                   }
-                  //console.log(duplicateObjects[index][moduleType].sections);
               })
+
+              console.log('duplicateObjects combined ',duplicateObjects);
+              console.log('concatArray ',concatArray);
 
           }
       }
