@@ -76,20 +76,6 @@ class Dependents {
                         var order = sortable.toArray();
                         ko.dataFor(evt.item).params.data.uniqueIdModified(order);
                         ko.dataFor(evt.item).params.data.sortMappingOrder();
-
-                        // console.log('uniqueIdModified ',ko.dataFor(evt.item).params.data.uniqueIdModified());
-                        // console.log('order ',order);
-
-                        // var sorted = ko.dataFor(evt.item).params.data.selectedModules();
-                        // var module = ko.dataFor(evt.item).moduleType();
-                        // var reorderAray = ko.dataFor(evt.item).params.data.selectedModules();
-                        //
-                        // if (reorderAray[newIndex] != module) {
-                        //     sorted.splice(oldIndex,1);
-                        //     sorted.splice(newIndex,0,module);
-                        //     ko.dataFor(evt.item).params.data.selectedModules(sorted);
-                        //     console.log('sorted ',ko.dataFor(evt.item).params.data.selectedModules());
-                        // }
                     }
                 });
 
@@ -102,8 +88,6 @@ class Dependents {
                 viewModel.params.data.mappingOrder[uniqueId] = {};
                 viewModel.params.data.mappingOrder[uniqueId][alphaChar] = {};
                 viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType] = {};
-
-
 
                 switch (moduleType) {
                     case 'large-feature-module':
@@ -283,34 +267,15 @@ function reducerFilter(acc, xs) {
       if (xs[index] === xs[index+1]) {
           if (xs[index] === 'large-feature-module') {
               acc.push(item);
+          } else {
+              acc.push('concat');
           }
       } else {
           acc.push(item);
       }
   })
-  console.log('acc ',acc);
+  // console.log('acc ',acc);
   return acc;
-}
-
-function reducerObjFilter(acc, xs) {
-    Object.keys(xs).reduce(function(previous, current, index, array){
-        //return previous + o[key].value;
-        console.log('previous ',previous);
-        console.log('current ',current);
-        console.log('index ',index);
-        console.log('array ',array);
-    });
-
-  // xs.map((item, index) => {
-  //     //console.log(item.hasOwnProperty('large-feature-module'));
-  //     //console.log('hasOwnProperty ',item.hasOwnProperty(xs[index]));
-  //
-  //     if (item.hasOwnProperty(Object.keys(xs[index+1])) === item.hasOwnProperty(Object.keys(xs[index+1])[0])) {
-  //         console.log('hasOwnProperty ',Object.keys(xs[index])[0]);
-  //     } else {
-  //         console.log('else');
-  //     }
-  // })
 }
 
 ko.components.register('homePageTool', {
@@ -340,44 +305,35 @@ ko.components.register('homePageTool', {
           }
           this.previewOrder = function(e) {
               var obj = this.mappingOrder;
-              var filterJson = [];
+              var duplicateModuleNames = [];
+              var duplicateObjects = [];
+              var concatArray = [];
 
               //gets the order
               Object.keys(obj).forEach(function(key) {
                  Object.assign(cleanJson, obj[key]);
               });
-              //find duplicates
+              //console.log('cleanJson ',cleanJson);
+
               Object.keys(cleanJson).forEach(function(key,index) {
-                filterJson.push(cleanJson[key]);
+                  duplicateModuleNames.push(Object.keys(cleanJson[key])[0]);
+                  duplicateObjects.push(cleanJson[key]);
               });
-            //    && filterJson.indexOf(filterJson[index+1]) != -1
-              filterJson.forEach((obj,index) => {
+              //console.log('duplicateModuleNames ',duplicateModuleNames);
+              //console.log('duplicateObjects ',duplicateObjects);
+              var adjecentCombine = reducerFilter([],duplicateModuleNames);
 
-                  var sectionsArray = [];
-                  if (Object.keys(obj)[0] != 'large-feature-module') {
-                      if(filterJson[index+1] === 'undfined'){
-                          sectionsArray.push(filterJson[index][Object.keys(filterJson[index])[0]].sections[0]);
-                      }
-                      
-                      if (Object.keys(filterJson[index])[0] === Object.keys(filterJson[index+1])[0]) {
-                          //console.log(filterJson[index][Object.keys(filterJson[index])[0]].sections);
-                          //sectionsArray.concat(filterJson[index][Object.keys(filterJson[index])[0]].sections,filterJson[index+1][Object.keys(filterJson[index+1])[0]].sections);
-                          //console.log(filterJson[index][Object.keys(filterJson[index])[0]].sections.concat(filterJson[index+1][Object.keys(filterJson[index+1])[0]].sections));
-                          sectionsArray.push(filterJson[index][Object.keys(filterJson[index])[0]].sections[0]);
-                          sectionsArray.push(filterJson[index+1][Object.keys(filterJson[index+1])[0]].sections[0]);
+              console.log('adjecentCombine ',adjecentCombine);
 
-                      }
-
+              adjecentCombine.forEach((el,index) => {
+                  var moduleType = Object.keys(duplicateObjects[index])[0];
+                  if (el === 'concat') {
+                      concatArray = duplicateObjects[index][moduleType].sections.concat(duplicateObjects[index+1][moduleType].sections);
+                      console.log('concatArray ',concatArray);
                   }
-                  console.log(sectionsArray);
+                  //console.log(duplicateObjects[index][moduleType].sections);
               })
-              //filterJson[index+1] != undefined
-            //console.log('filterJson ',filterJson);
-            //     console.log('cleanJson ',cleanJson);
-            //   reducerFilter([], filterJson);
-              //reducerFilter([], filterJson);
-              //console.log('filterObj ', filterObj);
-              //console.log('cleanJson ', cleanJson);
+
           }
       }
     },
