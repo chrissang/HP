@@ -329,10 +329,10 @@ ko.components.register('homePageTool', {
                   if (el === 'concat') {
                     concatArray.push(duplicateObjects[index][moduleType].sections[0]);
                     duplicateObjects.splice(index,1,'');
-
-                    console.log('if ',duplicateObjects);
                   } else {
                       concatArray.push(duplicateObjects[index][moduleType].sections[0]);
+                      duplicateObjects[index][moduleType].sections = [];
+                      console.log('sections ',duplicateObjects[index][moduleType].sections);
                     //   duplicateObjects[index][moduleType].sections = [];
                     //   duplicateObjects[index][moduleType].sections.push(concatArray);
                   }
