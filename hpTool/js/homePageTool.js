@@ -327,19 +327,17 @@ ko.components.register('homePageTool', {
               adjecentCombine.forEach((el,index) => {
                   var moduleType = Object.keys(duplicateObjects[index])[0];
                   if (el === 'concat') {
-                    concatArray.push(duplicateObjects[index][moduleType].sections[0]);
+                      duplicateObjects[index+1][moduleType].sections = duplicateObjects[index][moduleType].sections.concat(duplicateObjects[index+1][moduleType].sections);
+
+                    // concatArray.push(duplicateObjects[index][moduleType].sections[0]);
                     duplicateObjects.splice(index,1,'');
-                  } else {
-                      concatArray.push(duplicateObjects[index][moduleType].sections[0]);
-                      duplicateObjects[index][moduleType].sections = [];
-                      console.log('sections ',duplicateObjects[index][moduleType].sections);
-                    //   duplicateObjects[index][moduleType].sections = [];
-                    //   duplicateObjects[index][moduleType].sections.push(concatArray);
                   }
               })
 
+              duplicateObjects = duplicateObjects.filter(function(n){ return n != '' });
               console.log('duplicateObjects combined ',duplicateObjects);
-              console.log('concatArray ',concatArray);
+
+              //console.log('concatArray ',concatArray);
 
           }
       }
