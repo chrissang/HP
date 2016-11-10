@@ -7,6 +7,9 @@ class Dependents {
         this.itemNumber = ko.observable("");
         this.itemUrl = ko.observable("");
         this.imageUrl = ko.observable("");
+        this.imageSmallUrl = ko.observable("");
+        this.imageLargeUrl = ko.observable("");
+        this.description = ko.observable("");
         this.headline = ko.observable("");
         this.headlineUrl = ko.observable("");
         this.cta = ko.observable("");
@@ -91,43 +94,51 @@ class Dependents {
 
                 switch (moduleType) {
                     case 'large-feature-module':
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['item'] = viewModel.itemNumber();
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['image'] = {
-                            "customImage": viewModel.imageUrl(),
-                            "link": viewModel.itemUrl()
-                        };
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['headline'] = {
-                            "text": viewModel.headline(),
-                            "link": viewModel.headlineUrl()
-                        };
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['cta'] = {
-                            "text": viewModel.cta(),
-                            "link": viewModel.ctaUrl()
-                        };
-                        break;
-                    case 'small-feature-module':
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
-                            "text": viewModel.section(),
-                            "link": viewModel.sectionUrl()
-                        };
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
-                            {
-                                'item': viewModel.itemNumber(),
-                                'image': {
-                                    'customImage': viewModel.imageUrl(),
-                                    'link': viewModel.itemUrl()
+                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                        {
+                            'item': viewModel.itemNumber(),
+                            'image': {
+                                'customImage': {
+                                    "small": viewModel.imageSmallUrl(),
+                                    "large": viewModel.imageLargeUrl()
                                 },
-                                'headline': {
-                                    'text': viewModel.headline(),
-                                    'link': viewModel.headlineUrl()
-                                },
-                                'cta': {
-                                    'text': viewModel.cta(),
-                                    'link': viewModel.ctaUrl()
-                                }
+                                'link': viewModel.itemUrl(),
+                                'description': viewModel.description()
+                            },
+                            'headline': {
+                                'text': viewModel.headline(),
+                                'link': viewModel.headlineUrl()
+                            },
+                            'cta': {
+                                'text': viewModel.cta(),
+                                'link': viewModel.ctaUrl()
                             }
-                        ]
-                        break;
+                        }
+                    ]
+                    break;
+                    case 'small-feature-module':
+                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                        "text": viewModel.section(),
+                        "link": viewModel.sectionUrl()
+                    };
+                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                        {
+                            'item': viewModel.itemNumber(),
+                            'image': {
+                                'customImage': viewModel.imageUrl(),
+                                'link': viewModel.itemUrl()
+                            },
+                            'headline': {
+                                'text': viewModel.headline(),
+                                'link': viewModel.headlineUrl()
+                            },
+                            'cta': {
+                                'text': viewModel.cta(),
+                                'link': viewModel.ctaUrl()
+                            }
+                        }
+                    ]
+                    break;
                 }
             }
         };
@@ -158,11 +169,20 @@ ko.components.register('large-feature-module', {
                                 <div class="small-12 medium-4 columns">
                                     <label>Item URL</label>
                                     <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL"></input>
-                                    <h3 data-bind="text: itemUrl"></h3>
                                 </div>
                                 <div class="small-12 medium-4 columns">
-                                    <label>Image URL</label>
-                                    <input data-bind="textInput: imageUrl" type="text" placeholder="Image URL"></input>
+                                    <label>Description Tag</label>
+                                    <input data-bind="textInput: description" type="text" placeholder="Description Tag"></input>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="small-12 medium-6 columns">
+                                    <label>Small Image URL</label>
+                                    <input data-bind="textInput: imageSmallUrl" type="text" placeholder="Small Image URL"></input>
+                                </div>
+                                <div class="small-12 medium-6 columns">
+                                    <label>Large Image URL</label>
+                                    <input data-bind="textInput: imageLargeUrl" type="text" placeholder="Large Image URL"></input>
                                 </div>
                             </div>
                             <div class="row">
@@ -264,7 +284,7 @@ ko.components.register('small-feature-module', {
 function reducerFilter(acc, xs) {
   xs.map((item, index) => {
       if (xs[index] === xs[index+1]) {
-          if (xs[index] === 'large-feature-module') {
+          if (xs[index] === 'collection-grid-module' || xs[index] === 'carousel-module' || xs[index] === 'text-link-module') {
               acc.push(item);
           } else {
               acc.push('concat');
@@ -291,9 +311,7 @@ ko.components.register('homePageTool', {
               {name: 'Collection Grid (CG)', value: 'collection-grid-module'},
               {name: 'Carousel (CL)', value: 'carousel-module'},
               {name: 'Text Link (TL)', value: 'text-link-module'},
-              {name: 'Image Link Single (LS)', value: 'image-link-single-module'},
               {name: 'Image Link Double (LD)', value: 'image-link-double-module'},
-              {name: 'Button Link Single (BI)', value: 'button-link-single-module'},
               {name: 'Button Link Double (BD)', value: 'button-link-double-module'}
           ];
 
@@ -326,6 +344,7 @@ ko.components.register('homePageTool', {
 
               adjecentCombine.forEach((el,index) => {
                   var moduleType = Object.keys(duplicateObjects[index])[0];
+                  console.log(el);
                   if (el === 'concat') {
                       duplicateObjects[index+1][moduleType].sections = duplicateObjects[index][moduleType].sections.concat(duplicateObjects[index+1][moduleType].sections);
 
