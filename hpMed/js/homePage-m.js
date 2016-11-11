@@ -653,9 +653,12 @@ ko.components.register('collection-grid-module', {
             this.headline = params.data.headline;
             this.cta = params.data.cta;
             this.collectionGridModulesSections = params.data.sections;
-            this.isLessThan2 = function(index) {
-                return index < 2 ? true : false;
-            }
+            this.arrayContent1 = this.collectionGridModulesSections[0];
+            this.arrayContent2 = this.collectionGridModulesSections[1];
+            this.arrayContent3 = this.collectionGridModulesSections[2];
+            this.arrayContent4 = this.collectionGridModulesSections[3];
+            this.arrayContent5 = this.collectionGridModulesSections[4];
+            this.arrayContent6 = this.collectionGridModulesSections[5];
         }
     },
     template: `
@@ -664,37 +667,33 @@ ko.components.register('collection-grid-module', {
                 <div class="small-12 xlarge-10 xlarge-centered columns">
                     <div class="row container">
 
-                        <!-- ko foreach: collectionGridModulesSections -->
-                            <!-- ko if: $parent.isEven($index()) -->
-                                <div class="small-12 medium-6 columns">
-                                    <div class="flex">
-                                        <div class="small-8-width">
-                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
-                                                <div class="responsively-lazy preventReflow">
-                                                    <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: $parent.cta.text }"/>
-                                                </div>
-                                            </a>
+                        <div class="small-12 medium-6 columns">
+                            <div class="flex">
+                                <div class="small-8-width">
+                                    <a data-bind="attr: { href: addUgDomain(arrayContent1.image.link), 'data-type': 'Image', 'data-description': arrayContent1.image.description }">
+                                        <div class="responsively-lazy preventReflow">
+                                            <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent1.item, arrayContent1.image.customImage.large, arrayContent1.image.customImage.small), src: arrayContent1.image.customImage.large ? arrayContent1.image.customImage.large : productImgPath(arrayContent1.item,360), alt: cta.text }"/>
                                         </div>
-                                        <div class="small-4-width">
-                                            <div>
-                                                <a data-bind="attr: { href: addUgDomain(subImageTop.link), 'data-type': 'Image', 'data-description': subImageTop.description }">
-                                                    <div class="responsively-lazy preventReflow">
-                                                        <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(subImageTop.item, subImageTop.customImage.large, subImageTop.customImage.small), src: subImageTop.customImage.large ? subImageTop.customImage.large : productImgPath(subImageTop.item,360), alt: $parent.cta.text }"/>
-                                                    </div>
-                                                </a>
+                                    </a>
+                                </div>
+                                <div class="small-4-width">
+                                    <div>
+                                        <a data-bind="attr: { href: addUgDomain(arrayContent2.image.link), 'data-type': 'Image', 'data-description': arrayContent2.image.description }">
+                                            <div class="responsively-lazy preventReflow">
+                                                <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent2.item, arrayContent2.image.customImage.large, arrayContent2.image.customImage.small), src: arrayContent2.image.customImage.large ? arrayContent2.image.customImage.large : productImgPath(arrayContent2.item,360), alt: cta.text }"/>
                                             </div>
-                                            <div>
-                                                <a data-bind="attr: { href: addUgDomain(subImageBottom.link), 'data-type': 'Image', 'data-description': subImageBottom.description }">
-                                                    <div class="responsively-lazy preventReflow">
-                                                        <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(subImageBottom.item, subImageBottom.customImage.large, subImageBottom.customImage.small), src: subImageBottom.customImage.large ? subImageBottom.customImage.large : productImgPath(subImageBottom.item,360), alt: $parent.cta.text }"/>
-                                                    </div>
-                                                </a>
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a data-bind="attr: { href: addUgDomain(arrayContent3.image.link), 'data-type': 'Image', 'data-description': arrayContent3.image.description }">
+                                            <div class="responsively-lazy preventReflow">
+                                                <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent3.item, arrayContent3.image.customImage.large, arrayContent3.image.customImage.small), src: arrayContent3.image.customImage.large ? arrayContent3.image.customImage.large : productImgPath(arrayContent3.item,360), alt: cta.text }"/>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 </div>
-                            <!-- /ko -->
-                        <!-- /ko -->
+                            </div>
+                        </div>
 
                         <!-- ko if: viewPortSize() === 'small' -->
                             <div class="small-12 text-center columns copyContainer">
@@ -706,37 +705,33 @@ ko.components.register('collection-grid-module', {
                             </div>
                         <!-- /ko -->
 
-                        <!-- ko foreach: collectionGridModulesSections -->
-                            <!-- ko if: !$parent.isEven($index()) -->
-                                <div class="small-12 medium-6 columns">
-                                    <div class="flex">
-                                        <div class="small-8-width">
-                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
-                                                <div class="responsively-lazy preventReflow">
-                                                    <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: $parent.cta.text }"/>
-                                                </div>
-                                            </a>
+                        <div class="small-12 medium-6 columns">
+                            <div class="flex">
+                                <div class="small-8-width">
+                                    <a data-bind="attr: { href: addUgDomain(arrayContent4.image.link), 'data-type': 'Image', 'data-description': arrayContent4.image.description }">
+                                        <div class="responsively-lazy preventReflow">
+                                            <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent4.item, arrayContent4.image.customImage.large, arrayContent4.image.customImage.small), src: arrayContent4.image.customImage.large ? arrayContent4.image.customImage.large : productImgPath(arrayContent4.item,360), alt: cta.text }"/>
                                         </div>
-                                        <div class="small-4-width">
-                                            <div>
-                                                <a data-bind="attr: { href: addUgDomain(subImageTop.link), 'data-type': 'Image', 'data-description': subImageTop.description }">
-                                                    <div class="responsively-lazy preventReflow">
-                                                        <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(subImageTop.item, subImageTop.customImage.large, subImageTop.customImage.small), src: subImageTop.customImage.large ? subImageTop.customImage.large : productImgPath(subImageTop.item,360), alt: $parent.cta.text }"/>
-                                                    </div>
-                                                </a>
+                                    </a>
+                                </div>
+                                <div class="small-4-width">
+                                    <div>
+                                        <a data-bind="attr: { href: addUgDomain(arrayContent5.image.link), 'data-type': 'Image', 'data-description': arrayContent5.image.description }">
+                                            <div class="responsively-lazy preventReflow">
+                                                <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent5.item, arrayContent5.image.customImage.large, arrayContent5.image.customImage.small), src: arrayContent5.image.customImage.large ? arrayContent5.image.customImage.large : productImgPath(arrayContent5.item,360), alt: cta.text }"/>
                                             </div>
-                                            <div>
-                                                <a data-bind="attr: { href: addUgDomain(subImageBottom.link), 'data-type': 'Image', 'data-description': subImageBottom.description }">
-                                                    <div class="responsively-lazy preventReflow">
-                                                        <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(subImageBottom.item, subImageBottom.customImage.large, subImageBottom.customImage.small), src: subImageBottom.customImage.large ? subImageBottom.customImage.large : productImgPath(subImageBottom.item,360), alt: $parent.cta.text }"/>
-                                                    </div>
-                                                </a>
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a data-bind="attr: { href: addUgDomain(arrayContent6.image.link), 'data-type': 'Image', 'data-description': arrayContent6.image.description }">
+                                            <div class="responsively-lazy preventReflow">
+                                                <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent6.item, arrayContent6.image.customImage.large, arrayContent6.image.customImage.small), src: arrayContent6.image.customImage.large ? arrayContent6.image.customImage.large : productImgPath(arrayContent6.item,360), alt: cta.text }"/>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 </div>
-                            <!-- /ko -->
-                        <!-- /ko -->
+                            </div>
+                        </div>
 
                         <!-- ko if: viewPortSize() != 'small' -->
                             <div class="small-12 columns">
@@ -1218,6 +1213,83 @@ ko.components.register('button-link-double-module', {
                 </div>
             </div>
         </section>`, synchronous: true
+});
+
+ko.components.register('seo-link-module', {
+    viewModel: class TextLinkModuleComponentModel extends Dependents {
+        constructor(params) {
+            super(params);
+            this.sectionTop = params.data.sectionTop;
+            this.seoLinksTopSections = params.data.sectionsTop;
+            this.sectionBottom = params.data.sectionBottom;
+            this.seoLinksBottomSections = params.data.sectionsBottom;
+        }
+    },
+    template: `
+        <section data-bind="resizeView: 'SEO_Links_Top', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="text-link-module background-color-off-white">
+            <div class"row">
+                <div class="small-12 small-centered columns container">
+                    <!-- ko if: sectionTop.text -->
+                        <div class="row">
+                            <div class="small-12 text-center columns">
+                                <h1>
+                                    <a class="a-secondary" data-bind="text: sectionTop.text, attr: { href: addUgDomain(sectionTop.link), 'data-type': 'Section', 'data-description': sectionTop.description }"></a>
+                                </h1>
+                            </div>
+                        </div>
+                    <!-- /ko -->
+
+                    <!-- ko if: viewPortSize() === 'small' -->
+                        <div class="row">
+                            <!-- ko foreach: seoLinksTopSections -->
+                                <!-- ko if: $parent.displayOn(displayModuleOn) -->
+                                    <div class="small-6 columns">
+                                        <div class="text-link-container">
+                                            <div class="content"><h4><a class="a-secondary" data-bind="text: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></h4></div>
+                                        </div>
+                                    </div>
+                                <!-- /ko -->
+                            <!-- /ko -->
+                        </div>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </section>
+
+        <section data-bind="resizeView: 'SEO_Links_Bottom', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="image-link-double-module background-color-off-white">
+            <div class="row container">
+                <div class="small-12 small-centered columns">
+                    <!-- ko if: sectionBottom.text -->
+                        <div class="row">
+                            <div class="small-12 xlarge-10 text-center xlarge-centered columns">
+                                <h1>
+                                    <a class="a-secondary" data-bind="html: sectionBottom.text, attr: { href: addUgDomain(sectionBottom.link), 'data-type': 'Section', 'data-description': sectionBottom.description }"></a>
+                                </h1>
+                            </div>
+                        </div>
+                    <!-- /ko -->
+                </div>
+
+                <div class="small-11 small-centered columns">
+                    <ul data-bind="attr: { class: className(seoLinksBottomSections) }">
+                        <!-- ko foreach: seoLinksBottomSections -->
+                            <!-- ko if: $parent.displayOn(displayModuleOn) -->
+                                <li class="text-center content">
+                                    <div class="responsively-lazy preventReflow">
+                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                            <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
+                                        </a>
+                                    </div>
+                                    <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></h4>
+                                </li>
+                            <!-- /ko -->
+                        <!-- /ko -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    `, synchronous: true
 });
 
 ko.components.register('homePage-container', {

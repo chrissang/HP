@@ -5,11 +5,22 @@ class Dependents {
     constructor(params) {
         this.itemNumber = ko.observable("");
         this.itemUrl = ko.observable("");
-        this.imageUrl = ko.observable("");
         this.imageSmallUrl = ko.observable("");
         this.imageLargeUrl = ko.observable("");
         this.headline = ko.observable("");
         this.headlineUrl = ko.observable("");
+
+        this.subImageTopItemNumber = ko.observable("");
+        this.subImageTopItemUrl = ko.observable("");
+        this.subImageTopImageSmallUrl = ko.observable("");
+        this.subImageTopImageLargeUrl = ko.observable("");
+        this.subImageTopImageDescription = ko.observable("");
+
+        this.subImageBottomItemNumber = ko.observable("");
+        this.subImageBottomItemUrl = ko.observable("");
+        this.subImageBottomImageSmallUrl = ko.observable("");
+        this.subImageBottomImageLargeUrl = ko.observable("");
+        this.subImageBottomImageDescription = ko.observable("");
 
         this.copy = ko.observable("");
         this.copyUrl = ko.observable("");
@@ -109,107 +120,153 @@ class Dependents {
 
                 switch (moduleType) {
                     case 'large-feature-module':
-                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
-                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
-                        {
-                            'item': viewModel.itemNumber(),
-                            'displayModuleOn': viewModel.selectedModuleScreenSize(),
-                            'image': {
-                                'customImage': {
-                                    "small": viewModel.imageSmallUrl(),
-                                    "large": viewModel.imageLargeUrl()
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                            {
+                                'item': viewModel.itemNumber(),
+                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                                'image': {
+                                    'customImage': {
+                                        "small": viewModel.imageSmallUrl(),
+                                        "large": viewModel.imageLargeUrl()
+                                    },
+                                    'link': viewModel.itemUrl(),
+                                    'description': viewModel.imageDescription()
                                 },
-                                'link': viewModel.itemUrl(),
-                                'description': viewModel.imageDescription()
-                            },
-                            'headline': {
-                                'text': viewModel.headline(),
-                                'link': viewModel.headlineUrl(),
-                                'description': viewModel.headlineDescription()
-                            },
-                            'cta': {
-                                'text': viewModel.cta(),
-                                'link': viewModel.ctaUrl(),
-                                'description': viewModel.ctaDescription()
+                                'headline': {
+                                    'text': viewModel.headline(),
+                                    'link': viewModel.headlineUrl(),
+                                    'description': viewModel.headlineDescription()
+                                },
+                                'cta': {
+                                    'text': viewModel.cta(),
+                                    'link': viewModel.ctaUrl(),
+                                    'description': viewModel.ctaDescription()
+                                }
                             }
-                        }
-                    ]
+                        ]
                     break;
                     case 'small-feature-module':
-                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
-                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
-                        {
-                            'item': viewModel.itemNumber(),
-                            'displayModuleOn': viewModel.selectedModuleScreenSize(),
-                            'section': {
-                                'text': viewModel.section(),
-                                'link': viewModel.sectionUrl(),
-                                'description': viewModel.sectionDescription()
-                            },
-                            'image': {
-                                'customImage': {
-                                    "small": viewModel.imageSmallUrl(),
-                                    "large": viewModel.imageLargeUrl()
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                            {
+                                'item': viewModel.itemNumber(),
+                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                                'section': {
+                                    'text': viewModel.section(),
+                                    'link': viewModel.sectionUrl(),
+                                    'description': viewModel.sectionDescription()
                                 },
-                                'link': viewModel.itemUrl(),
-                                'description': viewModel.imageDescription()
-                            },
-                            'headline': {
-                                'text': viewModel.headline(),
-                                'link': viewModel.headlineUrl(),
-                                'description': viewModel.headlineDescription()
-                            },
-                            'cta': {
-                                'text': viewModel.cta(),
-                                'link': viewModel.ctaUrl(),
-                                'description': viewModel.ctaDescription()
+                                'image': {
+                                    'customImage': {
+                                        "small": viewModel.imageSmallUrl(),
+                                        "large": viewModel.imageLargeUrl()
+                                    },
+                                    'link': viewModel.itemUrl(),
+                                    'description': viewModel.imageDescription()
+                                },
+                                'headline': {
+                                    'text': viewModel.headline(),
+                                    'link': viewModel.headlineUrl(),
+                                    'description': viewModel.headlineDescription()
+                                },
+                                'cta': {
+                                    'text': viewModel.cta(),
+                                    'link': viewModel.ctaUrl(),
+                                    'description': viewModel.ctaDescription()
+                                }
                             }
-                        }
-                    ]
+                        ]
                     break;
                     case 'basic-story-module':
-                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
-                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
-                        {
-                            'item': viewModel.itemNumber(),
-                            'displayModuleOn': viewModel.selectedModuleScreenSize(),
-                            'section': {
-                                'text': viewModel.section(),
-                                'link': viewModel.sectionUrl(),
-                                'description': viewModel.sectionDescription()
-                            },
-                            'image': {
-                                'customImage': {
-                                    "small": viewModel.imageSmallUrl(),
-                                    "large": viewModel.imageLargeUrl()
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                            {
+                                'item': viewModel.itemNumber(),
+                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                                'section': {
+                                    'text': viewModel.section(),
+                                    'link': viewModel.sectionUrl(),
+                                    'description': viewModel.sectionDescription()
                                 },
-                                'link': viewModel.itemUrl(),
-                                'description': viewModel.imageDescription()
-                            },
-                            'headline': {
-                                'text': viewModel.headline(),
-                                'link': viewModel.headlineUrl(),
-                                'description': viewModel.headlineDescription()
-                            },
-                            'cta': {
-                                'text': viewModel.cta(),
-                                'link': viewModel.ctaUrl(),
-                                'description': viewModel.ctaDescription()
+                                'image': {
+                                    'customImage': {
+                                        "small": viewModel.imageSmallUrl(),
+                                        "large": viewModel.imageLargeUrl()
+                                    },
+                                    'link': viewModel.itemUrl(),
+                                    'description': viewModel.imageDescription()
+                                },
+                                'headline': {
+                                    'text': viewModel.headline(),
+                                    'link': viewModel.headlineUrl(),
+                                    'description': viewModel.headlineDescription()
+                                },
+                                'cta': {
+                                    'text': viewModel.cta(),
+                                    'link': viewModel.ctaUrl(),
+                                    'description': viewModel.ctaDescription()
+                                }
                             }
-                        }
-                    ]
+                        ]
                     break;
                     case 'extended-story-module':
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                            {
+                                'item': viewModel.itemNumber(),
+                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                                'section': {
+                                    'text': viewModel.section(),
+                                    'link': viewModel.sectionUrl(),
+                                    'description': viewModel.sectionDescription()
+                                },
+                                'image': {
+                                    'customImage': {
+                                        "small": viewModel.imageSmallUrl(),
+                                        "large": viewModel.imageLargeUrl()
+                                    },
+                                    'link': viewModel.itemUrl(),
+                                    'description': viewModel.imageDescription()
+                                },
+                                'headline': {
+                                    'text': viewModel.headline(),
+                                    'link': viewModel.headlineUrl(),
+                                    'description': viewModel.headlineDescription()
+                                },
+                                'copy': {
+                                    'text': viewModel.copy(),
+                                    'link': viewModel.copyUrl(),
+                                    'description': viewModel.copyDescription()
+                                },
+                                'cta': {
+                                    'text': viewModel.cta(),
+                                    'link': viewModel.ctaUrl(),
+                                    'description': viewModel.ctaDescription()
+                                }
+                            }
+                        ]
+                    break;
+                    case 'collection-grid-module':
                     viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
+                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                        'text': viewModel.section(),
+                        'link': viewModel.sectionUrl(),
+                        'description': viewModel.sectionDescription()
+                    },
+                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['headline'] = {
+                        'text': viewModel.headline(),
+                        'link': viewModel.headlineUrl(),
+                        'description': viewModel.headlineDescription()
+                    },
+                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['cta'] = {
+                        'text': viewModel.cta(),
+                        'link': viewModel.ctaUrl(),
+                        'description': viewModel.ctaDescription()
+                    },
                     viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
                         {
                             'item': viewModel.itemNumber(),
-                            'displayModuleOn': viewModel.selectedModuleScreenSize(),
-                            'section': {
-                                'text': viewModel.section(),
-                                'link': viewModel.sectionUrl(),
-                                'description': viewModel.sectionDescription()
-                            },
                             'image': {
                                 'customImage': {
                                     "small": viewModel.imageSmallUrl(),
@@ -218,20 +275,27 @@ class Dependents {
                                 'link': viewModel.itemUrl(),
                                 'description': viewModel.imageDescription()
                             },
-                            'headline': {
-                                'text': viewModel.headline(),
-                                'link': viewModel.headlineUrl(),
-                                'description': viewModel.headlineDescription()
+                            "subImageTop": {
+                                'item': viewModel.subImageTopItemNumber(),
+                                'image': {
+                                    'customImage': {
+                                        "small": viewModel.subImageTopImageSmallUrl(),
+                                        "large": viewModel.subImageTopImageLargeUrl()
+                                    },
+                                    'link': viewModel.subImageTopItemUrl(),
+                                    'description': viewModel.subImageTopImageDescription()
+                                }
                             },
-                            'copy': {
-                                'text': viewModel.copy(),
-                                'link': viewModel.copyUrl(),
-                                'description': viewModel.copyDescription()
-                            },
-                            'cta': {
-                                'text': viewModel.cta(),
-                                'link': viewModel.ctaUrl(),
-                                'description': viewModel.ctaDescription()
+                            "subImageBottom": {
+                                'item': viewModel.subImageBottomItemNumber(),
+                                'image': {
+                                    'customImage': {
+                                        "small": viewModel.subImageBottomImageSmallUrl(),
+                                        "large": viewModel.subImageBottomImageLargeUrl()
+                                    },
+                                    'link': viewModel.subImageBottomItemUrl(),
+                                    'description': viewModel.subImageBottomImageDescription()
+                                }
                             }
                         }
                     ]
@@ -645,6 +709,104 @@ ko.components.register('extended-story-module', {
             </div>
         </div>`, synchronous: true
 });
+
+ko.components.register('collection-grid-module', {
+    viewModel: class SmallFeatureModuleComponentModel extends Dependents {
+        constructor(params) {
+          super(params);
+          this.params = params;
+          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
+        }
+    },
+    template: `
+        <div class="row" data-bind="attr: { 'data-id': uniqueId }">
+            <div class="small-12 columns">
+                <dl class="accordion small-12 columns" data-accordion="" role="tablist">
+                    <dd class="accordion-navigation">
+                        <a data-bind="text: 'Collection Grid Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+
+                        <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                            <div class="row">
+                                <div class="small-12 medium-4 columns">
+                                    <label>Item #</label>
+                                    <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
+                                </div>
+                                <div class="small-12 medium-4 columns">
+                                    <label>Item URL</label>
+                                    <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL">
+                                </div>
+                                <div class="small-12 medium-4 columns">
+                                    <label>Display Group On</label>
+                                    <select data-bind="options: groupScreenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="small-12 medium-4 columns">
+                                    <label>Small Image URL</label>
+                                    <input data-bind="textInput: imageSmallUrl" type="text" placeholder="Small Image URL"></input>
+                                </div>
+                                <div class="small-12 medium-4 columns">
+                                    <label>Large Image URL</label>
+                                    <input data-bind="textInput: imageLargeUrl" type="text" placeholder="Large Image URL"></input>
+                                </div>
+                                <div class="small-12 medium-4 columns">
+                                    <label>Image Description Tag</label>
+                                    <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag"></input>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="small-12 medium-4 columns">
+                                    <label>Section</label>
+                                    <input data-bind="textInput: section" type="text" placeholder="Section">
+                                </div>
+                                <div class="small-12 medium-4 columns">
+                                    <label>Section URL</label>
+                                    <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
+                                </div>
+                                <div class="small-12 medium-4 columns">
+                                    <label>Section Description Tag</label>
+                                    <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="small-12 medium-4 columns">
+                                    <label>Headline</label>
+                                    <input data-bind="textInput: headline" type="text" placeholder="Headline">
+                                </div>
+                                <div class="small-12 medium-4 columns">
+                                    <label>Headline URL</label>
+                                    <input data-bind="textInput: headlineUrl" type="text" placeholder="Headline URL">
+                                </div>
+                                <div class="small-12 medium-4 columns">
+                                    <label>Headline Description Tag</label>
+                                    <input data-bind="textInput: headlineDescription" type="text" placeholder="Headline Description Tag"></input>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="small-12 medium-4 columns">
+                                    <label>CTA</label>
+                                    <input data-bind="textInput: cta" type="text" placeholder="CTA">
+                                </div>
+                                <div class="small-12 medium-4 columns">
+                                    <label>CTA URL</label>
+                                    <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
+                                </div>
+                                <div class="small-12 medium-4 columns">
+                                    <label>CTA Description Tag</label>
+                                    <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag"></input>
+                                </div>
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>`, synchronous: true
+});
+
 
 function reducerFilter(acc, xs) {
   xs.map((item, index) => {
