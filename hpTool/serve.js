@@ -15,7 +15,7 @@ app.use('/', express.static(__dirname));
 var port = process.env.HTTP_PORT || 5000;
 
 
-app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.urlencoded({extended : true}));// to support URL-encoded bodies
 app.post("/json", function(request, response) {
     response.send(request.body);
     var outputFilename = __dirname+'/json/mappingOrder.json';
