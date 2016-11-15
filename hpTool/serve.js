@@ -13,7 +13,7 @@ var app = express();
 app.use('/', express.static(__dirname));
 
 var port = process.env.HTTP_PORT || 5000;
-
+var mydata = {}
 
 app.use(bodyParser.urlencoded({extended : true}));// to support URL-encoded bodies
 app.post("/json", function(request, response) {

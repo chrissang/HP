@@ -1,0 +1,29 @@
+{
+    "A": {
+        "large-feature-module": {
+            "sections": [
+                {
+                    "item": "",
+                    "image": {
+                        "customImage": {
+                            "small": "",
+                            "large": ""
+                        },
+                        "link": "",
+                        "description": ""
+                    },
+                    "headline": {
+                        "text": "",
+                        "link": "",
+                        "description": ""
+                    },
+                    "cta": {
+                        "text": "",
+                        "link": "",
+                        "description": ""
+                    }
+                }
+            ]
+        }
+    }
+}
