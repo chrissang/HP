@@ -1,20 +1,50 @@
 
-
-var path = require('path');
 var express = require('express');
-var fs = require('fs');
-var http = require("http");
+var path = require('path');
 var request = require('request');
-var router = express.Router();
-var bodyParser  = require('body-parser');
-
+var fs = require('fs');
 var app = express();
 
 //var staticPath = path.resolve(__dirname, '/public');
 //app.use(express.static(staticPath));
 
+app.use(express.static(__dirname + '/'));
 
-var port = process.env.HTTP_PORT || 9000;
+app.get('/', function(req, res){
+    var date = req.param('date');
+    request("http://localhost:5000/json/"+date+".json").pipe(fs.createWriteStream("json/mappingOrder.json"));
+
+    var order = request("http://localhost:5000/json/"+date+".json");
+
+    if(req.session){
+        console.log(req.session);
+    }
+
+    console.log('ok');
+    console.log('date ',date);
+    res.sendfile('preview.html');
+});
+
+
+
+
+
+
+
+// app.use('/', express.static(__dirname));
+//
+//
+//
+// app.get('/', function(req, res, next) {
+//     var date = req.param('date');
+//
+//     //request("http://localhost:5000/json/"+date+".json").pipe(fs.createWriteStream("json/mappingOrder.json"));
+//
+//     console.log('date ',date);
+//     res.send(date);
+// });
+
+
 
 // request("http://localhost:5000/json/2016-11-11.json", function(error, response, body) {
 //     if (error) {
@@ -24,19 +54,11 @@ var port = process.env.HTTP_PORT || 9000;
 //     //console.log(body);
 // });
 
-request("http://localhost:5000/json/2016-11-11.json").pipe(fs.createWriteStream("hello.json"));
-
-
-// app.get('/', function(req, res, next) {
-//     var date = req.param('date');
-//     console.log('date ',date);
-//     res.send(date);
-//
-// });
+// request("http://localhost:5000/json/2016-11-11.json").pipe(fs.createWriteStream("hello.json"));
 
 
 
-app.use('/', express.static(__dirname));
+var port = process.env.HTTP_PORT || 9000;
 app.listen(port, function() {
   console.log('listening for DEV: on port %s', port);
 });

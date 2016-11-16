@@ -7,19 +7,47 @@
     <link rel="stylesheet" type="text/css" href="css/app.css">
     <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
     <script>
+        var mappingOrder;
 
-        // $(document).ready(function() {
+        // $.ajax({
+        //     url: 'http://localhost:9000/json/mappingOrder.json', //the URL to your node.js server that has data
+        //     dataType: 'json',
+        //     cache: false
+        // }).done(function(data){
+        //     //"data" will be JSON. Do what you want with it.
+        //     // console.log('done');
+        //     // console.log(JSON.stringify(data));
+        //     doSomthingOnComplete(data);
         //
-        //     $.ajax({
-        //         url: 'http://localhost:5000/json/2016-11-11.json',
-        //         dataType: 'JSONP',
-        //         jsonpCallback: 'callback',
-        //         type: 'GET',
-        //         success: function (data) {
-        //             console.log(JSON.parse(data));
-        //         }
+        // });
+        // function doSomthingOnComplete(data) {
+        //     mappingOrder = data;
+        // }
+        $.getJSON("http://localhost:9000/json/mappingOrder.json", function(data) {
+            console.log('data ',data);
+        })
+
+
+        //
+        // $(document).ready(function() {
+        //     var mapping;
+        //
+        //     $(function(){
+        //         $.ajax({
+        //             url: 'http://localhost:9000/json/mappingOrder.json', //the URL to your node.js server that has data
+        //             dataType: 'json',
+        //             cache: false
+        //         }).done(function(data){
+        //             //"data" will be JSON. Do what you want with it.
+        //             console.log('done');
+        //             console.log(JSON.stringify(data));
+        //
+        //
+        //         });
         //     });
+        //
         // })
+
         var urlParams = location.search.split(/[?&]/).slice(1).map(function(paramPair) {
             return paramPair.split(/=(.+)?/).slice(0, 2);
         }).reduce(function (obj, pairArray) {
@@ -28,7 +56,7 @@
         }, {});
         var testdate = urlParams.testdate;
         var currentDate = new Date().toISOString().slice(0,10);
-        var mapping;
+
         if (testdate == null || testdate == undefined) {
         	testdate = "";
         	currentDate = new Date().toISOString().slice(0,10);
@@ -39,36 +67,6 @@
         if(currentDate >= new Date('2016-08-29').toISOString().slice(0,10)){
             // $.get('http://localhost:5000/json/2016-11-11.json', {}, function(data){
             //     console.log(data)
-            // });
-
-
-
-
-            // $.ajax({
-            //     type: "GET",
-            //     dataType: "jsonp",
-            //     url: "http://localhost:5000/json/2016-11-11.json",
-            //     crossDomain : true,
-            //     contentType: "application/json; charset=utf-8",
-            //     success : function(res){
-            //         console.log('res ',res);
-            //     },
-            //     error: function (parsedjson, textStatus, errorThrown) {
-            //         console.log("parsedJson: " + JSON.stringify(parsedjson));
-            //     }
-            // }).done(function( data ) {
-            //         console.log("done");
-            // })
-
-            // $.ajax({
-            //     type: 'POST',
-            //     url: 'Jqueryoperation.aspx?Operation=DeleteRow',
-            //     contentType: 'application/json; charset=utf-8',
-            //     data: json,
-            //     dataType: 'text json',
-            //     cache: false,
-            //     success: AjaxSucceeded,
-            //     error: AjaxFailed
             // });
 
             // mappingOrder = {
@@ -992,7 +990,7 @@
     </script>
 </head>
 <body>
-    <!--
+<!--
     <div class="homePage-container" style="display: none;" data-bind="visible: true">
     	<div data-bind="component: { name: 'homePage-container', params: { data: mappingOrder } }" class="homePage-container"></div>
 	</div>
