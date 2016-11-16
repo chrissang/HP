@@ -2,7 +2,6 @@
 
 var path = require('path');
 var express = require('express');
-
 var fs = require('fs');
 var bodyParser  = require('body-parser');
 
@@ -16,10 +15,15 @@ var port = process.env.HTTP_PORT || 5000;
 var mydata = {}
 
 app.use(bodyParser.urlencoded({extended : true}));// to support URL-encoded bodies
+
 app.post("/json", function(request, response) {
     response.send(request.body);
-    var outputFilename = __dirname+'/json/mappingOrder.json';
-    fs.writeFile(outputFilename, JSON.stringify(request.body, null, 4), function(err) {
+    var outputFilename = __dirname+'/hp_config/'+request.body.date+'.js';
+
+    var data = JSON.stringify(request.body.json, null, 4);
+
+    var content = 'var mappingOrder = '+ data;
+    fs.writeFile(outputFilename, content, function(err) {
         if(err) {
           console.log(err);
         } else {

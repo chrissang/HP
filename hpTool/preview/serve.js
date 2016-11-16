@@ -1,6 +1,5 @@
 
 var express = require('express');
-var path = require('path');
 var request = require('request');
 var fs = require('fs');
 var app = express();
@@ -10,52 +9,28 @@ var app = express();
 
 app.use(express.static(__dirname + '/'));
 
-app.get('/', function(req, res){
-    var date = req.param('date');
+
+
+//res.header("Access-Control-Allow-Origin", "*");
+app.get('/:simulator', function(req, res){
+    var date = req.query.date;
     request("http://localhost:5000/json/"+date+".json").pipe(fs.createWriteStream("json/mappingOrder.json"));
 
-    var order = request("http://localhost:5000/json/"+date+".json");
 
-    if(req.session){
-        console.log(req.session);
-    }
+
+    // if(req.session){
+    //     console.log(req.session);
+    // }
 
     console.log('ok');
-    console.log('date ',date);
-    res.sendfile('preview.html');
+    console.log(req.query.date);
+    //console.log(res.params.preview);
+    //console.log(req.query);
+    //console.log('date ',req.query.date);
+    //res.setHeader('Content-Type', 'application/json');
+    //res.send(JSON.stringify({ a: 1 }));
+    res.sendFile(__dirname + '/');
 });
-
-
-
-
-
-
-
-// app.use('/', express.static(__dirname));
-//
-//
-//
-// app.get('/', function(req, res, next) {
-//     var date = req.param('date');
-//
-//     //request("http://localhost:5000/json/"+date+".json").pipe(fs.createWriteStream("json/mappingOrder.json"));
-//
-//     console.log('date ',date);
-//     res.send(date);
-// });
-
-
-
-// request("http://localhost:5000/json/2016-11-11.json", function(error, response, body) {
-//     if (error) {
-//         return console.error('upload failed:', error);
-//     }
-//
-//     //console.log(body);
-// });
-
-// request("http://localhost:5000/json/2016-11-11.json").pipe(fs.createWriteStream("hello.json"));
-
 
 
 var port = process.env.HTTP_PORT || 9000;

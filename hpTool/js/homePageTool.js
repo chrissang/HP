@@ -830,6 +830,8 @@ ko.components.register('homePageTool', {
           super(params);
           this.selection = ko.observable();
           this.selectedModules = ko.observableArray();
+          this.date = ko.observable("");
+
           this.moduleTypes = [
               {name: 'Large Feature (LF)', value: 'large-feature-module'},
               {name: 'Small Feature (SF)', value: 'small-feature-module'},
@@ -844,19 +846,30 @@ ko.components.register('homePageTool', {
           this.jsonOrder = function(arry) {
               var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
               var hpJson = {};
+              var hpDate = this.date();
+
+
               arry.forEach((obj, index) => {
                   hpJson[alpha.charAt(index)] = obj;
-                  //console.log('obj',obj);
               })
-              //console.log('hpJson ',hpJson);
+
             $.ajax({
                 type: "POST",
                 url: "http://localhost:5000/json",
-                data: hpJson,
+                data: formToJSON(),
                 dataType: "json"
             }).done(function(msg) {
                 console.log("Data Saved: " + msg);
             });
+
+            function formToJSON() {
+                 return {
+                     "json": hpJson,
+                     "date": hpDate
+                  };
+             }
+
+             formToJSON();
           }
 
           this.handleClick = function (e) {
@@ -901,8 +914,11 @@ ko.components.register('homePageTool', {
     },
     template: `
         <div class='row'>
-            <div class='small-12 columns'>
+            <div class='small-6 columns'>
                 <h2>Home Page Tool</h2>
+            </div>
+            <div class='small-6 columns'>
+                <input data-bind="textInput: date" type="text" placeholder="Date">
             </div>
         </div>
 
