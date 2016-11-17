@@ -1,4 +1,4 @@
-var mappingOrder = {
+var mappingOrderData = {
     "A": {
         "small-feature-module": {
             "sections": [

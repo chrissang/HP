@@ -848,28 +848,30 @@ ko.components.register('homePageTool', {
               var hpJson = {};
               var hpDate = this.date();
 
-
               arry.forEach((obj, index) => {
                   hpJson[alpha.charAt(index)] = obj;
               })
 
-            $.ajax({
-                type: "POST",
-                url: "http://localhost:5000/json",
-                data: formToJSON(),
-                dataType: "json"
-            }).done(function(msg) {
-                console.log("Data Saved: " + msg);
-            });
+              $.ajax({
+                  type: "POST",
+                  url: "http://localhost:5000/json",
+                  data: formToJSON(),
+                  dataType: "json",
+                  success: function() {
+                      window.open('http://localhost:9000/simulator/?date='+hpDate, '_blank');
+                  }
+              }).done(function(msg) {
+                  console.log("Data Saved: " + msg);
+                //   var win = window.open('http://localhost:9000/simulator/?date='+hpDate, '_blank');
+                //   win.focus();
+              });
 
-            function formToJSON() {
-                 return {
-                     "json": hpJson,
-                     "date": hpDate
+              function formToJSON() {
+                  return {
+                      "json": hpJson,
+                      "date": hpDate
                   };
-             }
-
-             formToJSON();
+              }
           }
 
           this.handleClick = function (e) {

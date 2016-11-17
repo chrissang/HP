@@ -14,21 +14,10 @@ app.use(express.static(__dirname + '/'));
 //res.header("Access-Control-Allow-Origin", "*");
 app.get('/:simulator', function(req, res){
     var date = req.query.date;
-    request("http://localhost:5000/json/"+date+".json").pipe(fs.createWriteStream("json/mappingOrder.json"));
-
-
-
-    // if(req.session){
-    //     console.log(req.session);
-    // }
+    request("http://localhost:5000/hp_config/"+date+".js").pipe(fs.createWriteStream("js/mappingOrder.js"));
 
     console.log('ok');
     console.log(req.query.date);
-    //console.log(res.params.preview);
-    //console.log(req.query);
-    //console.log('date ',req.query.date);
-    //res.setHeader('Content-Type', 'application/json');
-    //res.send(JSON.stringify({ a: 1 }));
     res.sendFile(__dirname + '/');
 });
 
