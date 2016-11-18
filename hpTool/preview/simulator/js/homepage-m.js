@@ -3,6 +3,9 @@ var moduleOrderStatic = [];
 var moduleOrder = [];
 var elementsArray = [];
 
+console.log('homePage-m.js');
+
+
 const imageDir = 'https://www.uncommongoods.com/images';
 const ugWeb = 'https://www.uncommongoods.com';
 
@@ -1225,7 +1228,6 @@ ko.components.register('homePage-container', {
     viewModel: class HomePageContainerComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            console.log('hello');
 
             var self = this;
             self.records = ko.observable();

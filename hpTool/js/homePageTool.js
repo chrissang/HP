@@ -912,15 +912,41 @@ ko.components.register('homePageTool', {
 
 
           }
+          ko.bindingHandlers.datepicker = {
+            init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+                $(function () {
+                    $('#dp1').fdatepicker({
+                        initialDate: 'yyyy-mm-dd',
+                        format: 'yyyy-mm-dd',
+                        disableDblClickSelection: true,
+                        onRender: function (date) {
+                            return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+                        }
+                    }).on('changeDate', function (ev) {
+                        console.log(ev.date.toISOString().slice(0,10));
+                        viewModel.date(ev.date.toISOString().slice(0,10));
+                    })
+                })
+            }
+        }
       }
     },
     template: `
         <div class='row'>
-            <div class='small-6 columns'>
+            <div class='small-12 columns'>
                 <h2>Home Page Tool</h2>
             </div>
-            <div class='small-6 columns'>
+            <!--<div class='small-6 columns'>
                 <input data-bind="textInput: date" type="text" placeholder="Date">
+            </div>-->
+        </div>
+
+        <div class="row" style="max-width:200px; margin: 0;">
+            <div class="small-2 columns" style="padding-right: 0;">
+                <span class="prefix"><i class="fa fa-calendar" style="line-height: inherit;"></i></span>
+            </div>
+            <div class="small-10 columns" style="padding-left: 0;">
+                <input type="text" class="span2" id="dp1" data-bind="datepicker">
             </div>
         </div>
 
