@@ -1,5 +1,5 @@
-var hpJson = {};
-var cleanJson = {};
+// var hpJson = {};
+// var cleanJson = {};
 
 class Dependents {
     constructor(params) {
@@ -248,57 +248,57 @@ class Dependents {
                         ]
                     break;
                     case 'collection-grid-module':
-                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
-                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
-                        'text': viewModel.section(),
-                        'link': viewModel.sectionUrl(),
-                        'description': viewModel.sectionDescription()
-                    },
-                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['headline'] = {
-                        'text': viewModel.headline(),
-                        'link': viewModel.headlineUrl(),
-                        'description': viewModel.headlineDescription()
-                    },
-                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['cta'] = {
-                        'text': viewModel.cta(),
-                        'link': viewModel.ctaUrl(),
-                        'description': viewModel.ctaDescription()
-                    },
-                    viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
-                        {
-                            'item': viewModel.itemNumber(),
-                            'image': {
-                                'customImage': {
-                                    "small": viewModel.imageSmallUrl(),
-                                    "large": viewModel.imageLargeUrl()
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                            'text': viewModel.section(),
+                            'link': viewModel.sectionUrl(),
+                            'description': viewModel.sectionDescription()
+                        },
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['headline'] = {
+                            'text': viewModel.headline(),
+                            'link': viewModel.headlineUrl(),
+                            'description': viewModel.headlineDescription()
+                        },
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['cta'] = {
+                            'text': viewModel.cta(),
+                            'link': viewModel.ctaUrl(),
+                            'description': viewModel.ctaDescription()
+                        },
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                            {
+                                'item': viewModel.itemNumber(),
+                                'image': {
+                                    'customImage': {
+                                        "small": viewModel.imageSmallUrl(),
+                                        "large": viewModel.imageLargeUrl()
+                                    },
+                                    'link': viewModel.itemUrl(),
+                                    'description': viewModel.imageDescription()
                                 },
-                                'link': viewModel.itemUrl(),
-                                'description': viewModel.imageDescription()
-                            },
-                            "subImageTop": {
-                                'item': viewModel.subImageTopItemNumber(),
-                                'image': {
-                                    'customImage': {
-                                        "small": viewModel.subImageTopImageSmallUrl(),
-                                        "large": viewModel.subImageTopImageLargeUrl()
-                                    },
-                                    'link': viewModel.subImageTopItemUrl(),
-                                    'description': viewModel.subImageTopImageDescription()
-                                }
-                            },
-                            "subImageBottom": {
-                                'item': viewModel.subImageBottomItemNumber(),
-                                'image': {
-                                    'customImage': {
-                                        "small": viewModel.subImageBottomImageSmallUrl(),
-                                        "large": viewModel.subImageBottomImageLargeUrl()
-                                    },
-                                    'link': viewModel.subImageBottomItemUrl(),
-                                    'description': viewModel.subImageBottomImageDescription()
+                                "subImageTop": {
+                                    'item': viewModel.subImageTopItemNumber(),
+                                    'image': {
+                                        'customImage': {
+                                            "small": viewModel.subImageTopImageSmallUrl(),
+                                            "large": viewModel.subImageTopImageLargeUrl()
+                                        },
+                                        'link': viewModel.subImageTopItemUrl(),
+                                        'description': viewModel.subImageTopImageDescription()
+                                    }
+                                },
+                                "subImageBottom": {
+                                    'item': viewModel.subImageBottomItemNumber(),
+                                    'image': {
+                                        'customImage': {
+                                            "small": viewModel.subImageBottomImageSmallUrl(),
+                                            "large": viewModel.subImageBottomImageLargeUrl()
+                                        },
+                                        'link': viewModel.subImageBottomItemUrl(),
+                                        'description': viewModel.subImageBottomImageDescription()
+                                    }
                                 }
                             }
-                        }
-                    ]
+                        ]
                     break;
                 }
             }
@@ -856,7 +856,7 @@ ko.components.register('homePageTool', {
                   data: formToJSON(),
                   dataType: "json",
                   success: function() {
-                      window.open('http://localhost:9000/simulator/?date='+hpDate, '_blank');
+                     window.open('http://localhost:9000/simulator/?date='+hpDate, '_blank');
                   }
               }).done(function(msg) {
                   console.log("Data Saved: " + msg);
@@ -875,27 +875,29 @@ ko.components.register('homePageTool', {
               }
           }
           this.previewOrder = function(e) {
-              var obj = this.mappingOrder;
+              //console.log('preview click ',this.mappingOrder);
+              var mappingOrderCopy = JSON.parse(JSON.stringify(this.mappingOrder));
+              var cleanJson = {};
               var duplicateModuleNames = [];
               var duplicateObjects = [];
               var concatArray = [];
-              console.log(duplicateObjects);
 
-              //gets the order
-              Object.keys(obj).forEach(function(key) {
-                 Object.assign(cleanJson, obj[key]);
+              //removes uniqueIds
+              Object.keys(mappingOrderCopy).forEach(function(key) {
+                 Object.assign(cleanJson, mappingOrderCopy[key]);
               });
+
 
               Object.keys(cleanJson).forEach(function(key,index) {
                   duplicateModuleNames.push(Object.keys(cleanJson[key])[0]);
                   duplicateObjects.push(cleanJson[key]);
+
               });
 
               var adjecentCombine = reducerFilter([],duplicateModuleNames);
 
               adjecentCombine.forEach((el,index) => {
                   var moduleType = Object.keys(duplicateObjects[index])[0];
-                  //console.log(el);
                   if (el === 'concat') {
                       duplicateObjects[index+1][moduleType].sections = duplicateObjects[index][moduleType].sections.concat(duplicateObjects[index+1][moduleType].sections);
                       duplicateObjects.splice(index,1,'');
@@ -904,8 +906,6 @@ ko.components.register('homePageTool', {
 
               duplicateObjects = duplicateObjects.filter(function(n){ return n != '' });
 
-
-
               this.jsonOrder(duplicateObjects);
           }
           ko.bindingHandlers.datepicker = {
@@ -913,6 +913,7 @@ ko.components.register('homePageTool', {
                 var d = new Date();
                 d.setHours(0, -d.getTimezoneOffset(), 0, 0); //removing the timezone offset.
                 viewModel.date(d.toISOString().slice(0,10));
+
                 $(function () {
                     $('#dp1').fdatepicker({
                         initialDate: 'yyyy-mm-dd',

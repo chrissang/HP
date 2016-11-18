@@ -4,10 +4,10 @@ var mappingOrder = {
             "displayGroupOn": "small",
             "sections": [
                 {
-                    "item": "",
+                    "item": "22405",
                     "displayModuleOn": "small",
                     "section": {
-                        "text": "",
+                        "text": "asd",
                         "link": "",
                         "description": ""
                     },
@@ -20,21 +20,21 @@ var mappingOrder = {
                         "description": ""
                     },
                     "headline": {
-                        "text": "",
+                        "text": "asd",
                         "link": "",
                         "description": ""
                     },
                     "cta": {
-                        "text": "",
+                        "text": "asd",
                         "link": "",
                         "description": ""
                     }
                 },
                 {
-                    "item": "",
+                    "item": "22405",
                     "displayModuleOn": "small",
                     "section": {
-                        "text": "",
+                        "text": "asd",
                         "link": "",
                         "description": ""
                     },
@@ -47,66 +47,12 @@ var mappingOrder = {
                         "description": ""
                     },
                     "headline": {
-                        "text": "",
+                        "text": "asd",
                         "link": "",
                         "description": ""
                     },
                     "cta": {
-                        "text": "",
-                        "link": "",
-                        "description": ""
-                    }
-                },
-                {
-                    "item": "",
-                    "displayModuleOn": "small",
-                    "section": {
-                        "text": "",
-                        "link": "",
-                        "description": ""
-                    },
-                    "image": {
-                        "customImage": {
-                            "small": "",
-                            "large": ""
-                        },
-                        "link": "",
-                        "description": ""
-                    },
-                    "headline": {
-                        "text": "",
-                        "link": "",
-                        "description": ""
-                    },
-                    "cta": {
-                        "text": "",
-                        "link": "",
-                        "description": ""
-                    }
-                },
-                {
-                    "item": "",
-                    "displayModuleOn": "small",
-                    "section": {
-                        "text": "",
-                        "link": "",
-                        "description": ""
-                    },
-                    "image": {
-                        "customImage": {
-                            "small": "",
-                            "large": ""
-                        },
-                        "link": "",
-                        "description": ""
-                    },
-                    "headline": {
-                        "text": "",
-                        "link": "",
-                        "description": ""
-                    },
-                    "cta": {
-                        "text": "",
+                        "text": "asd",
                         "link": "",
                         "description": ""
                     }
