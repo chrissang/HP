@@ -252,6 +252,7 @@ class Dependents {
                     break;
                     case 'collection-grid-module':
                         // viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
+                        console.log('CG item numbers ',viewModel.itemNumber());
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
                             'text': viewModel.section(),
                             'link': viewModel.sectionUrl(),
@@ -318,7 +319,7 @@ ko.components.register('large-feature-module', {
         }
     },
     template: `
-        <div class="row" data-bind="attr: { 'data-id': uniqueId }">
+        <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
             <div class="small-12 columns">
                 <dl class="accordion" data-accordion="" role="tablist">
                     <dd class="accordion-navigation">
@@ -503,7 +504,7 @@ ko.components.register('basic-story-module', {
         }
     },
     template: `
-        <div class="row" data-bind="attr: { 'data-id': uniqueId }">
+        <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
             <div class="small-12 columns">
                 <dl class="accordion" data-accordion="" role="tablist">
                     <dd class="accordion-navigation">
@@ -600,7 +601,7 @@ ko.components.register('extended-story-module', {
         }
     },
     template: `
-        <div class="row" data-bind="attr: { 'data-id': uniqueId }">
+        <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
             <div class="small-12 columns">
                 <dl class="accordion" data-accordion="" role="tablist">
                     <dd class="accordion-navigation">
@@ -712,7 +713,7 @@ ko.components.register('collection-grid-module', {
         }
     },
     template: `
-        <div class="row" data-bind="attr: { 'data-id': uniqueId }">
+        <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
             <div class="small-12 columns">
                 <dl class="accordion" data-accordion="" role="tablist">
                     <dd class="accordion-navigation">
@@ -720,6 +721,21 @@ ko.components.register('collection-grid-module', {
 
                         <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
                             <div class="row">
+                                <div class="small-12 medium-4 columns">
+                                    <label>Item #</label>
+                                    <textarea data-bind="textInput: itemNumber" rows="6" type="text" placeholder="Item #"></textarea>
+                                </div>
+                                <div class="small-12 medium-4 columns">
+                                    <label>Item URL</label>
+                                    <textarea rows="6"></textarea>
+                                </div>
+                                <div class="small-12 medium-4 columns">
+                                    <label>Display Group On</label>
+                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
+                                </div>
+                            </div>
+
+                            <!--<div class="row">
                                 <div class="small-12 medium-4 columns">
                                     <label>Item #</label>
                                     <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
@@ -732,7 +748,7 @@ ko.components.register('collection-grid-module', {
                                     <label>Display Group On</label>
                                     <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
                                 </div>
-                            </div>
+                            </div>-->
 
                             <div class="row">
                                 <div class="small-12 medium-4 columns">
