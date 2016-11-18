@@ -1,0 +1,45 @@
+.sortable-ghost {
+	opacity: .5;
+	background-color: $active;
+}
+.content-shrink {
+	/* Initially we don't want any height, and we want the contents to be hidden */
+	max-height: 0;
+	overflow: hidden;
+
+	/* Set our transitions up. */
+	-webkit-transition: max-height 0.8s;
+	-moz-transition: max-height 0.8s;
+	transition: max-height 0.8s;
+}
+.accordion .accordion-navigation > a, .accordion dd > a {
+	border-bottom: 0 !important;
+}
+.accordion .accordion-navigation > .content, .accordion dd > .content {
+    padding-top: 0;
+}
+ul {
+	list-style-type: none;
+}
+
+.flexContainer {
+	display: flex;
+	margin-bottom: 1rem;
+}
+// .fa-times {
+// 	line-height: 4;
+// }
+
+.datepicker {
+	left: .375rem;
+	margin-top: .75rem;
+	table:not(.noLeftLabels):not(.noLabels) tr td:first-child, table:not(.noLeftabels):not(.noLabels) tr th:first-child {
+		border-right: 0px;
+	}
+	table:not(.noTopLabels):not(.noLabels) tr:first-child td, table:not(.noTopLabels):not(.noLabels) tr:first-child th {
+		border-bottom: 0px;
+	}
+	td span.active, td.active.day, td.active.year {
+		background: $active;
+	}
+}

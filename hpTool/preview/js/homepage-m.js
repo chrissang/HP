@@ -9,7 +9,8 @@ const ugWeb = 'https://www.uncommongoods.com';
 class Dependents {
     constructor(params) {
         this.modulePosition = params.data.index + 1;
-        this.displayGroupViewPortSize = params.data.displayGroupOn;
+        // this.displayGroupViewPortSize = params.data.displayGroupOn;
+        this.displayGroupViewPortSize = ko.observable();
         this.viewPortSize = ko.observable(breakpointValue());
         this.isSmall = function(){
             return this.viewPortSize() === 'small' ? true : false;
@@ -77,6 +78,29 @@ class Dependents {
                 }[this.nonHiddenModuleSections.length];
             }
         }
+        this.displayGroup = function(arry) {
+            var sectionArray = [];
+
+            arry.forEach((el,i) => {
+                sectionArray.push(el.displayModuleOn);
+
+            })
+
+            if (sectionArray.indexOf('small') > -1) {
+                console.log('show group small');
+                return 'small';
+            } else if (sectionArray.indexOf('medium') > -1) {
+                console.log('show group medium');
+                return 'medium';
+            } else if (sectionArray.indexOf('large') > -1) {
+                console.log('show group large');
+                return 'large';
+            } else {
+                console.log('show group xlarge');
+                return 'xlarge';
+            }
+        }
+
         ko.bindingHandlers.resizeView = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 $(window).resize(function () {
@@ -256,6 +280,7 @@ ko.components.register('large-feature-module', {
         constructor(params) {
             super(params);
             this.largeFeatureModulesSections = params.data.sections;
+            this.displayGroupViewPortSize = this.displayGroup(this.largeFeatureModulesSections);
         }
     },
     template: `
@@ -315,6 +340,7 @@ ko.components.register('small-feature-module', {
             this.columnLen = function() {
                 return this.smModulesSections.length === 3 ? 'large-4 columns' : 'large-6 columns';
             }
+            this.displayGroupViewPortSize = this.displayGroup(this.smModulesSections);
         }
     },
     template: `
@@ -413,6 +439,7 @@ ko.components.register('basic-story-module', {
             this.columnLen = function() {
                 return this.basicStoryModulesSections.length === 3 ? 'large-4 columns' : 'large-6 columns';
             }
+            this.displayGroupViewPortSize = this.displayGroup(this.basicStoryModulesSections);
         }
     },
     template: `
@@ -534,6 +561,7 @@ ko.components.register('extended-story-module', {
         constructor(params) {
             super(params);
             this.extendedStoryModulesSections = params.data.sections;
+            this.displayGroupViewPortSize = this.displayGroup(this.extendedStoryModulesSections);
         }
     },
     template: `
@@ -659,6 +687,8 @@ ko.components.register('collection-grid-module', {
             this.arrayContent4 = this.collectionGridModulesSections[3];
             this.arrayContent5 = this.collectionGridModulesSections[4];
             this.arrayContent6 = this.collectionGridModulesSections[5];
+
+            this.displayGroupViewPortSize = this.displayGroup(this.collectionGridModulesSections);
         }
     },
     template: `

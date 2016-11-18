@@ -1,13 +1,12 @@
 var mappingOrder = {
     "A": {
         "small-feature-module": {
-            "displayGroupOn": "small",
             "sections": [
                 {
                     "item": "22405",
                     "displayModuleOn": "small",
                     "section": {
-                        "text": "asd",
+                        "text": "asdasd",
                         "link": "",
                         "description": ""
                     },
@@ -20,39 +19,12 @@ var mappingOrder = {
                         "description": ""
                     },
                     "headline": {
-                        "text": "ad",
+                        "text": "asdasd",
                         "link": "",
                         "description": ""
                     },
                     "cta": {
-                        "text": "asd",
-                        "link": "",
-                        "description": ""
-                    }
-                },
-                {
-                    "item": "22405",
-                    "displayModuleOn": "small",
-                    "section": {
-                        "text": "asd",
-                        "link": "",
-                        "description": ""
-                    },
-                    "image": {
-                        "customImage": {
-                            "small": "",
-                            "large": ""
-                        },
-                        "link": "",
-                        "description": ""
-                    },
-                    "headline": {
-                        "text": "ad",
-                        "link": "",
-                        "description": ""
-                    },
-                    "cta": {
-                        "text": "asd",
+                        "text": "asdad",
                         "link": "",
                         "description": ""
                     }
