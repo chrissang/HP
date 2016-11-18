@@ -40,9 +40,9 @@ class Dependents {
         this.displayGroupOn = ko.observable("");
         this.displayModuleOn = ko.observable("");
 
-        this.groupScreenSizes = ko.observableArray(['small', 'medium', 'large', 'xlarge']);
-        this.selectedGroupScreenSize = ko.observable('');
-        this.selectedModuleScreenSize = ko.observable('')
+        this.screenSizes = ko.observableArray(['small', 'medium', 'large', 'xlarge']);
+        this.selectedGroupScreenSize = ko.observable('small');
+        this.selectedModuleScreenSize = ko.observable('small')
 
         this.alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         this.mappingOrder = {};
@@ -333,11 +333,11 @@ ko.components.register('large-feature-module', {
                                 </div>
                                 <div class="small-12 medium-2 columns">
                                     <label>Display Group On</label>
-                                    <select data-bind="options: groupScreenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
+                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
                                 </div>
                                 <div class="small-12 medium-2 columns">
                                     <label>Display Module On</label>
-                                    <select data-bind="options: groupScreenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
                                 </div>
                             </div>
 
@@ -419,11 +419,11 @@ ko.components.register('small-feature-module', {
                                 </div>
                                 <div class="small-12 medium-2 columns">
                                     <label>Display Group On</label>
-                                    <select data-bind="options: groupScreenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
+                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
                                 </div>
                                 <div class="small-12 medium-2 columns">
                                     <label>Display Module On</label>
-                                    <select data-bind="options: groupScreenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
                                 </div>
                             </div>
 
@@ -520,11 +520,11 @@ ko.components.register('basic-story-module', {
                                 </div>
                                 <div class="small-12 medium-2 columns">
                                     <label>Display Group On</label>
-                                    <select data-bind="options: groupScreenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
+                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
                                 </div>
                                 <div class="small-12 medium-2 columns">
                                     <label>Display Module On</label>
-                                    <select data-bind="options: groupScreenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
                                 </div>
                             </div>
 
@@ -621,11 +621,11 @@ ko.components.register('extended-story-module', {
                                 </div>
                                 <div class="small-12 medium-2 columns">
                                     <label>Display Group On</label>
-                                    <select data-bind="options: groupScreenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
+                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
                                 </div>
                                 <div class="small-12 medium-2 columns">
                                     <label>Display Module On</label>
-                                    <select data-bind="options: groupScreenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
                                 </div>
                             </div>
 
@@ -737,7 +737,7 @@ ko.components.register('collection-grid-module', {
                                 </div>
                                 <div class="small-12 medium-4 columns">
                                     <label>Display Group On</label>
-                                    <select data-bind="options: groupScreenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
+                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
                                 </div>
                             </div>
 
@@ -807,7 +807,6 @@ ko.components.register('collection-grid-module', {
         </div>`, synchronous: true
 });
 
-
 function reducerFilter(acc, xs) {
   xs.map((item, index) => {
       if (xs[index] === xs[index+1]) {
@@ -830,8 +829,7 @@ ko.components.register('homePageTool', {
           super(params);
           this.selection = ko.observable();
           this.selectedModules = ko.observableArray();
-          this.date = ko.observable("");
-
+          this.date = ko.observable();
           this.moduleTypes = [
               {name: 'Large Feature (LF)', value: 'large-feature-module'},
               {name: 'Small Feature (SF)', value: 'small-feature-module'},
@@ -862,8 +860,6 @@ ko.components.register('homePageTool', {
                   }
               }).done(function(msg) {
                   console.log("Data Saved: " + msg);
-                //   var win = window.open('http://localhost:9000/simulator/?date='+hpDate, '_blank');
-                //   win.focus();
               });
 
               function formToJSON() {
@@ -873,7 +869,6 @@ ko.components.register('homePageTool', {
                   };
               }
           }
-
           this.handleClick = function (e) {
               if (this.selection()) {
                   this.selectedModules.push(this.selection());
@@ -884,6 +879,7 @@ ko.components.register('homePageTool', {
               var duplicateModuleNames = [];
               var duplicateObjects = [];
               var concatArray = [];
+              console.log(duplicateObjects);
 
               //gets the order
               Object.keys(obj).forEach(function(key) {
@@ -908,22 +904,21 @@ ko.components.register('homePageTool', {
 
               duplicateObjects = duplicateObjects.filter(function(n){ return n != '' });
 
+
+
               this.jsonOrder(duplicateObjects);
-
-
           }
           ko.bindingHandlers.datepicker = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+                var d = new Date();
+                d.setHours(0, -d.getTimezoneOffset(), 0, 0); //removing the timezone offset.
+                viewModel.date(d.toISOString().slice(0,10));
                 $(function () {
                     $('#dp1').fdatepicker({
                         initialDate: 'yyyy-mm-dd',
                         format: 'yyyy-mm-dd',
-                        disableDblClickSelection: true,
-                        onRender: function (date) {
-                            return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
-                        }
+                        disableDblClickSelection: true
                     }).on('changeDate', function (ev) {
-                        console.log(ev.date.toISOString().slice(0,10));
                         viewModel.date(ev.date.toISOString().slice(0,10));
                     })
                 })
@@ -936,9 +931,6 @@ ko.components.register('homePageTool', {
             <div class='small-12 columns'>
                 <h2>Home Page Tool</h2>
             </div>
-            <!--<div class='small-6 columns'>
-                <input data-bind="textInput: date" type="text" placeholder="Date">
-            </div>-->
         </div>
 
         <div class="row" style="max-width:200px; margin: 0;">
