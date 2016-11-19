@@ -252,7 +252,12 @@ class Dependents {
                     break;
                     case 'collection-grid-module':
                         // viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
-                        console.log('CG item numbers ',viewModel.itemNumber());
+                        var itemsList = viewModel.itemNumber().replace(/\n/g, ',').split(',');
+                        var itemsUrlList = viewModel.itemUrl().replace(/\n/g, ',').split(',');
+                        var smallImageList = viewModel.imageSmallUrl().replace(/\n/g, ',').split(',');
+                        var largeImageList = viewModel.imageLargeUrl().replace(/\n/g, ',').split(',');
+                        var imageDescriptionList = viewModel.imageDescription().replace(/\n/g, ',').split(',');
+
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
                             'text': viewModel.section(),
                             'link': viewModel.sectionUrl(),
@@ -268,41 +273,24 @@ class Dependents {
                             'link': viewModel.ctaUrl(),
                             'description': viewModel.ctaDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
-                            {
-                                'item': viewModel.itemNumber(),
-                                'image': {
-                                    'customImage': {
-                                        "small": viewModel.imageSmallUrl(),
-                                        "large": viewModel.imageLargeUrl()
-                                    },
-                                    'link': viewModel.itemUrl(),
-                                    'description': viewModel.imageDescription()
-                                },
-                                "subImageTop": {
-                                    'item': viewModel.subImageTopItemNumber(),
-                                    'image': {
-                                        'customImage': {
-                                            "small": viewModel.subImageTopImageSmallUrl(),
-                                            "large": viewModel.subImageTopImageLargeUrl()
-                                        },
-                                        'link': viewModel.subImageTopItemUrl(),
-                                        'description': viewModel.subImageTopImageDescription()
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = []
+                        itemsList.forEach((item, index) => {
+                            if (item != '') {
+                                viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'].push(
+                                    {
+                                        'item': item,
+                                        'image': {
+                                            'customImage': {
+                                                'small': smallImageList[index] === undefined ? '' : smallImageList[index],
+                                                'large': largeImageList[index] === undefined ? '' : largeImageList[index]
+                                            },
+                                            'link': itemsUrlList[index] === undefined ? '' : itemsUrlList[index],
+                                            'description': imageDescriptionList[index] === undefined ? '' : imageDescriptionList[index]
+                                        }
                                     }
-                                },
-                                "subImageBottom": {
-                                    'item': viewModel.subImageBottomItemNumber(),
-                                    'image': {
-                                        'customImage': {
-                                            "small": viewModel.subImageBottomImageSmallUrl(),
-                                            "large": viewModel.subImageBottomImageLargeUrl()
-                                        },
-                                        'link': viewModel.subImageBottomItemUrl(),
-                                        'description': viewModel.subImageBottomImageDescription()
-                                    }
-                                }
+                                )
                             }
-                        ]
+                        })
                     break;
                 }
             }
@@ -723,11 +711,11 @@ ko.components.register('collection-grid-module', {
                             <div class="row">
                                 <div class="small-12 medium-4 columns">
                                     <label>Item #</label>
-                                    <textarea data-bind="textInput: itemNumber" rows="6" type="text" placeholder="Item #"></textarea>
+                                    <textarea rows="6" type="text" placeholder="Item #" data-bind="textInput: itemNumber"></textarea>
                                 </div>
                                 <div class="small-12 medium-4 columns">
                                     <label>Item URL</label>
-                                    <textarea rows="6"></textarea>
+                                    <textarea rows="6" type="text" placeholder="Item URL" data-bind="textInput: itemUrl"></textarea>
                                 </div>
                                 <div class="small-12 medium-4 columns">
                                     <label>Display Group On</label>
@@ -735,33 +723,18 @@ ko.components.register('collection-grid-module', {
                                 </div>
                             </div>
 
-                            <!--<div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Item #</label>
-                                    <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Item URL</label>
-                                    <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Display Group On</label>
-                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
-                                </div>
-                            </div>-->
-
                             <div class="row">
                                 <div class="small-12 medium-4 columns">
                                     <label>Small Image URL</label>
-                                    <input data-bind="textInput: imageSmallUrl" type="text" placeholder="Small Image URL"></input>
+                                    <textarea rows="6" type="text" placeholder="Small Image URL" data-bind="textInput: imageSmallUrl"></textarea>
                                 </div>
                                 <div class="small-12 medium-4 columns">
                                     <label>Large Image URL</label>
-                                    <input data-bind="textInput: imageLargeUrl" type="text" placeholder="Large Image URL"></input>
+                                    <textarea rows="6" type="text" placeholder="Large Image URL" data-bind="textInput: imageLargeUrl"></textarea>
                                 </div>
                                 <div class="small-12 medium-4 columns">
                                     <label>Image Description Tag</label>
-                                    <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag"></input>
+                                    <textarea rows="6" type="text" placeholder="Image Description Tag" data-bind="textInput: imageDescription"></textarea>
                                 </div>
                             </div>
 
