@@ -1067,13 +1067,11 @@ ko.components.register('homePageTool', {
               this.jsonOrder(duplicateObjects);
           }
 
-          self = this;
-
           this.loadHomePage = function(e) {
               var loadDate = this.date();
               location.replace("http://localhost:5000/?loaded="+loadDate);
           }
-
+          console.log();
           ko.bindingHandlers.datepicker = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 var d = new Date();
