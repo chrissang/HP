@@ -14,7 +14,9 @@
             return obj;
         }, {});
         var testdate = urlParams.testdate;
-        var currentDate = new Date().toISOString().slice(0,10);
+        var d = new Date();
+        d.setHours(0, -d.getTimezoneOffset(), 0, 0); //removing the timezone offset.
+        var currentDate = d.toISOString().slice(0,10);
         var mapping;
         if (testdate == null || testdate == undefined) {
         	testdate = "";
