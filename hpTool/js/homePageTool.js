@@ -1,5 +1,9 @@
+var loadedJson;
+
 class Dependents {
     constructor(params) {
+        this.selectedModules = ko.observableArray();
+
         this.itemNumber = ko.observable("");
         this.itemUrl = ko.observable("");
         this.imageSmallUrl = ko.observable("");
@@ -68,7 +72,7 @@ class Dependents {
           var container = document.getElementById(e.uniqueId);
           ko.removeNode(container);
           delete this.params.data.mappingOrder[e.uniqueId];
-          console.log('mappingOrder ',this.params.data.mappingOrder)
+          //console.log('mappingOrder after delete ',this.params.data.mappingOrder);
         }
         self = this;
         this.bindingHandlers = {
@@ -273,6 +277,50 @@ class Dependents {
                             'link': viewModel.ctaUrl(),
                             'description': viewModel.ctaDescription()
                         },
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = []
+                        itemsList.forEach((item, index) => {
+                            if (item != '') {
+                                viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'].push(
+                                    {
+                                        'item': item,
+                                        'image': {
+                                            'customImage': {
+                                                'small': smallImageList[index] === undefined ? '' : smallImageList[index],
+                                                'large': largeImageList[index] === undefined ? '' : largeImageList[index]
+                                            },
+                                            'link': itemsUrlList[index] === undefined ? '' : itemsUrlList[index],
+                                            'description': imageDescriptionList[index] === undefined ? '' : imageDescriptionList[index]
+                                        }
+                                    }
+                                )
+                            }
+                        })
+                    break;
+                    case 'carousel-module':
+                        // viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayGroupOn'] = viewModel.selectedGroupScreenSize(),
+                        var itemsList = viewModel.itemNumber().replace(/\n/g, ',').split(',');
+                        var itemsUrlList = viewModel.itemUrl().replace(/\n/g, ',').split(',');
+                        var smallImageList = viewModel.imageSmallUrl().replace(/\n/g, ',').split(',');
+                        var largeImageList = viewModel.imageLargeUrl().replace(/\n/g, ',').split(',');
+                        var imageDescriptionList = viewModel.imageDescription().replace(/\n/g, ',').split(',');
+
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                            'text': viewModel.section(),
+                            'link': viewModel.sectionUrl(),
+                            'description': viewModel.sectionDescription()
+                        },
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['headline'] = {
+                            'text': viewModel.headline(),
+                            'link': viewModel.headlineUrl(),
+                            'description': viewModel.headlineDescription()
+                        },
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['cta'] = {
+                            'text': viewModel.cta(),
+                            'link': viewModel.ctaUrl(),
+                            'description': viewModel.ctaDescription()
+                        },
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = []
                         itemsList.forEach((item, index) => {
                             if (item != '') {
@@ -312,7 +360,7 @@ ko.components.register('large-feature-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Large Feature Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Large Feature Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
                             <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
                                 <div class="row">
@@ -400,7 +448,7 @@ ko.components.register('small-feature-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Small Feature Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Small Feature Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
                             <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
                                 <div class="row">
@@ -503,7 +551,7 @@ ko.components.register('basic-story-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Basic Story Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Basic Story Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
                             <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
                                 <div class="row">
@@ -606,7 +654,7 @@ ko.components.register('extended-story-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Extended Story Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Extended Story Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
                             <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
                                 <div class="row">
@@ -724,7 +772,7 @@ ko.components.register('collection-grid-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Collection Grid Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Collection Grid Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
                             <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
                                 <div class="row">
@@ -737,8 +785,111 @@ ko.components.register('collection-grid-module', {
                                         <textarea rows="6" type="text" placeholder="Item URL" data-bind="textInput: itemUrl"></textarea>
                                     </div>
                                     <div class="small-12 medium-4 columns">
-                                        <label>Display Group On</label>
-                                        <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
+                                        <label>Display Module On</label>
+                                        <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Small Image URL</label>
+                                        <textarea rows="6" type="text" placeholder="Small Image URL" data-bind="textInput: imageSmallUrl"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Large Image URL</label>
+                                        <textarea rows="6" type="text" placeholder="Large Image URL" data-bind="textInput: imageLargeUrl"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Image Description Tag</label>
+                                        <textarea rows="6" type="text" placeholder="Image Description Tag" data-bind="textInput: imageDescription"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section</label>
+                                        <input data-bind="textInput: section" type="text" placeholder="Section">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section URL</label>
+                                        <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section Description Tag</label>
+                                        <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline</label>
+                                        <input data-bind="textInput: headline" type="text" placeholder="Headline">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline URL</label>
+                                        <input data-bind="textInput: headlineUrl" type="text" placeholder="Headline URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline Description Tag</label>
+                                        <input data-bind="textInput: headlineDescription" type="text" placeholder="Headline Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA</label>
+                                        <input data-bind="textInput: cta" type="text" placeholder="CTA">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA URL</label>
+                                        <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA Description Tag</label>
+                                        <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag"></input>
+                                    </div>
+                                </div>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="small-1 text-center columns removeModule">
+                    <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
+                </div>
+            </div>
+        </div>`, synchronous: true
+});
+
+ko.components.register('carousel-module', {
+    viewModel: class CarouselModuleComponentModel extends Dependents {
+        constructor(params) {
+          super(params);
+          this.params = params;
+          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
+        }
+    },
+    template: `
+        <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+            <div class="flexContainer">
+                <div class="small-11 columns">
+                    <dl class="accordion" data-accordion="" role="tablist">
+                        <dd class="accordion-navigation">
+                            <a data-bind="text: 'Carousel Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+
+                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item #</label>
+                                        <textarea rows="6" type="text" placeholder="Item #" data-bind="textInput: itemNumber"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item URL</label>
+                                        <textarea rows="6" type="text" placeholder="Item URL" data-bind="textInput: itemUrl"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Display Module On</label>
+                                        <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
                                     </div>
                                 </div>
 
@@ -836,7 +987,7 @@ ko.components.register('homePageTool', {
       constructor(params) {
           super(params);
           this.selection = ko.observable();
-          this.selectedModules = ko.observableArray();
+        //   this.selectedModules = ko.observableArray();
           this.date = ko.observable();
           this.moduleTypes = [
               {name: 'Large Feature (LF)', value: 'large-feature-module'},
@@ -860,7 +1011,7 @@ ko.components.register('homePageTool', {
 
               $.ajax({
                   type: "POST",
-                  url: "http://localhost:5000/json",
+                  url: "http://localhost:5000/hp_config",
                   data: formToJSON(),
                   dataType: "json",
                   success: function() {
@@ -881,7 +1032,6 @@ ko.components.register('homePageTool', {
               if (this.selection()) {
                   this.selectedModules.push(this.selection());
               }
-              console.log('selectedModules ',this.selectedModules());
           }
           this.previewHomepage = function(e) {
               //console.log('preview click ',this.mappingOrder);
@@ -914,9 +1064,16 @@ ko.components.register('homePageTool', {
               })
 
               duplicateObjects = duplicateObjects.filter(function(n){ return n != '' });
-
               this.jsonOrder(duplicateObjects);
           }
+
+          self = this;
+
+          this.loadHomePage = function(e) {
+              var loadDate = this.date();
+              location.replace("http://localhost:5000/?loaded="+loadDate);
+          }
+
           ko.bindingHandlers.datepicker = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 var d = new Date();
@@ -957,9 +1114,10 @@ ko.components.register('homePageTool', {
                 <select data-bind="options: moduleTypes, value: selection ,optionsText: 'name', optionsValue: 'value', optionsCaption: 'Choose Module Type'"></select>
             </div>
             <div class="small-8 columns end">
+                <button>Create New Home Page</button>
+                <button data-bind="event:{ click: loadHomePage }">Load Home Page</button>
                 <button data-bind="event:{ click: createModule }">Create Module</button>
                 <button data-bind="event:{ click: previewHomepage }">Preview Home Page</button>
-                <button>Load Home Page</button>
             </div>
         </div>
 

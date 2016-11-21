@@ -16,11 +16,11 @@ var mydata = {}
 
 app.use(bodyParser.urlencoded({extended : true}));// to support URL-encoded bodies
 
-app.post("/json", function(request, response) {
+app.post("/hp_config", function(request, response) {
     response.send(request.body);
     var outputFilename = __dirname+'/hp_config/'+request.body.date+'.js';
 
-    var data = JSON.stringify(request.body.json, null, 4);
+    var data = JSON.stringify(request.body.json);
 
     var content = 'var mappingOrder = '+ data;
     fs.writeFile(outputFilename, content, function(err) {

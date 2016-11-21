@@ -1,13 +1,12 @@
 var mappingOrder = {
     "A": {
         "small-feature-module": {
-            "displayGroupOn": "small",
             "sections": [
                 {
-                    "item": "22405",
+                    "item": "",
                     "displayModuleOn": "small",
                     "section": {
-                        "text": "asd",
+                        "text": "",
                         "link": "",
                         "description": ""
                     },
@@ -20,24 +19,25 @@ var mappingOrder = {
                         "description": ""
                     },
                     "headline": {
-                        "text": "asd",
+                        "text": "",
                         "link": "",
                         "description": ""
                     },
                     "cta": {
-                        "text": "asd",
+                        "text": "",
                         "link": "",
                         "description": ""
                     }
-                },
+                }
+            ]
+        }
+    },
+    "B": {
+        "large-feature-module": {
+            "sections": [
                 {
-                    "item": "22405",
+                    "item": "",
                     "displayModuleOn": "small",
-                    "section": {
-                        "text": "asd",
-                        "link": "",
-                        "description": ""
-                    },
                     "image": {
                         "customImage": {
                             "small": "",
@@ -47,12 +47,12 @@ var mappingOrder = {
                         "description": ""
                     },
                     "headline": {
-                        "text": "asd",
+                        "text": "",
                         "link": "",
                         "description": ""
                     },
                     "cta": {
-                        "text": "asd",
+                        "text": "",
                         "link": "",
                         "description": ""
                     }

@@ -688,7 +688,7 @@ ko.components.register('collection-grid-module', {
             this.arrayContent5 = this.collectionGridModulesSections[4];
             this.arrayContent6 = this.collectionGridModulesSections[5];
 
-            this.displayGroupViewPortSize = this.displayGroup(this.collectionGridModulesSections);
+            this.displayGroupViewPortSize = params.data.displayModuleOn;
         }
     },
     template: `
@@ -798,6 +798,8 @@ ko.components.register('carousel-module', {
             this.arrayContent4 = this.carouselModulesSections[3];
             this.arrayContent5 = this.carouselModulesSections[4];
             this.arrayContent6 = this.carouselModulesSections[5];
+
+            this.displayGroupViewPortSize = params.data.displayModuleOn;
             ko.bindingHandlers.reinit = {
                 update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                     $(function () {
