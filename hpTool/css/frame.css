@@ -15713,21 +15713,32 @@ ul {
   display: flex;
   margin-bottom: 1rem;
 }
+/* line 28, ../scss/hpTool.scss */
+.flexContainer .small-11 {
+  padding-right: 0;
+}
+/* line 31, ../scss/hpTool.scss */
+.flexContainer .removeModule {
+  padding: 0;
+  padding-top: 2rem;
+  border-top: 1px solid #817B73;
+  border-bottom: 1px solid #817B73;
+}
 
-/* line 33, ../scss/hpTool.scss */
+/* line 39, ../scss/hpTool.scss */
 .datepicker {
   left: .375rem;
   margin-top: .75rem;
 }
-/* line 36, ../scss/hpTool.scss */
+/* line 42, ../scss/hpTool.scss */
 .datepicker table:not(.noLeftLabels):not(.noLabels) tr td:first-child, .datepicker table:not(.noLeftabels):not(.noLabels) tr th:first-child {
   border-right: 0px;
 }
-/* line 39, ../scss/hpTool.scss */
+/* line 45, ../scss/hpTool.scss */
 .datepicker table:not(.noTopLabels):not(.noLabels) tr:first-child td, .datepicker table:not(.noTopLabels):not(.noLabels) tr:first-child th {
   border-bottom: 0px;
 }
-/* line 42, ../scss/hpTool.scss */
+/* line 48, ../scss/hpTool.scss */
 .datepicker td span.active, .datepicker td.active.day, .datepicker td.active.year {
   background: #048D8A;
 }

@@ -64,7 +64,7 @@ class Dependents {
             });
         }
 
-        this.handleClick = function(e) {
+        this.removeModule = function(e) {
           var container = document.getElementById(e.uniqueId);
           ko.removeNode(container);
           delete this.params.data.mappingOrder[e.uniqueId];
@@ -308,75 +308,81 @@ ko.components.register('large-feature-module', {
     },
     template: `
         <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
-            <div class="small-12 columns">
-                <dl class="accordion" data-accordion="" role="tablist">
-                    <dd class="accordion-navigation">
-                        <a data-bind="text: 'Large Feature Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+            <div class="flexContainer">
+                <div class="small-11 columns">
+                    <dl class="accordion" data-accordion="" role="tablist">
+                        <dd class="accordion-navigation">
+                            <a data-bind="text: 'Large Feature Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
-                        <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Item #</label>
-                                    <input data-bind="textInput: itemNumber" type="number" placeholder="Item #"></input>
+                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item #</label>
+                                        <input data-bind="textInput: itemNumber" type="number" placeholder="Item #"></input>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item URL</label>
+                                        <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL"></input>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Display Module On</label>
+                                        <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+                                    </div>
                                 </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Item URL</label>
-                                    <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL"></input>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Small Image URL</label>
+                                        <input data-bind="textInput: imageSmallUrl" type="text" placeholder="Small Image URL"></input>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Large Image URL</label>
+                                        <input data-bind="textInput: imageLargeUrl" type="text" placeholder="Large Image URL"></input>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Image Description Tag</label>
+                                        <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag"></input>
+                                    </div>
                                 </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Display Module On</label>
-                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline</label>
+                                        <input data-bind="textInput: headline" type="text" placeholder="Headline">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline URL</label>
+                                        <input data-bind="textInput: headlineUrl" type="text" placeholder="Headline URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline Description Tag</label>
+                                        <input data-bind="textInput: headlineDescription" type="text" placeholder="Headline Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA</label>
+                                        <input data-bind="textInput: cta" type="text" placeholder="CTA">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA URL</label>
+                                        <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA Description Tag</label>
+                                        <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag"></input>
+                                    </div>
                                 </div>
                             </div>
+                        </dd>
+                    </dl>
+                </div>
 
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Small Image URL</label>
-                                    <input data-bind="textInput: imageSmallUrl" type="text" placeholder="Small Image URL"></input>
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Large Image URL</label>
-                                    <input data-bind="textInput: imageLargeUrl" type="text" placeholder="Large Image URL"></input>
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Image Description Tag</label>
-                                    <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag"></input>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Headline</label>
-                                    <input data-bind="textInput: headline" type="text" placeholder="Headline">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Headline URL</label>
-                                    <input data-bind="textInput: headlineUrl" type="text" placeholder="Headline URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Headline Description Tag</label>
-                                    <input data-bind="textInput: headlineDescription" type="text" placeholder="Headline Description Tag"></input>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>CTA</label>
-                                    <input data-bind="textInput: cta" type="text" placeholder="CTA">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>CTA URL</label>
-                                    <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>CTA Description Tag</label>
-                                    <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag"></input>
-                                </div>
-                            </div>
-                        </div>
-                    </dd>
-                </dl>
-            </div>
+                <div class="small-1 text-center columns removeModule">
+                    <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
+                </div>
+            </div
         </div>`, synchronous: true
 });
 
@@ -391,7 +397,7 @@ ko.components.register('small-feature-module', {
     template: `
         <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
             <div class="flexContainer">
-                <div class="small-11 columns" style="padding-right: 0;">
+                <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
                             <a data-bind="text: 'Small Feature Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
@@ -476,8 +482,8 @@ ko.components.register('small-feature-module', {
                     </dl>
                 </div>
 
-                <div class="small-1 text-center columns" style="padding: 0; padding-top: 2rem; border-top: 1px solid #817B73; border-bottom: 1px solid #817B73;">
-                    <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: handleClick }"></i>
+                <div class="small-1 text-center columns removeModule">
+                    <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
         </div>`, synchronous: true
@@ -493,90 +499,96 @@ ko.components.register('basic-story-module', {
     },
     template: `
         <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
-            <div class="small-12 columns">
-                <dl class="accordion" data-accordion="" role="tablist">
-                    <dd class="accordion-navigation">
-                        <a data-bind="text: 'Basic Story Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+            <div class="flexContainer">
+                <div class="small-11 columns">
+                    <dl class="accordion" data-accordion="" role="tablist">
+                        <dd class="accordion-navigation">
+                            <a data-bind="text: 'Basic Story Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
-                        <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Item #</label>
-                                    <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
+                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item #</label>
+                                        <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item URL</label>
+                                        <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Display Module On</label>
+                                        <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+                                    </div>
                                 </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Item URL</label>
-                                    <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL">
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Small Image URL</label>
+                                        <input data-bind="textInput: imageSmallUrl" type="text" placeholder="Small Image URL"></input>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Large Image URL</label>
+                                        <input data-bind="textInput: imageLargeUrl" type="text" placeholder="Large Image URL"></input>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Image Description Tag</label>
+                                        <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag"></input>
+                                    </div>
                                 </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Display Module On</label>
-                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section</label>
+                                        <input data-bind="textInput: section" type="text" placeholder="Section">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section URL</label>
+                                        <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section Description Tag</label>
+                                        <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline</label>
+                                        <input data-bind="textInput: headline" type="text" placeholder="Headline">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline URL</label>
+                                        <input data-bind="textInput: headlineUrl" type="text" placeholder="Headline URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline Description Tag</label>
+                                        <input data-bind="textInput: headlineDescription" type="text" placeholder="Headline Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA</label>
+                                        <input data-bind="textInput: cta" type="text" placeholder="CTA">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA URL</label>
+                                        <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA Description Tag</label>
+                                        <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag"></input>
+                                    </div>
                                 </div>
                             </div>
+                        </dd>
+                    </dl>
+                </div>
 
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Small Image URL</label>
-                                    <input data-bind="textInput: imageSmallUrl" type="text" placeholder="Small Image URL"></input>
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Large Image URL</label>
-                                    <input data-bind="textInput: imageLargeUrl" type="text" placeholder="Large Image URL"></input>
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Image Description Tag</label>
-                                    <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag"></input>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Section</label>
-                                    <input data-bind="textInput: section" type="text" placeholder="Section">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Section URL</label>
-                                    <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Section Description Tag</label>
-                                    <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Headline</label>
-                                    <input data-bind="textInput: headline" type="text" placeholder="Headline">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Headline URL</label>
-                                    <input data-bind="textInput: headlineUrl" type="text" placeholder="Headline URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Headline Description Tag</label>
-                                    <input data-bind="textInput: headlineDescription" type="text" placeholder="Headline Description Tag"></input>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>CTA</label>
-                                    <input data-bind="textInput: cta" type="text" placeholder="CTA">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>CTA URL</label>
-                                    <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>CTA Description Tag</label>
-                                    <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag"></input>
-                                </div>
-                            </div>
-                        </div>
-                    </dd>
-                </dl>
-            </div>
+                <div class="small-1 text-center columns removeModule">
+                    <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
+                </div>
+            </div
         </div>`, synchronous: true
 });
 
@@ -590,104 +602,110 @@ ko.components.register('extended-story-module', {
     },
     template: `
         <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
-            <div class="small-12 columns">
-                <dl class="accordion" data-accordion="" role="tablist">
-                    <dd class="accordion-navigation">
-                        <a data-bind="text: 'Extended Story Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+            <div class="flexContainer">
+                <div class="small-11 columns">
+                    <dl class="accordion" data-accordion="" role="tablist">
+                        <dd class="accordion-navigation">
+                            <a data-bind="text: 'Extended Story Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
-                        <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Item #</label>
-                                    <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
+                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item #</label>
+                                        <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item URL</label>
+                                        <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Display Module On</label>
+                                        <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+                                    </div>
                                 </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Item URL</label>
-                                    <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL">
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Small Image URL</label>
+                                        <input data-bind="textInput: imageSmallUrl" type="text" placeholder="Small Image URL"></input>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Large Image URL</label>
+                                        <input data-bind="textInput: imageLargeUrl" type="text" placeholder="Large Image URL"></input>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Image Description Tag</label>
+                                        <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag"></input>
+                                    </div>
                                 </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Display Module On</label>
-                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section</label>
+                                        <input data-bind="textInput: section" type="text" placeholder="Section">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section URL</label>
+                                        <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section Description Tag</label>
+                                        <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline</label>
+                                        <input data-bind="textInput: headline" type="text" placeholder="Headline">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline URL</label>
+                                        <input data-bind="textInput: headlineUrl" type="text" placeholder="Headline URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline Description Tag</label>
+                                        <input data-bind="textInput: headlineDescription" type="text" placeholder="Headline Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Copy</label>
+                                        <input data-bind="textInput: copy" type="text" placeholder="Copy">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Copy URL</label>
+                                        <input data-bind="textInput: copyUrl" type="text" placeholder="Copy URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Copy Description Tag</label>
+                                        <input data-bind="textInput: copyDescription" type="text" placeholder="Copy Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA</label>
+                                        <input data-bind="textInput: cta" type="text" placeholder="CTA">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA URL</label>
+                                        <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA Description Tag</label>
+                                        <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag"></input>
+                                    </div>
                                 </div>
                             </div>
+                        </dd>
+                    </dl>
+                </div>
 
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Small Image URL</label>
-                                    <input data-bind="textInput: imageSmallUrl" type="text" placeholder="Small Image URL"></input>
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Large Image URL</label>
-                                    <input data-bind="textInput: imageLargeUrl" type="text" placeholder="Large Image URL"></input>
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Image Description Tag</label>
-                                    <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag"></input>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Section</label>
-                                    <input data-bind="textInput: section" type="text" placeholder="Section">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Section URL</label>
-                                    <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Section Description Tag</label>
-                                    <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Headline</label>
-                                    <input data-bind="textInput: headline" type="text" placeholder="Headline">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Headline URL</label>
-                                    <input data-bind="textInput: headlineUrl" type="text" placeholder="Headline URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Headline Description Tag</label>
-                                    <input data-bind="textInput: headlineDescription" type="text" placeholder="Headline Description Tag"></input>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Copy</label>
-                                    <input data-bind="textInput: copy" type="text" placeholder="Copy">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Copy URL</label>
-                                    <input data-bind="textInput: copyUrl" type="text" placeholder="Copy URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Copy Description Tag</label>
-                                    <input data-bind="textInput: copyDescription" type="text" placeholder="Copy Description Tag"></input>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>CTA</label>
-                                    <input data-bind="textInput: cta" type="text" placeholder="CTA">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>CTA URL</label>
-                                    <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>CTA Description Tag</label>
-                                    <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag"></input>
-                                </div>
-                            </div>
-                        </div>
-                    </dd>
-                </dl>
+                <div class="small-1 text-center columns removeModule">
+                    <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
+                </div>
             </div>
         </div>`, synchronous: true
 });
@@ -702,89 +720,95 @@ ko.components.register('collection-grid-module', {
     },
     template: `
         <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
-            <div class="small-12 columns">
-                <dl class="accordion" data-accordion="" role="tablist">
-                    <dd class="accordion-navigation">
-                        <a data-bind="text: 'Collection Grid Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+            <div class="flexContainer">
+                <div class="small-11 columns">
+                    <dl class="accordion" data-accordion="" role="tablist">
+                        <dd class="accordion-navigation">
+                            <a data-bind="text: 'Collection Grid Module '+accordionIndex(), attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
-                        <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Item #</label>
-                                    <textarea rows="6" type="text" placeholder="Item #" data-bind="textInput: itemNumber"></textarea>
+                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item #</label>
+                                        <textarea rows="6" type="text" placeholder="Item #" data-bind="textInput: itemNumber"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item URL</label>
+                                        <textarea rows="6" type="text" placeholder="Item URL" data-bind="textInput: itemUrl"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Display Group On</label>
+                                        <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
+                                    </div>
                                 </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Item URL</label>
-                                    <textarea rows="6" type="text" placeholder="Item URL" data-bind="textInput: itemUrl"></textarea>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Small Image URL</label>
+                                        <textarea rows="6" type="text" placeholder="Small Image URL" data-bind="textInput: imageSmallUrl"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Large Image URL</label>
+                                        <textarea rows="6" type="text" placeholder="Large Image URL" data-bind="textInput: imageLargeUrl"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Image Description Tag</label>
+                                        <textarea rows="6" type="text" placeholder="Image Description Tag" data-bind="textInput: imageDescription"></textarea>
+                                    </div>
                                 </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Display Group On</label>
-                                    <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedGroupScreenSize"></select>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section</label>
+                                        <input data-bind="textInput: section" type="text" placeholder="Section">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section URL</label>
+                                        <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section Description Tag</label>
+                                        <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline</label>
+                                        <input data-bind="textInput: headline" type="text" placeholder="Headline">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline URL</label>
+                                        <input data-bind="textInput: headlineUrl" type="text" placeholder="Headline URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Headline Description Tag</label>
+                                        <input data-bind="textInput: headlineDescription" type="text" placeholder="Headline Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA</label>
+                                        <input data-bind="textInput: cta" type="text" placeholder="CTA">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA URL</label>
+                                        <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA Description Tag</label>
+                                        <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag"></input>
+                                    </div>
                                 </div>
                             </div>
+                        </dd>
+                    </dl>
+                </div>
 
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Small Image URL</label>
-                                    <textarea rows="6" type="text" placeholder="Small Image URL" data-bind="textInput: imageSmallUrl"></textarea>
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Large Image URL</label>
-                                    <textarea rows="6" type="text" placeholder="Large Image URL" data-bind="textInput: imageLargeUrl"></textarea>
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Image Description Tag</label>
-                                    <textarea rows="6" type="text" placeholder="Image Description Tag" data-bind="textInput: imageDescription"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Section</label>
-                                    <input data-bind="textInput: section" type="text" placeholder="Section">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Section URL</label>
-                                    <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Section Description Tag</label>
-                                    <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>Headline</label>
-                                    <input data-bind="textInput: headline" type="text" placeholder="Headline">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Headline URL</label>
-                                    <input data-bind="textInput: headlineUrl" type="text" placeholder="Headline URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>Headline Description Tag</label>
-                                    <input data-bind="textInput: headlineDescription" type="text" placeholder="Headline Description Tag"></input>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="small-12 medium-4 columns">
-                                    <label>CTA</label>
-                                    <input data-bind="textInput: cta" type="text" placeholder="CTA">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>CTA URL</label>
-                                    <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
-                                </div>
-                                <div class="small-12 medium-4 columns">
-                                    <label>CTA Description Tag</label>
-                                    <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag"></input>
-                                </div>
-                            </div>
-                        </div>
-                    </dd>
-                </dl>
+                <div class="small-1 text-center columns removeModule">
+                    <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
+                </div>
             </div>
         </div>`, synchronous: true
 });
@@ -805,6 +829,8 @@ function reducerFilter(acc, xs) {
   return acc;
 }
 
+
+// TODO: refactor accordionIndex and see if i need selectedModules for anyhting other than rendering modules
 ko.components.register('homePageTool', {
   viewModel: class HomePageToolComponentModel extends Dependents {
       constructor(params) {
@@ -851,12 +877,13 @@ ko.components.register('homePageTool', {
                   };
               }
           }
-          this.handleClick = function (e) {
+          this.createModule = function (e) {
               if (this.selection()) {
                   this.selectedModules.push(this.selection());
               }
+              console.log('selectedModules ',this.selectedModules());
           }
-          this.previewOrder = function(e) {
+          this.previewHomepage = function(e) {
               //console.log('preview click ',this.mappingOrder);
               var mappingOrderCopy = JSON.parse(JSON.stringify(this.mappingOrder));
               var cleanJson = {};
@@ -912,7 +939,7 @@ ko.components.register('homePageTool', {
     template: `
         <div class='row'>
             <div class='small-12 columns'>
-                <h2>Home Page Tool</h2>
+                <h2>Create Home Page Tool</h2>
             </div>
         </div>
 
@@ -926,12 +953,13 @@ ko.components.register('homePageTool', {
         </div>
 
         <div class="row">
-            <div class="small-6 columns end">
+            <div class="small-4 columns end">
                 <select data-bind="options: moduleTypes, value: selection ,optionsText: 'name', optionsValue: 'value', optionsCaption: 'Choose Module Type'"></select>
             </div>
-            <div class="small-6 columns end">
-                <button data-bind="event:{ click: handleClick }">Create Module</button>
-                <button data-bind="event:{ click: previewOrder }">Preview Order</button>
+            <div class="small-8 columns end">
+                <button data-bind="event:{ click: createModule }">Create Module</button>
+                <button data-bind="event:{ click: previewHomepage }">Preview Home Page</button>
+                <button>Load Home Page</button>
             </div>
         </div>
 

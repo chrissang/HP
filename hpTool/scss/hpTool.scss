@@ -25,10 +25,16 @@ ul {
 .flexContainer {
 	display: flex;
 	margin-bottom: 1rem;
+	.small-11 {
+		padding-right: 0;
+	}
+	.removeModule {
+		padding: 0;
+		padding-top: 2rem;
+		border-top: 1px solid #817B73;
+		border-bottom: 1px solid #817B73;
+	}
 }
-// .fa-times {
-// 	line-height: 4;
-// }
 
 .datepicker {
 	left: .375rem;
