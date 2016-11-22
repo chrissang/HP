@@ -1065,17 +1065,86 @@ ko.components.register('homePageTool', {
 
           this.loadHomePage = function(e) {
               var loadDate = this.date();
+              var self = this;
               $.ajax({
                   type: "GET",
                   url: "http://localhost:5000/hp_config/"+loadDate+".js",
                   success: function(data) {
-                     console.log(mappingOrder);
-                    //  console.log(this.mappingOrder)
+
                      var clearModules = [];
                      clearModules = Array.from(document.getElementById('sortableContainer').querySelectorAll('.module'));
                      clearModules.forEach((el, index)=> {
                          ko.removeNode(el);
+                         delete self.mappingOrder[el.getAttribute('id')];
                      })
+
+                     Object.keys(mappingOrder).forEach((letter, i) => {
+                         Object.keys(mappingOrder[letter]).forEach((module, index) => {
+                             console.log(module);
+                             //console.log(mappingOrder[letter]);
+                             //console.log(mappingOrder[letter][module]);
+
+                             switch (module) {
+                                 case 'small-feature-module':
+                                    var sectionsArry = mappingOrder[letter][module].sections;
+                                    sectionsArry.forEach((el,index) => {
+                                        console.log(el);
+                                        self.itemNumber = el.item;
+                                        self.displayModuleOn = el.selectedModuleScreenSize;
+                                        self.section = el.section.text;
+                                        self.sectionUrl = el.section.link;
+                                        self.sectionDescription = el.section.description;
+                                        // self.itemNumber(el.item);
+                                        // self.displayModuleOn(el.selectedModuleScreenSize);
+                                        // self.section(el.section.text);
+                                        // self.sectionUrl(el.section.link);
+                                        // self.sectionDescription(el.section.description);
+                                        
+                                        //self.selectedModules.push(module);
+
+
+
+
+                                        // {
+                                        //     'item': viewModel.itemNumber(),
+                                        //     'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                                        //     'section': {
+                                        //         'text': viewModel.section(),
+                                        //         'link': viewModel.sectionUrl(),
+                                        //         'description': viewModel.sectionDescription()
+                                        //     },
+                                        //     'image': {
+                                        //         'customImage': {
+                                        //             "small": viewModel.imageSmallUrl(),
+                                        //             "large": viewModel.imageLargeUrl()
+                                        //         },
+                                        //         'link': viewModel.itemUrl(),
+                                        //         'description': viewModel.imageDescription()
+                                        //     },
+                                        //     'headline': {
+                                        //         'text': viewModel.headline(),
+                                        //         'link': viewModel.headlineUrl(),
+                                        //         'description': viewModel.headlineDescription()
+                                        //     },
+                                        //     'cta': {
+                                        //         'text': viewModel.cta(),
+                                        //         'link': viewModel.ctaUrl(),
+                                        //         'description': viewModel.ctaDescription()
+                                        //     }
+                                        // }
+
+                                    })
+                                    // console.log(mappingOrder[letter][module]);
+                                 break
+                            }
+                            //  if (module === 'small-feature-module') {
+                            //     console.log(mappingOrder[letter][module]);
+                            //  }
+
+                         })
+                     })
+                     //self.selectedModules.push('small-feature-module');
+                     //console.log(self.selectedModules());
 
 
                   }
