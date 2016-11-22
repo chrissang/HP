@@ -6,26 +6,13 @@ class Dependents {
         this.imageLargeUrl = ko.observable("");
         this.headline = ko.observable("");
         this.headlineUrl = ko.observable("");
-
-        this.subImageTopItemNumber = ko.observable("");
-        this.subImageTopItemUrl = ko.observable("");
-        this.subImageTopImageSmallUrl = ko.observable("");
-        this.subImageTopImageLargeUrl = ko.observable("");
-        this.subImageTopImageDescription = ko.observable("");
-
-        this.subImageBottomItemNumber = ko.observable("");
-        this.subImageBottomItemUrl = ko.observable("");
-        this.subImageBottomImageSmallUrl = ko.observable("");
-        this.subImageBottomImageLargeUrl = ko.observable("");
-        this.subImageBottomImageDescription = ko.observable("");
-
         this.copy = ko.observable("");
         this.copyUrl = ko.observable("");
-
         this.cta = ko.observable("");
         this.ctaUrl = ko.observable("");
         this.section = ko.observable("");
         this.sectionUrl = ko.observable("");
+
         this.moduleType = ko.observable("");
 
         this.imageDescription = ko.observable("");
@@ -63,14 +50,30 @@ class Dependents {
                 }
             });
         }
-
         this.removeModule = function(e) {
           var container = document.getElementById(e.uniqueId);
           ko.removeNode(container);
           delete this.params.data.mappingOrder[e.uniqueId];
           //console.log('mappingOrder after delete ',this.params.data.mappingOrder);
         }
-        self = this;
+
+        this.defaults = ko.observableArray();
+        // this.displayLoadedJson = function() {
+        //     Object.keys(mappingOrder).forEach((letter, i) => {
+        //         Object.keys(mappingOrder[letter]).forEach((module, index) => {
+        //             if (module === 'small-feature-module') {
+        //                 var sections = mappingOrder[letter][module].sections;
+        //                 // console.log('displayLoadedJson ',this.selectedModules() );
+        //                 sections.forEach((item,index) => {
+        //                     console.log(item);
+        //
+        //
+        //                 })
+        //             }
+        //         })
+        //     })
+        // }
+        // self = this;
         this.bindingHandlers = {
             init: $(function () {
                 $(document).foundation({
@@ -85,6 +88,23 @@ class Dependents {
         };
 
         ko.bindingHandlers.sortable = {
+            init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+                console.log(viewModel.params.data.selectedModules().length)
+
+                if (Object.keys(mappingOrder).length != 0) {
+
+                    Object.keys(mappingOrder).forEach((letter, i) => {
+                        Object.keys(mappingOrder[letter]).forEach((module, index) => {
+                            if (module === 'small-feature-module') {
+                                console.log(mappingOrder[letter]['small-feature-module']['sections'][index].item);
+                            }
+                            if (module === 'basic-story-module') {
+                                console.log(mappingOrder[letter]['basic-story-module']['sections'][index].item);
+                            }
+                        })
+                    })
+                }
+            },
             update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 var el = document.getElementById('sortableContainer');
                 var sortable = new Sortable(el, {
@@ -111,6 +131,11 @@ class Dependents {
                         ko.dataFor(evt.item).params.data.sortMappingOrder();
                     }
                 });
+                // console.log(mappingOrder);
+                // console.log(bindingContext);
+
+                // console.log('viewmodel updated: ',viewModel.params.data.itemNumber());
+                // console.log('viewmodel OG: ',viewModel.itemNumber());
 
                 //viewModel.params.data.uniqueIdModified(viewModel.uniqueId);
                 var uniqueId = viewModel.uniqueId;
@@ -436,6 +461,15 @@ ko.components.register('small-feature-module', {
           super(params);
           this.params = params;
           this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
+
+        //   console.log('loaded sm feature: ',params);
+        //   console.log('loaded sm feature: ',this.params);
+
+          //console.log('loaded sm feature: ',this.params.data.itemNumber());
+
+          //console.log('loaded sm feature: ',this.itemNumber());
+
+          //console.log('loaded sm feature mapping ',mappingOrder);
         }
     },
     template: `
@@ -534,7 +568,7 @@ ko.components.register('small-feature-module', {
 });
 
 ko.components.register('basic-story-module', {
-    viewModel: class SmallFeatureModuleComponentModel extends Dependents {
+    viewModel: class BasicStoryModuleComponentModel extends Dependents {
         constructor(params) {
           super(params);
           this.params = params;
@@ -637,7 +671,7 @@ ko.components.register('basic-story-module', {
 });
 
 ko.components.register('extended-story-module', {
-    viewModel: class SmallFeatureModuleComponentModel extends Dependents {
+    viewModel: class ExtendedStoryModuleComponentModel extends Dependents {
         constructor(params) {
           super(params);
           this.params = params;
@@ -755,7 +789,7 @@ ko.components.register('extended-story-module', {
 });
 
 ko.components.register('collection-grid-module', {
-    viewModel: class SmallFeatureModuleComponentModel extends Dependents {
+    viewModel: class CollectionGridModuleComponentModel extends Dependents {
         constructor(params) {
           super(params);
           this.params = params;
@@ -1063,9 +1097,33 @@ ko.components.register('homePageTool', {
               this.jsonOrder(duplicateObjects);
           }
 
+          this.reRender = function renderLoadedJson() {
+              Object.keys(mappingOrder).forEach((letter, i) => {
+                  Object.keys(mappingOrder[letter]).forEach((module, index) => {
+                      switch (module) {
+                          case 'small-feature-module':
+                             var sectionsArry = mappingOrder[letter][module].sections;
+                             sectionsArry.forEach((el,index) => {
+                                this.itemNumber(mappingOrder[letter][module].sections[index].item);
+                                this.selectedModules.push(module);
+                            })
+                          break
+                          case 'basic-story-module':
+                             var sectionsArry = mappingOrder[letter][module].sections;
+                             sectionsArry.forEach((el,index) => {
+                                this.itemNumber(mappingOrder[letter][module].sections[index].item);
+                                this.selectedModules.push(module);
+                            })
+                          break
+
+                     }
+                  })
+              })
+          };
           this.loadHomePage = function(e) {
               var loadDate = this.date();
               var self = this;
+
               $.ajax({
                   type: "GET",
                   url: "http://localhost:5000/hp_config/"+loadDate+".js",
@@ -1077,85 +1135,14 @@ ko.components.register('homePageTool', {
                          ko.removeNode(el);
                          delete self.mappingOrder[el.getAttribute('id')];
                      })
-
-                     Object.keys(mappingOrder).forEach((letter, i) => {
-                         Object.keys(mappingOrder[letter]).forEach((module, index) => {
-                             console.log(module);
-                             //console.log(mappingOrder[letter]);
-                             //console.log(mappingOrder[letter][module]);
-
-                             switch (module) {
-                                 case 'small-feature-module':
-                                    var sectionsArry = mappingOrder[letter][module].sections;
-                                    sectionsArry.forEach((el,index) => {
-                                        console.log(el);
-                                        self.itemNumber = el.item;
-                                        self.displayModuleOn = el.selectedModuleScreenSize;
-                                        self.section = el.section.text;
-                                        self.sectionUrl = el.section.link;
-                                        self.sectionDescription = el.section.description;
-                                        // self.itemNumber(el.item);
-                                        // self.displayModuleOn(el.selectedModuleScreenSize);
-                                        // self.section(el.section.text);
-                                        // self.sectionUrl(el.section.link);
-                                        // self.sectionDescription(el.section.description);
-                                        
-                                        //self.selectedModules.push(module);
-
-
-
-
-                                        // {
-                                        //     'item': viewModel.itemNumber(),
-                                        //     'displayModuleOn': viewModel.selectedModuleScreenSize(),
-                                        //     'section': {
-                                        //         'text': viewModel.section(),
-                                        //         'link': viewModel.sectionUrl(),
-                                        //         'description': viewModel.sectionDescription()
-                                        //     },
-                                        //     'image': {
-                                        //         'customImage': {
-                                        //             "small": viewModel.imageSmallUrl(),
-                                        //             "large": viewModel.imageLargeUrl()
-                                        //         },
-                                        //         'link': viewModel.itemUrl(),
-                                        //         'description': viewModel.imageDescription()
-                                        //     },
-                                        //     'headline': {
-                                        //         'text': viewModel.headline(),
-                                        //         'link': viewModel.headlineUrl(),
-                                        //         'description': viewModel.headlineDescription()
-                                        //     },
-                                        //     'cta': {
-                                        //         'text': viewModel.cta(),
-                                        //         'link': viewModel.ctaUrl(),
-                                        //         'description': viewModel.ctaDescription()
-                                        //     }
-                                        // }
-
-                                    })
-                                    // console.log(mappingOrder[letter][module]);
-                                 break
-                            }
-                            //  if (module === 'small-feature-module') {
-                            //     console.log(mappingOrder[letter][module]);
-                            //  }
-
-                         })
-                     })
-                     //self.selectedModules.push('small-feature-module');
-                     //console.log(self.selectedModules());
-
-
+                     self.reRender()
                   }
-              }).done(function(msg) {
-                  //console.log("Data Saved: " + msg);
-              });
+              })
 
-              //location.replace("http://localhost:5000/?loaded="+loadDate);
+
+
+             // console.log('get ',this.selectedModules() );
           }
-
-
           ko.bindingHandlers.datepicker = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 var d = new Date();
@@ -1173,7 +1160,7 @@ ko.components.register('homePageTool', {
                 })
             }
         }
-        }
+      }
     },
     template: `
         <div class='row'>
