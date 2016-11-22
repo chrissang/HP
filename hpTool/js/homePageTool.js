@@ -1,9 +1,5 @@
-var loadedJson;
-
 class Dependents {
     constructor(params) {
-        this.selectedModules = ko.observableArray();
-
         this.itemNumber = ko.observable("");
         this.itemUrl = ko.observable("");
         this.imageSmallUrl = ko.observable("");
@@ -355,7 +351,7 @@ ko.components.register('large-feature-module', {
         }
     },
     template: `
-        <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
@@ -443,7 +439,7 @@ ko.components.register('small-feature-module', {
         }
     },
     template: `
-        <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
@@ -546,7 +542,7 @@ ko.components.register('basic-story-module', {
         }
     },
     template: `
-        <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
@@ -649,7 +645,7 @@ ko.components.register('extended-story-module', {
         }
     },
     template: `
-        <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
@@ -767,7 +763,7 @@ ko.components.register('collection-grid-module', {
         }
     },
     template: `
-        <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
@@ -870,7 +866,7 @@ ko.components.register('carousel-module', {
         }
     },
     template: `
-        <div class="row" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
@@ -983,11 +979,11 @@ function reducerFilter(acc, xs) {
 
 // TODO: refactor accordionIndex and see if i need selectedModules for anyhting other than rendering modules
 ko.components.register('homePageTool', {
-  viewModel: class HomePageToolComponentModel extends Dependents {
+    viewModel: class HomePageToolComponentModel extends Dependents {
       constructor(params) {
           super(params);
           this.selection = ko.observable();
-        //   this.selectedModules = ko.observableArray();
+          this.selectedModules = ko.observableArray();
           this.date = ko.observable();
           this.moduleTypes = [
               {name: 'Large Feature (LF)', value: 'large-feature-module'},
@@ -1069,9 +1065,28 @@ ko.components.register('homePageTool', {
 
           this.loadHomePage = function(e) {
               var loadDate = this.date();
-              location.replace("http://localhost:5000/?loaded="+loadDate);
+              $.ajax({
+                  type: "GET",
+                  url: "http://localhost:5000/hp_config/"+loadDate+".js",
+                  success: function(data) {
+                     console.log(mappingOrder);
+                    //  console.log(this.mappingOrder)
+                     var clearModules = [];
+                     clearModules = Array.from(document.getElementById('sortableContainer').querySelectorAll('.module'));
+                     clearModules.forEach((el, index)=> {
+                         ko.removeNode(el);
+                     })
+
+
+                  }
+              }).done(function(msg) {
+                  //console.log("Data Saved: " + msg);
+              });
+
+              //location.replace("http://localhost:5000/?loaded="+loadDate);
           }
-          console.log();
+
+
           ko.bindingHandlers.datepicker = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 var d = new Date();
@@ -1089,7 +1104,7 @@ ko.components.register('homePageTool', {
                 })
             }
         }
-      }
+        }
     },
     template: `
         <div class='row'>
