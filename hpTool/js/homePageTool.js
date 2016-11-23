@@ -52,28 +52,12 @@ class Dependents {
         }
         this.removeModule = function(e) {
           var container = document.getElementById(e.uniqueId);
+          var removeIndex = this.params.data.selectedModules().indexOf(ko.contextFor(container).$parent);
+          this.params.data.selectedModules().splice(removeIndex, 1)
           ko.removeNode(container);
-          delete this.params.data.mappingOrder[e.uniqueId];
-          //console.log('mappingOrder after delete ',this.params.data.mappingOrder);
+          delete this.params.data.mappingOrder[e.uniqueId];;
         }
 
-        this.defaults = ko.observableArray();
-        // this.displayLoadedJson = function() {
-        //     Object.keys(mappingOrder).forEach((letter, i) => {
-        //         Object.keys(mappingOrder[letter]).forEach((module, index) => {
-        //             if (module === 'small-feature-module') {
-        //                 var sections = mappingOrder[letter][module].sections;
-        //                 // console.log('displayLoadedJson ',this.selectedModules() );
-        //                 sections.forEach((item,index) => {
-        //                     console.log(item);
-        //
-        //
-        //                 })
-        //             }
-        //         })
-        //     })
-        // }
-        // self = this;
         this.bindingHandlers = {
             init: $(function () {
                 $(document).foundation({
@@ -89,17 +73,21 @@ class Dependents {
 
         ko.bindingHandlers.sortable = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-                console.log(viewModel.params.data.selectedModules().length)
-
+                // console.log('length ',viewModel.params.data.selectedModules().length);
+                var length = viewModel.params.data.selectedModules().length;
+                console.log('length ',length-1);
                 if (Object.keys(mappingOrder).length != 0) {
 
                     Object.keys(mappingOrder).forEach((letter, i) => {
                         Object.keys(mappingOrder[letter]).forEach((module, index) => {
+
                             if (module === 'small-feature-module') {
-                                console.log(mappingOrder[letter]['small-feature-module']['sections'][index].item);
+                                console.log(mappingOrder[letter]['small-feature-module']['sections'][length-1].item);
+                                viewModel.itemNumber(mappingOrder[letter]['small-feature-module']['sections'][length-1].item);
+                                //console.log(viewModel.itemNumber());
                             }
                             if (module === 'basic-story-module') {
-                                console.log(mappingOrder[letter]['basic-story-module']['sections'][index].item);
+                                console.log(mappingOrder[letter]['basic-story-module']['sections'][length-1].item);
                             }
                         })
                     })
@@ -1098,6 +1086,7 @@ ko.components.register('homePageTool', {
           }
 
           this.reRender = function renderLoadedJson() {
+              this.selectedModules.removeAll();
               Object.keys(mappingOrder).forEach((letter, i) => {
                   Object.keys(mappingOrder[letter]).forEach((module, index) => {
                       switch (module) {
@@ -1115,7 +1104,6 @@ ko.components.register('homePageTool', {
                                 this.selectedModules.push(module);
                             })
                           break
-
                      }
                   })
               })
@@ -1123,7 +1111,6 @@ ko.components.register('homePageTool', {
           this.loadHomePage = function(e) {
               var loadDate = this.date();
               var self = this;
-
               $.ajax({
                   type: "GET",
                   url: "http://localhost:5000/hp_config/"+loadDate+".js",
@@ -1138,10 +1125,6 @@ ko.components.register('homePageTool', {
                      self.reRender()
                   }
               })
-
-
-
-             // console.log('get ',this.selectedModules() );
           }
           ko.bindingHandlers.datepicker = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
