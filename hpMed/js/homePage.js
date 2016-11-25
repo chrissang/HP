@@ -22,6 +22,21 @@ class Dependents {
                 'xlarge': this.viewPortSize() === 'xlarge' ? true : false
             }[viewPortSize]
         }
+        this.displayGroup = function(arry) {
+            var sectionArray = [];
+            arry.forEach((el,i) => {
+                sectionArray.push(el.displayModuleOn);
+            })
+            if (sectionArray.indexOf('small') > -1) {
+                return 'small';
+            } else if (sectionArray.indexOf('medium') > -1) {
+                return 'medium';
+            } else if (sectionArray.indexOf('large') > -1) {
+                return 'large';
+            } else {
+                return 'xlarge';
+            }
+        }
         this.responsiveImage = function(itemId, largeImage, smallImage) {
             var responsiveLarge = function() {
                 return largeImage ? largeImage + ' 1024w, ' + largeImage + ' 640w, ' : productImgPath(itemId,640) + ' 1024w, ' +  productImgPath(itemId,640) + ' 640w, ';
@@ -256,6 +271,7 @@ ko.components.register('large-feature-module', {
         constructor(params) {
             super(params);
             this.largeFeatureModulesSections = params.data.sections;
+            this.displayGroupViewPortSize = this.displayGroup(this.largeFeatureModulesSections);
         }
     },
     template: `
@@ -317,6 +333,7 @@ ko.components.register('small-feature-module', {
             this.columnLen = function() {
                 return this.smModulesSections.length === 3 ? 'large-4 columns' : 'large-6 columns';
             }
+            this.displayGroupViewPortSize = this.displayGroup(this.smModulesSections);
         }
     },
     template: `
@@ -415,6 +432,7 @@ ko.components.register('basic-story-module', {
             this.columnLen = function() {
                 return this.basicStoryModulesSections.length === 3 ? 'large-4 columns' : 'large-6 columns';
             }
+            this.displayGroupViewPortSize = this.displayGroup(this.basicStoryModulesSections);
         }
     },
     template: `
@@ -540,6 +558,7 @@ ko.components.register('extended-story-module', {
         constructor(params) {
             super(params);
             this.extendedStoryModulesSections = params.data.sections;
+            this.displayGroupViewPortSize = this.displayGroup(this.extendedStoryModulesSections);
         }
     },
     template: `
@@ -663,6 +682,7 @@ ko.components.register('collection-grid-module', {
             this.arrayContent4 = this.collectionGridModulesSections[3];
             this.arrayContent5 = this.collectionGridModulesSections[4];
             this.arrayContent6 = this.collectionGridModulesSections[5];
+            this.displayGroupViewPortSize = params.data.displayModuleOn;
         }
     },
     template: `
@@ -775,6 +795,7 @@ ko.components.register('carousel-module', {
             this.arrayContent4 = this.carouselModulesSections[3];
             this.arrayContent5 = this.carouselModulesSections[4];
             this.arrayContent6 = this.carouselModulesSections[5];
+            this.displayGroupViewPortSize = params.data.displayModuleOn;
             ko.bindingHandlers.reinit = {
                 update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                     $(function () {
@@ -935,6 +956,7 @@ ko.components.register('text-link-module', {
             this.section = params.data.section;
             this.textLinkModuleSections = params.data.sections;
             this.nonHiddenModuleSections = [];
+            this.displayGroupViewPortSize = this.displayGroup(this.textLinkModuleSections);
         }
     },
     template: `
@@ -1006,6 +1028,7 @@ ko.components.register('image-link-double-module', {
             this.section = params.data.section;
             this.imageLinkDoubleModuleSections = params.data.sections;
             this.nonHiddenModuleSections = [];
+            this.displayGroupViewPortSize = this.displayGroup(this.imageLinkDoubleModuleSections);
         }
     },
     template: `
@@ -1059,6 +1082,7 @@ ko.components.register('button-link-double-module', {
             this.arrayContent4 = this.buttonLinkDoubleModuleSections[3];
             this.arrayContent5 = this.buttonLinkDoubleModuleSections[4];
             this.arrayContent6 = this.buttonLinkDoubleModuleSections[5];
+            this.displayGroupViewPortSize = this.displayGroup(this.buttonLinkDoubleModuleSections);
             this.nonHiddenModuleSections = [];
             this.hidePrefooterLine = function() {
                 return this.modulePosition === params.parent.totalModules ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : '';
