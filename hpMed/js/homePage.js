@@ -1266,22 +1266,22 @@ ko.components.register('seo-link-module', {
     viewModel: class TextLinkModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.sectionTop = params.data.sectionTop;
-            this.seoLinksTopSections = params.data.sectionsTop;
-            this.sectionBottom = params.data.sectionBottom;
-            this.seoLinksBottomSections = params.data.sectionsBottom;
+            this.sectionTop = params.data.seo1;
+            this.seoLinksTopSections = params.data.seo1.sections;
+            this.sectionBottom = params.data.seo2;
+            this.seoLinksBottomSections = params.data.seo2.sections;
         }
     },
     template: `
-        <section data-bind="resizeView: 'SEO_Links_Top', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="text-link-module background-color-off-white">
+        <section data-bind="resizeView: 'TL_SEO1', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="text-link-module background-color-off-white">
             <div class"row">
                 <div class="small-12 small-centered columns container">
                     <!-- ko if: sectionTop.text -->
                         <div class="row">
                             <div class="small-12 text-center columns">
-                                <h1>
+                                <h2>
                                     <a class="a-secondary" data-bind="html: sectionTop.text, attr: { href: addUgDomain(sectionTop.link), 'data-type': 'Section', 'data-description': sectionTop.description }"></a>
-                                </h1>
+                                </h2>
                             </div>
                         </div>
                     <!-- /ko -->
@@ -1303,15 +1303,15 @@ ko.components.register('seo-link-module', {
             </div>
         </section>
 
-        <section data-bind="resizeView: 'SEO_Links_Bottom', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="image-link-double-module background-color-off-white">
+        <section data-bind="resizeView: 'LD_SEO2', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="image-link-double-module background-color-off-white">
             <div class="row container">
                 <div class="small-12 small-centered columns">
                     <!-- ko if: sectionBottom.text -->
                         <div class="row">
                             <div class="small-12 xlarge-10 text-center xlarge-centered columns">
-                                <h1>
+                                <h2>
                                     <a class="a-secondary" data-bind="html: sectionBottom.text, attr: { href: addUgDomain(sectionBottom.link), 'data-type': 'Section', 'data-description': sectionBottom.description }"></a>
-                                </h1>
+                                </h2>
                             </div>
                         </div>
                     <!-- /ko -->
