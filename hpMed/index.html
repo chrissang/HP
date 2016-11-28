@@ -15,8 +15,14 @@
         }, {});
         var testdate = urlParams.testdate;
         var d = new Date();
-        d.setHours(0, -d.getTimezoneOffset(), 0, 0); //removing the timezone offset.
+        //d.setTime( d.getTime() + d.getTimezoneOffset()*60*1000 );
+        //d.setHours(0, -d.getTimezoneOffset(), 0, 0); //removing the timezone offset.
+        //console.log('d ',d.setHours(0, -d.getTimezoneOffset(), 0, 0));
+        if(d.getTimezoneOffset() != 0){
+            d.setTime( d.getTime() + d.getTimezoneOffset()*60*1000 );
+        }
         var currentDate = d.toISOString().slice(0,10);
+
         var mapping;
         if (testdate == null || testdate == undefined) {
         	testdate = "";
@@ -192,6 +198,128 @@
                   }
                },
                "C": {
+                  "seo-link-module": {
+                     "seo1": {
+                        "text": "shop by recipient",
+                        "link": "/gifts/by-recipient",
+                        "description": "Text Link section description",
+                        "sections": [
+                            {
+                               "item": "42159",
+                               "displayModuleOn": "small",
+                               "cta": {
+                                    "text": "for him",
+                                    "link": "/gifts/by-recipient/gifts-for-men",
+                                    "description": "For Him cta description"
+                               }
+                            },
+                            {
+                               "item": "42159",
+                               "displayModuleOn": "small",
+                               "cta": {
+                                    "text": "for her",
+                                    "link": "/gifts/by-recipient/gifts-for-women",
+                                    "description": "For Her cta description"
+                               }
+                            },
+                            {
+                               "item": "42159",
+                               "displayModuleOn": "small",
+                               "cta": {
+                                    "text": "kids",
+                                    "link": "/gifts/by-recipient/gifts-for-couples",
+                                    "description": "For Couples cta description"
+                               }
+                            },
+                            {
+                               "item": "42159",
+                               "displayModuleOn": "small",
+                               "cta": {
+                                    "text": "teens",
+                                    "link": "/gifts/by-recipient/gifts-for-kids",
+                                    "description": "For Kids cta description"
+                               }
+                           }
+                       ]
+                    },
+                    "seo2": {
+                       "text": "Top Categories",
+                       "link": "/gifts/by-recipient",
+                       "description": "Image Link section description",
+                       "sections": [
+                          {
+                             "item": "42159",
+                             "displayModuleOn": "small",
+                             "image": {
+                                 "customImage": {
+                                     "small": "",
+                                     "large": ""
+                                 },
+                                "link": "/product/bioluminescent-mini-aquarium",
+                                "description": "Bioluminescent Aquarium description"
+                             },
+                             "cta": {
+                                "text": "fun",
+                                "link": "/product/bioluminescent-mini-aquarium",
+                                "description": "Bioluminescent Aquarium description cta description"
+                             }
+                          },
+                          {
+                             "item": "26827",
+                             "displayModuleOn": "small",
+                             "image": {
+                                 "customImage": {
+                                     "small": "",
+                                     "large": ""
+                                 },
+                                "link": "/product/barnwood-state-side-tables",
+                                "description": "Barnwood State Side Tables description"
+                             },
+                             "cta": {
+                                "text": "home",
+                                "link": "/product/barnwood-state-side-tables",
+                                "description": "Barnwood State Side Tables cta description"
+                             }
+                          },
+                          {
+                             "item": "24008",
+                             "displayModuleOn": "small",
+                             "image": {
+                                 "customImage": {
+                                     "small": "",
+                                     "large": ""
+                                 },
+                                "link": "/product/pedestal-jewelry-holder",
+                                "description": "Pedestal Jewelry Holder description"
+                             },
+                             "cta": {
+                                "text": "jewelry",
+                                "link": "/product/pedestal-jewelry-holder",
+                                "description": "Pedestal Jewelry Holder cta description"
+                             }
+                          },
+                          {
+                             "item": "40340",
+                             "displayModuleOn": "small",
+                             "image": {
+                                 "customImage": {
+                                     "small": "",
+                                     "large": ""
+                                 },
+                                "link": "/product/nautical-whiskey-stones",
+                                "description": "Nautical Whiskey Stones description"
+                             },
+                             "cta": {
+                                "text": "kitchen & bar",
+                                "link": "/product/nautical-whiskey-stones",
+                                "description": "Nautical Whiskey Stones cta description"
+                             }
+                          }
+                       ]
+                    }
+                  }
+              },
+               "D": {
                   "basic-story-module": {
                      "sections": [
                          {
@@ -278,7 +406,7 @@
                      ]
                   }
                },
-               "D": {
+               "E": {
                   "extended-story-module": {
                      "sections": [
                          {
@@ -348,7 +476,7 @@
                      ]
                   }
                },
-               "E": {
+               "F": {
                    "collection-grid-module": {
                       "displayModuleOn": "small",
                       "section": {
@@ -436,7 +564,7 @@
                       ]
                    }
                },
-               "F": {
+               "G": {
                   "carousel-module": {
                      "displayModuleOn": "small",
                      "section": {
@@ -524,7 +652,7 @@
                      ]
                   }
                },
-               "G": {
+               "H": {
                   "text-link-module": {
                      "section": {
                         "text": "shop by recipient",
@@ -637,7 +765,7 @@
                      ]
                   }
                },
-               "H": {
+               "I": {
                   "button-link-double-module": {
                      "section": {
                         "text": "Section Intro",
@@ -750,7 +878,7 @@
                      ]
                   }
               },
-               "I": {
+               "J": {
                   "image-link-double-module": {
                      "section": {
                         "text": "Top Categories",
@@ -863,7 +991,7 @@
                      ]
                   }
                },
-               "J": {
+               "K": {
                   "button-link-double-module": {
                      "section": {
                         "text": "Section Intro",
@@ -941,131 +1069,13 @@
                        }
                      ]
                   }
-              },
-              "K": {
-                 "seo-link-module": {
-                    "seo1": {
-                       "text": "shop by recipient",
-                       "link": "/gifts/by-recipient",
-                       "description": "Text Link section description",
-                       "sections": [
-                           {
-                              "item": "42159",
-                              "displayModuleOn": "small",
-                              "cta": {
-                                   "text": "for him",
-                                   "link": "/gifts/by-recipient/gifts-for-men",
-                                   "description": "For Him cta description"
-                              }
-                           },
-                           {
-                              "item": "42159",
-                              "displayModuleOn": "small",
-                              "cta": {
-                                   "text": "for her",
-                                   "link": "/gifts/by-recipient/gifts-for-women",
-                                   "description": "For Her cta description"
-                              }
-                           },
-                           {
-                              "item": "42159",
-                              "displayModuleOn": "small",
-                              "cta": {
-                                   "text": "kids",
-                                   "link": "/gifts/by-recipient/gifts-for-couples",
-                                   "description": "For Couples cta description"
-                              }
-                           },
-                           {
-                              "item": "42159",
-                              "displayModuleOn": "small",
-                              "cta": {
-                                   "text": "teens",
-                                   "link": "/gifts/by-recipient/gifts-for-kids",
-                                   "description": "For Kids cta description"
-                              }
-                          }
-                      ]
-                   },
-                   "seo2": {
-                      "text": "Top Categories",
-                      "link": "/gifts/by-recipient",
-                      "description": "Image Link section description",
-                      "sections": [
-                         {
-                            "item": "42159",
-                            "displayModuleOn": "small",
-                            "image": {
-                                "customImage": {
-                                    "small": "",
-                                    "large": ""
-                                },
-                               "link": "/product/bioluminescent-mini-aquarium",
-                               "description": "Bioluminescent Aquarium description"
-                            },
-                            "cta": {
-                               "text": "fun",
-                               "link": "/product/bioluminescent-mini-aquarium",
-                               "description": "Bioluminescent Aquarium description cta description"
-                            }
-                         },
-                         {
-                            "item": "26827",
-                            "displayModuleOn": "small",
-                            "image": {
-                                "customImage": {
-                                    "small": "",
-                                    "large": ""
-                                },
-                               "link": "/product/barnwood-state-side-tables",
-                               "description": "Barnwood State Side Tables description"
-                            },
-                            "cta": {
-                               "text": "home",
-                               "link": "/product/barnwood-state-side-tables",
-                               "description": "Barnwood State Side Tables cta description"
-                            }
-                         },
-                         {
-                            "item": "24008",
-                            "displayModuleOn": "small",
-                            "image": {
-                                "customImage": {
-                                    "small": "",
-                                    "large": ""
-                                },
-                               "link": "/product/pedestal-jewelry-holder",
-                               "description": "Pedestal Jewelry Holder description"
-                            },
-                            "cta": {
-                               "text": "jewelry",
-                               "link": "/product/pedestal-jewelry-holder",
-                               "description": "Pedestal Jewelry Holder cta description"
-                            }
-                         },
-                         {
-                            "item": "40340",
-                            "displayModuleOn": "small",
-                            "image": {
-                                "customImage": {
-                                    "small": "",
-                                    "large": ""
-                                },
-                               "link": "/product/nautical-whiskey-stones",
-                               "description": "Nautical Whiskey Stones description"
-                            },
-                            "cta": {
-                               "text": "kitchen & bar",
-                               "link": "/product/nautical-whiskey-stones",
-                               "description": "Nautical Whiskey Stones cta description"
-                            }
-                         }
-                      ]
-                   }
-                 }
               }
             }
         };
+        if(currentDate >= new Date('2016-11-28').toISOString().slice(0,10)){
+            mappingOrder = {"A":{"collection-grid-module":{"displayModuleOn":"small","section":{"text":"","link":"","description":""},"headline":{"text":"Play Favorites","link":"/sets/top-rated-gifts","description":"description_tag"},"cta":{"text":"shop top rated gifts","link":"/sets/top-rated-gifts","description":"description_tag"},"sections":[{"item":"24830","image":{"customImage":{"small":"","large":""},"link":"/sets/top-rated-gifts","description":"Cheese_Crackers_Serving_Board"}},{"item":"26922","image":{"customImage":{"small":"","large":""},"link":"/sets/top-rated-gifts","description":"Stemless_Fountain_Aerating_Wine_Glass_Set"}},{"item":"27143","image":{"customImage":{"small":"","large":""},"link":"/sets/top-rated-gifts","description":"Vintage_Silk_Sari_Wrap"}},{"item":"26073","image":{"customImage":{"small":"","large":""},"link":"/sets/top-rated-gifts","description":"New_York_Times_Custom_Birthday_Book"}},{"item":"42310","image":{"customImage":{"small":"","large":""},"link":"/sets/top-rated-gifts","description":"Bubble_bib_necklace"}},{"item":"41849","image":{"customImage":{"small":"","large":""},"link":"/sets/top-rated-gifts","description":"Custom_Growler"}}]}},"B":{"seo-link-module":{"seo1":{"text":"Shop by Recipient","link":"/gifts/by-recipient","description":"seo_section_description","sections":[{"cta":{"text":"for him","link":"/gifts/by-recipient/gifts-for-men","description":"description_tag"}},{"cta":{"text":"for her","link":"/gifts/by-recipient/gifts-for-women","description":"description_tag"}},{"cta":{"text":"for teens","link":"/gifts/by-recipient/gifts-for-teens-15-and-up","description":"description_tag"}},{"cta":{"text":"for kids","link":"/for-kids/by-age/kids-gifts-5-years","description":"description_tag"}}]},"seo2":{"text":"Top Categories","link":"","description":"","sections":[{"item":27301,"image":{"customImage":{"small":"","large":""},"link":"/kitchen-bar/kitchen-tools?view=all","description":""},"cta":{"text":"kitchen","link":"/kitchen-bar/kitchen-tools?view=all","description":"CTA_description_tag"}},{"item":23573,"image":{"customImage":{"small":"","large":""},"link":"/kitchen-bar/barware?view=all","description":""},"cta":{"text":"barware","link":"/kitchen-bar/barware?view=all","description":"description_tag"}},{"item":42121,"image":{"customImage":{"small":"","large":""},"link":"/home-garden/home-decor","description":""},"cta":{"text":"home d&#233;cor","link":"/home-garden/home-decor","description":"description_tag"}},{"item":41266,"image":{"customImage":{"small":"/images/hp/mobile/C3_LD_20161121.jpg","large":"/images/hp/mobile/C3_LD_20161121.jpg"},"link":"/gifts/christmas/christmas-gifts","description":""},"cta":{"text":"christmas","link":"/gifts/christmas/christmas-gifts","description":"description_tag"}},{"item":25282,"image":{"customImage":{"small":"","large":""},"link":"/for-her/accessories?view=all","description":""},"cta":{"text":"accessories","link":"/for-her/accessories?view=all","description":"description_tag"}},{"item":22302,"image":{"customImage":{"small":"","large":""},"link":"/jewelry?view=all","description":""},"cta":{"text":"jewelry","link":"/jewelry?view=all","description":"description_tag"}}]}}},"C":{"basic-story-module":{"sections":[{"item":43244,"displayModuleOn":"small","section":{"text":"","link":"","description":""},"image":{"customImage":{"small":"","large":""},"link":"/curated/brand-new-best-sellers","description":"description_tag"},"headline":{"text":"Brand New Best Sellers","link":"/curated/brand-new-best-sellers","description":"description_tag"},"cta":{"text":"see what's new","link":"/curated/brand-new-best-sellers","description":"description_tag"}},{"item":42628,"displayModuleOn":"small","section":{"text":"","link":"","description":""},"image":{"customImage":{"small":"","large":""},"link":"/gifts/personalized/personalized-gifts","description":"description_tag"},"headline":{"text":"Personalized Gifts","link":"/gifts/personalized/personalized-gifts","description":"description_tag"},"cta":{"text":"make your mark","link":"/gifts/personalized/personalized-gifts","description":"description_tag"}},{"item":42970,"displayModuleOn":"small","section":{"text":"","link":"","description":""},"image":{"customImage":{"small":"","large":""},"link":"//blog.uncommongoods.com/holiday-gift-guides/?source=blog_gg_sidebar","description":"description_tag"},"headline":{"text":"Holiday Gift Guides","link":"//blog.uncommongoods.com/holiday-gift-guides/?source=blog_gg_sidebar","description":"description_tag"},"cta":{"text":"check it out","link":"//blog.uncommongoods.com/holiday-gift-guides/?source=blog_gg_sidebar","description":"description_tag"}}]}},"D":{"text-link-module":{"section":{"text":"Shop by Interest","link":"/fun/by-interest","description":"section_description"},"sections":[{"item":"26155","displayModuleOn":"small","image":{"customImage":{"small":"","large":""},"link":"","description":"description_tag"},"cta":{"text":"geeks","link":"/fun/by-interest/geek-gifts","description":"description_tag"}},{"item":"21870","displayModuleOn":"small","image":{"customImage":{"small":"","large":""},"link":"","description":"description_tag"},"cta":{"text":"sports","link":"/fun/by-interest/sports-gifts","description":"description_tag"}},{"item":"41601","displayModuleOn":"small","image":{"customImage":{"small":"","large":""},"link":"","description":"description_tag"},"cta":{"text":"music","link":"/fun/by-interest/music-gifts","description":"description_tag"}},{"item":"42813","displayModuleOn":"small","image":{"customImage":{"small":"","large":""},"link":"","description":"description_tag"},"cta":{"text":"travel","link":"/fun/by-interest/travel-gifts","description":"description_tag"}},{"item":"20409","displayModuleOn":"small","image":{"customImage":{"small":"","large":""},"link":"","description":"description_tag"},"cta":{"text":"business","link":"/fun/by-interest/business-gifts","description":"description_tag"}},{"item":"22405","displayModuleOn":"small","image":{"customImage":{"small":"","large":""},"link":"","description":"description_tag"},"cta":{"text":"entertaining","link":"/fun/wine-dine?view=all","description":"description_tag"}}]}},"E":{"button-link-double-module":{"section":{"text":"Shop by Occasion","link":"/gifts","description":"description_tag"},"sections":[{"item":25208,"displayModuleOn":"small","image":{"customImage":{"small":"","large":""},"link":"/gifts/wedding-gifts?view=all","description":"description_tag"},"cta":{"text":"wedding","link":"/gifts/wedding-gifts?view=all","description":"description_tag"}},{"item":21505,"displayModuleOn":"small","image":{"customImage":{"small":"","large":""},"link":"/gifts/anniversary-gifts/anniversary-gifts","description":"description_tag"},"cta":{"text":"anniversary","link":"/gifts/anniversary-gifts/anniversary-gifts","description":"description_tag"}},{"item":26446,"displayModuleOn":"small","image":{"customImage":{"small":"","large":""},"link":"/gifts/birthday-gifts?view=all","description":"description_tag"},"cta":{"text":"birthday","link":"/gifts/birthday-gifts?view=all","description":"description_tag"}},{"item":22244,"displayModuleOn":"small","image":{"customImage":{"small":"","large":""},"link":"/fun/by-interest/host-and-hostess-gifts","description":"description_tag"},"cta":{"text":"holiday party","link":"/fun/by-interest/host-and-hostess-gifts","description":"description_tag"}}]}},"F":{"small-feature-module":{"sections":[{"item":25476,"displayModuleOn":"small","section":{"text":"Family Fun","link":"/fun/games-puzzles/games-puzzles","description":"description_tag"},"image":{"customImage":{"small":"","large":""},"link":"/fun/games-puzzles/games-puzzles","description":"description_tag"},"headline":{"text":"Custom Lake Art Cribbage Board","link":"","description":"description_tag"},"cta":{"text":"Shop Games","link":"/fun/games-puzzles/games-puzzles","description":"description_tag"}},{"item":22312,"displayModuleOn":"small","section":{"text":"Family Fun","link":"/fun/games-puzzles/games-puzzles","description":"description_tag"},"image":{"customImage":{"small":"","large":""},"link":"/kitchen-bar/serveware?view=all","description":"description_tag"},"headline":{"text":"The Popcorn Bowl with Kernel Sifter","link":"","description":"description_tag"},"cta":{"text":"Shop Serveware","link":"/kitchen-bar/serveware?view=all","description":"description_tag"}}]}}}
+
+        }
     </script>
 </head>
 <body>

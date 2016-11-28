@@ -1140,6 +1140,8 @@ ko.components.register('text-link-module', {
                             <a data-bind="text: 'Text Link Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
                             <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+
+
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Section</label>
@@ -1154,7 +1156,7 @@ ko.components.register('text-link-module', {
                                         <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1199,6 +1201,7 @@ ko.components.register('text-link-module', {
                                         <textarea rows="6" type="text" placeholder="CTA Description Tag" data-bind="textInput: ctaDescription"></textarea>
                                     </div>
                                 </div>
+
                             </div>
                         </dd>
                     </dl>
