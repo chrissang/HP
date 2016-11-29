@@ -1214,7 +1214,6 @@ ko.components.register('text-link-module', {
         </div>`, synchronous: true
 });
 
-
 function reducerFilter(acc, xs) {
   xs.map((item, index) => {
       if (xs[index] === xs[index+1]) {
@@ -1230,7 +1229,6 @@ function reducerFilter(acc, xs) {
   // console.log('acc ',acc);
   return acc;
 }
-
 
 // TODO: refactor accordionIndex and see if i need selectedModules for anyhting other than rendering modules
 ko.components.register('homePageTool', {
