@@ -41,7 +41,6 @@ class Dependents {
                 var jsonString = JSON.stringify(obj);
                 jsonString = jsonString.replace(curr, updated);
                 var jsonObj = JSON.parse(jsonString);
-
                 return jsonObj;
             };
             uniqueIdReordered.forEach((el,index) => {
@@ -248,6 +247,57 @@ class Dependents {
                                             viewModel.ctaUrl(mappingOrder[letter][module]['cta'].link);
                                             viewModel.ctaDescription(mappingOrder[letter][module]['cta'].description);
                                         break
+                                        case 'text-link-module':
+                                            viewModel.section(mappingOrder[letter][module].section.text);
+                                            viewModel.sectionUrl(mappingOrder[letter][module].section.link);
+                                            viewModel.sectionDescription(mappingOrder[letter][module].section.description);
+
+                                            viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
+                                            viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
+
+                                            viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
+                                            viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
+                                            viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
+                                            viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
+
+                                            viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
+                                            viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
+                                            viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
+                                        break
+                                        case 'image-link-double-module':
+                                            viewModel.section(mappingOrder[letter][module].section.text);
+                                            viewModel.sectionUrl(mappingOrder[letter][module].section.link);
+                                            viewModel.sectionDescription(mappingOrder[letter][module].section.description);
+
+                                            viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
+                                            viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
+
+                                            viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
+                                            viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
+                                            viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
+                                            viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
+
+                                            viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
+                                            viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
+                                            viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
+                                        break
+                                        case 'button-link-double-module':
+                                            viewModel.section(mappingOrder[letter][module].section.text);
+                                            viewModel.sectionUrl(mappingOrder[letter][module].section.link);
+                                            viewModel.sectionDescription(mappingOrder[letter][module].section.description);
+
+                                            viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
+                                            viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
+
+                                            viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
+                                            viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
+                                            viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
+                                            viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
+
+                                            viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
+                                            viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
+                                            viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
+                                        break
                                     }
                                 }
                             })
@@ -274,8 +324,8 @@ class Dependents {
                     },
                     // // dragging ended
                     onEnd: function (/**Event*/evt) {
-                        var oldIndex = evt.oldIndex;  // element's old index within parent
-                        var newIndex = evt.newIndex;  // element's new index within parent
+                        //var oldIndex = evt.oldIndex;  // element's old index within parent
+                        //var newIndex = evt.newIndex;  // element's new index within parent
                         var order = sortable.toArray();
                         ko.dataFor(evt.item).params.data.uniqueIdModified(order);
                         ko.dataFor(evt.item).params.data.sortMappingOrder();
@@ -498,6 +548,84 @@ class Dependents {
                                 )
                             }
                         })
+                    break;
+                    case 'text-link-module':
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                            'text': viewModel.section(),
+                            'link': viewModel.sectionUrl(),
+                            'description': viewModel.sectionDescription()
+                        },
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                            {
+                                'item': viewModel.itemNumber(),
+                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                                'image': {
+                                    'customImage': {
+                                        "small": viewModel.imageSmallUrl(),
+                                        "large": viewModel.imageLargeUrl()
+                                    },
+                                    'link': viewModel.itemUrl(),
+                                    'description': viewModel.imageDescription()
+                                },
+                                'cta': {
+                                    'text': viewModel.cta(),
+                                    'link': viewModel.ctaUrl(),
+                                    'description': viewModel.ctaDescription()
+                                }
+                            }
+                        ]
+                    break;
+                    case 'image-link-double-module':
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                            'text': viewModel.section(),
+                            'link': viewModel.sectionUrl(),
+                            'description': viewModel.sectionDescription()
+                        },
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                            {
+                                'item': viewModel.itemNumber(),
+                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                                'image': {
+                                    'customImage': {
+                                        "small": viewModel.imageSmallUrl(),
+                                        "large": viewModel.imageLargeUrl()
+                                    },
+                                    'link': viewModel.itemUrl(),
+                                    'description': viewModel.imageDescription()
+                                },
+                                'cta': {
+                                    'text': viewModel.cta(),
+                                    'link': viewModel.ctaUrl(),
+                                    'description': viewModel.ctaDescription()
+                                }
+                            }
+                        ]
+                    break;
+                    case 'button-link-double-module':
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                            'text': viewModel.section(),
+                            'link': viewModel.sectionUrl(),
+                            'description': viewModel.sectionDescription()
+                        },
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                            {
+                                'item': viewModel.itemNumber(),
+                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                                'image': {
+                                    'customImage': {
+                                        "small": viewModel.imageSmallUrl(),
+                                        "large": viewModel.imageLargeUrl()
+                                    },
+                                    'link': viewModel.itemUrl(),
+                                    'description': viewModel.imageDescription()
+                                },
+                                'cta': {
+                                    'text': viewModel.cta(),
+                                    'link': viewModel.ctaUrl(),
+                                    'description': viewModel.ctaDescription()
+                                }
+                            }
+                        ]
                     break;
                 }
             }
@@ -1140,8 +1268,6 @@ ko.components.register('text-link-module', {
                             <a data-bind="text: 'Text Link Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
 
                             <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
-
-
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Section</label>
@@ -1160,11 +1286,11 @@ ko.components.register('text-link-module', {
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
-                                        <textarea rows="6" type="text" placeholder="Item #" data-bind="textInput: itemNumber"></textarea>
+                                        <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
                                     </div>
                                     <div class="small-12 medium-4 columns">
                                         <label>Item URL</label>
-                                        <textarea rows="6" type="text" placeholder="Item URL" data-bind="textInput: itemUrl"></textarea>
+                                        <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL">
                                     </div>
                                     <div class="small-12 medium-4 columns">
                                         <label>Display Module On</label>
@@ -1175,33 +1301,208 @@ ko.components.register('text-link-module', {
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Small Image URL</label>
-                                        <textarea rows="6" type="text" placeholder="Small Image URL" data-bind="textInput: imageSmallUrl"></textarea>
+                                        <input data-bind="textInput: imageSmallUrl" type="text" placeholder="Small Image URL">
                                     </div>
                                     <div class="small-12 medium-4 columns">
                                         <label>Large Image URL</label>
-                                        <textarea rows="6" type="text" placeholder="Large Image URL" data-bind="textInput: imageLargeUrl"></textarea>
+                                        <input data-bind="textInput: imageLargeUrl" type="text" placeholder="Large Image URL">
                                     </div>
                                     <div class="small-12 medium-4 columns">
                                         <label>Image Description Tag</label>
-                                        <textarea rows="6" type="text" placeholder="Image Description Tag" data-bind="textInput: imageDescription"></textarea>
+                                        <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag">
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>CTA</label>
-                                        <textarea rows="6" type="text" placeholder="CTA" data-bind="textInput: cta"></textarea>
+                                        <input data-bind="textInput: cta" type="text" placeholder="CTA">
                                     </div>
                                     <div class="small-12 medium-4 columns">
                                         <label>CTA URL</label>
-                                        <textarea rows="6" type="text" placeholder="CTA URL" data-bind="textInput: ctaUrl"></textarea>
+                                        <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
                                     </div>
                                     <div class="small-12 medium-4 columns">
                                         <label>CTA Description Tag</label>
-                                        <textarea rows="6" type="text" placeholder="CTA Description Tag" data-bind="textInput: ctaDescription"></textarea>
+                                        <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag">
+                                    </div>
+                                </div>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="small-1 text-center columns removeModule">
+                    <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
+                </div>
+            </div>
+        </div>`, synchronous: true
+});
+
+ko.components.register('image-link-double-module', {
+    viewModel: class ImageLinkDoubleModuleComponentModel extends Dependents {
+        constructor(params) {
+          super(params);
+          this.params = params;
+          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
+        }
+    },
+    template: `
+        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+            <div class="flexContainer">
+                <div class="small-11 columns">
+                    <dl class="accordion" data-accordion="" role="tablist">
+                        <dd class="accordion-navigation">
+                            <a data-bind="text: 'Image Link Double Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+
+                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section</label>
+                                        <input data-bind="textInput: section" type="text" placeholder="Section">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section URL</label>
+                                        <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section Description Tag</label>
+                                        <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item #</label>
+                                        <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item URL</label>
+                                        <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Display Module On</label>
+                                        <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Small Image URL</label>
+                                        <input data-bind="textInput: imageSmallUrl" type="text" placeholder="Small Image URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Large Image URL</label>
+                                        <input data-bind="textInput: imageLargeUrl" type="text" placeholder="Large Image URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Image Description Tag</label>
+                                        <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA</label>
+                                        <input data-bind="textInput: cta" type="text" placeholder="CTA">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA URL</label>
+                                        <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA Description Tag</label>
+                                        <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag">
+                                    </div>
+                                </div>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="small-1 text-center columns removeModule">
+                    <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
+                </div>
+            </div>
+        </div>`, synchronous: true
+});
+
+ko.components.register('button-link-double-module', {
+    viewModel: class ButtonLinkDoubleModuleComponentModel extends Dependents {
+        constructor(params) {
+          super(params);
+          this.params = params;
+          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
+        }
+    },
+    template: `
+        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+            <div class="flexContainer">
+                <div class="small-11 columns">
+                    <dl class="accordion" data-accordion="" role="tablist">
+                        <dd class="accordion-navigation">
+                            <a data-bind="text: 'Button Link Double Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+
+                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section</label>
+                                        <input data-bind="textInput: section" type="text" placeholder="Section">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section URL</label>
+                                        <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section Description Tag</label>
+                                        <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item #</label>
+                                        <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Item URL</label>
+                                        <input data-bind="textInput: itemUrl" type="text" placeholder="Item URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Display Module On</label>
+                                        <select data-bind="options: screenSizes, optionsCaption: 'Display On', value: selectedModuleScreenSize"></select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Small Image URL</label>
+                                        <input data-bind="textInput: imageSmallUrl" type="text" placeholder="Small Image URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Large Image URL</label>
+                                        <input data-bind="textInput: imageLargeUrl" type="text" placeholder="Large Image URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Image Description Tag</label>
+                                        <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA</label>
+                                        <input data-bind="textInput: cta" type="text" placeholder="CTA">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA URL</label>
+                                        <input data-bind="textInput: ctaUrl" type="text" placeholder="CTA URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA Description Tag</label>
+                                        <input data-bind="textInput: ctaDescription" type="text" placeholder="CTA Description Tag">
+                                    </div>
+                                </div>
                             </div>
                         </dd>
                     </dl>
@@ -1217,7 +1518,7 @@ ko.components.register('text-link-module', {
 function reducerFilter(acc, xs) {
   xs.map((item, index) => {
       if (xs[index] === xs[index+1]) {
-          if (xs[index] === 'collection-grid-module' || xs[index] === 'carousel-module' || xs[index] === 'text-link-module') {
+          if (xs[index] === 'collection-grid-module' || xs[index] === 'carousel-module') {
               acc.push(item);
           } else {
               acc.push('concat');
@@ -1285,20 +1586,27 @@ ko.components.register('homePageTool', {
           this.previewHomepage = function(e) {
               //console.log('preview click ',this.mappingOrder);
               var mappingOrderCopy = JSON.parse(JSON.stringify(this.mappingOrder));
+
               var cleanJson = {};
               var duplicateModuleNames = [];
               var duplicateObjects = [];
               var concatArray = [];
+
+              var orderedJson = {};
+
 
               //removes uniqueIds
               Object.keys(mappingOrderCopy).forEach(function(key) {
                  Object.assign(cleanJson, mappingOrderCopy[key]);
               });
 
+              Object.keys(cleanJson).sort().forEach(function(key,index) {
+                  orderedJson[key] = cleanJson[key];
+              });
 
-              Object.keys(cleanJson).forEach(function(key,index) {
-                  duplicateModuleNames.push(Object.keys(cleanJson[key])[0]);
-                  duplicateObjects.push(cleanJson[key]);
+              Object.keys(orderedJson).forEach(function(key,index) {
+                  duplicateModuleNames.push(Object.keys(orderedJson[key])[0]);
+                  duplicateObjects.push(orderedJson[key]);
 
               });
 
@@ -1313,6 +1621,7 @@ ko.components.register('homePageTool', {
               })
 
               duplicateObjects = duplicateObjects.filter(function(n){ return n != '' });
+              console.log('duplicateObjects ',duplicateObjects);
               this.jsonOrder(duplicateObjects);
           }
 
@@ -1353,6 +1662,24 @@ ko.components.register('homePageTool', {
                           case 'carousel-module':
                              var sectionsArry = mappingOrder[letter][module].sections;
                              this.selectedModules.push(module);
+                          break
+                          case 'text-link-module':
+                             var sectionsArry = mappingOrder[letter][module].sections;
+                             sectionsArry.forEach((el,index) => {
+                                this.selectedModules.push(module);
+                            })
+                          break
+                          case 'image-link-double-module':
+                             var sectionsArry = mappingOrder[letter][module].sections;
+                             sectionsArry.forEach((el,index) => {
+                                this.selectedModules.push(module);
+                            })
+                          break
+                          case 'button-link-double-module':
+                             var sectionsArry = mappingOrder[letter][module].sections;
+                             sectionsArry.forEach((el,index) => {
+                                this.selectedModules.push(module);
+                            })
                           break
                      }
                   })
