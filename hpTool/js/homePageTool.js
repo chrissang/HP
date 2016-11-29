@@ -24,6 +24,35 @@ class Dependents {
         this.sectionUrl = ko.observable("");
         this.sectionDescription = ko.observable("");
 
+        this.seo1Section = ko.observable("");
+        this.seo1SectionUrl = ko.observable("");
+        this.seo1SectionDescription = ko.observable("");
+
+        this.seo1cta = ko.observable("");
+        this.seo1ctaUrl = ko.observable("");
+        this.seo1ctaDescription = ko.observable("");
+
+        this.seo2Section = ko.observable("");
+        this.seo2SectionUrl = ko.observable("");
+        this.seo2SectionDescription = ko.observable("");
+
+        this.seo2cta = ko.observable("");
+        this.seo2ctaUrl = ko.observable("");
+        this.seo2ctaDescription = ko.observable("");
+
+        this.seo2ItemNumber = ko.observable("");
+        this.seo2ItemUrl = ko.observable("");
+
+        this.seo2ImageSmallUrl = ko.observable("");
+        this.seo2ImageLargeUrl = ko.observable("");
+        this.seo2ImageDescription = ko.observable("");
+
+        this.seo2cta = ko.observable("");
+        this.seo2ctaUrl = ko.observable("");
+        this.seo2ctaDescription = ko.observable("");
+
+
+
         this.moduleType = ko.observable("");
         this.displayModuleOn = ko.observable("");
         this.screenSizes = ko.observableArray(['small', 'medium', 'large', 'xlarge']);
@@ -76,11 +105,13 @@ class Dependents {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 if (Object.keys(mappingOrder).length != 0) {
                     //console.log('mappingOrder ',mappingOrder );
-                    //console.log('mappingOrder ',bindingContext.$parent );
                     //console.log(viewModel.params.data.selectedModules().length);
+                    //console.log('viewModel ',bindingContext.$parent);
+
 
                     if (viewModel.params.data.selectedModules().length <= Object.keys(mappingOrder).length) {
                         findModule(bindingContext.$parent);
+
                     }
 
                     function findModule(viewModelModule) {
@@ -298,6 +329,72 @@ class Dependents {
                                             viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
                                             viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
                                         break
+                                        case 'seo-link-module':
+                                            var seo1cta = [];
+                                            var seo1ctaUrl = [];
+                                            var seo1ctaDescription = [];
+
+                                            var seo2cta = [];
+                                            var seo2ctaUrl = [];
+                                            var seo2ctaDescription = [];
+                                            var itemNumbers = [];
+                                            var itemUrls = [];
+                                            var imageDescriptions = [];
+                                            var smallImageUrls = [];
+                                            var largeImageUrls = [];
+
+                                            mappingOrder[letter][module]['seo1']['sections'].forEach((item, index) => {
+                                                seo1cta.push(item.cta.text);
+                                                seo1ctaUrl.push(item.cta.link);
+                                                seo1ctaDescription.push(item.cta.description);
+                                            })
+
+                                            mappingOrder[letter][module]['seo2']['sections'].forEach((item, index) => {
+                                                itemNumbers.push(item.item);
+                                                itemUrls.push(item.image.link);
+                                                imageDescriptions.push(item.image.description);
+                                                smallImageUrls.push(item.image.customImage.small);
+                                                largeImageUrls.push(item.image.customImage.large);
+                                                seo2cta.push(item.cta.text);
+                                                seo2ctaUrl.push(item.cta.link);
+                                                seo2ctaDescription.push(item.cta.description);
+                                            })
+
+                                            seo1cta = seo1cta.join("\n");
+                                            seo1ctaUrl = seo1ctaUrl.join("\n");
+                                            seo1ctaDescription = seo1ctaDescription.join("\n");
+
+                                            itemNumbers = itemNumbers.join("\n");
+                                            itemUrls = itemUrls.join("\n");
+                                            smallImageUrls = smallImageUrls.join("\n");
+                                            largeImageUrls = largeImageUrls.join("\n");
+                                            imageDescriptions = imageDescriptions.join("\n");
+                                            seo2cta = seo2cta.join("\n");
+                                            seo2ctaUrl = seo2ctaUrl.join("\n");
+                                            seo2ctaDescription = seo2ctaDescription.join("\n");
+
+                                            viewModel.seo1Section(mappingOrder[letter][module]['seo1']['section'].text);
+                                            viewModel.seo1SectionUrl(mappingOrder[letter][module]['seo1']['section'].link);
+                                            viewModel.seo1SectionDescription(mappingOrder[letter][module]['seo1']['section'].description);
+
+                                            viewModel.seo1cta(seo1cta);
+                                            viewModel.seo1ctaUrl(seo1ctaUrl);
+                                            viewModel.seo1ctaDescription(seo1ctaDescription);
+
+                                            viewModel.seo2Section(mappingOrder[letter][module]['seo2']['section'].text);
+                                            viewModel.seo2SectionUrl(mappingOrder[letter][module]['seo2']['section'].link);
+                                            viewModel.seo2SectionDescription(mappingOrder[letter][module]['seo2']['section'].description);
+
+                                            viewModel.seo2ItemNumber(itemNumbers);
+                                            viewModel.seo2ItemUrl(itemUrls);
+                                            viewModel.seo2ImageSmallUrl(smallImageUrls);
+                                            viewModel.seo2ImageLargeUrl(largeImageUrls);
+                                            viewModel.seo2ImageDescription(imageDescriptions);
+
+                                            viewModel.seo2cta(seo2cta);
+                                            viewModel.seo2ctaUrl(seo2ctaUrl);
+                                            viewModel.seo2ctaDescription(seo2ctaDescription);
+                                        break
                                     }
                                 }
                             })
@@ -348,20 +445,20 @@ class Dependents {
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl(),
-                                        "large": viewModel.imageLargeUrl()
+                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
                                     },
-                                    'link': viewModel.itemUrl(),
+                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
                                 },
                                 'headline': {
-                                    'text': viewModel.headline(),
-                                    'link': viewModel.headlineUrl(),
+                                    'text': viewModel.headline().replace(/é/g, "&#233;"),
+                                    'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.headlineDescription()
                                 },
                                 'cta': {
-                                    'text': viewModel.cta(),
-                                    'link': viewModel.ctaUrl(),
+                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
+                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.ctaDescription()
                                 }
                             }
@@ -373,26 +470,26 @@ class Dependents {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
                                 'section': {
-                                    'text': viewModel.section(),
-                                    'link': viewModel.sectionUrl(),
+                                    'text': viewModel.section().replace(/é/g, "&#233;"),
+                                    'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.sectionDescription()
                                 },
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl(),
-                                        "large": viewModel.imageLargeUrl()
+                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
                                     },
-                                    'link': viewModel.itemUrl(),
+                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
                                 },
                                 'headline': {
-                                    'text': viewModel.headline(),
-                                    'link': viewModel.headlineUrl(),
+                                    'text': viewModel.headline().replace(/é/g, "&#233;"),
+                                    'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.headlineDescription()
                                 },
                                 'cta': {
-                                    'text': viewModel.cta(),
-                                    'link': viewModel.ctaUrl(),
+                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
+                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.ctaDescription()
                                 }
                             }
@@ -404,26 +501,26 @@ class Dependents {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
                                 'section': {
-                                    'text': viewModel.section(),
-                                    'link': viewModel.sectionUrl(),
+                                    'text': viewModel.section().replace(/é/g, "&#233;"),
+                                    'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.sectionDescription()
                                 },
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl(),
-                                        "large": viewModel.imageLargeUrl()
+                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
                                     },
-                                    'link': viewModel.itemUrl(),
+                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
                                 },
                                 'headline': {
-                                    'text': viewModel.headline(),
-                                    'link': viewModel.headlineUrl(),
+                                    'text': viewModel.headline().replace(/é/g, "&#233;"),
+                                    'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.headlineDescription()
                                 },
                                 'cta': {
-                                    'text': viewModel.cta(),
-                                    'link': viewModel.ctaUrl(),
+                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
+                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.ctaDescription()
                                 }
                             }
@@ -435,31 +532,31 @@ class Dependents {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
                                 'section': {
-                                    'text': viewModel.section(),
-                                    'link': viewModel.sectionUrl(),
+                                    'text': viewModel.section().replace(/é/g, "&#233;"),
+                                    'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.sectionDescription()
                                 },
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl(),
-                                        "large": viewModel.imageLargeUrl()
+                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
                                     },
-                                    'link': viewModel.itemUrl(),
+                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
                                 },
                                 'headline': {
-                                    'text': viewModel.headline(),
-                                    'link': viewModel.headlineUrl(),
+                                    'text': viewModel.headline().replace(/é/g, "&#233;"),
+                                    'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.headlineDescription()
                                 },
                                 'copy': {
-                                    'text': viewModel.copy(),
-                                    'link': viewModel.copyUrl(),
+                                    'text': viewModel.copy().replace(/é/g, "&#233;"),
+                                    'link': viewModel.copyUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.copyDescription()
                                 },
                                 'cta': {
-                                    'text': viewModel.cta(),
-                                    'link': viewModel.ctaUrl(),
+                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
+                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.ctaDescription()
                                 }
                             }
@@ -473,18 +570,18 @@ class Dependents {
                         var imageDescriptionList = viewModel.imageDescription().replace(/\n/g, ',').split(',');
 
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
-                            'text': viewModel.section(),
-                            'link': viewModel.sectionUrl(),
+                            'text': viewModel.section().replace(/é/g, "&#233;"),
+                            'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['headline'] = {
-                            'text': viewModel.headline(),
-                            'link': viewModel.headlineUrl(),
+                            'text': viewModel.headline().replace(/é/g, "&#233;"),
+                            'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.headlineDescription()
                         },
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['cta'] = {
-                            'text': viewModel.cta(),
-                            'link': viewModel.ctaUrl(),
+                            'text': viewModel.cta().replace(/é/g, "&#233;"),
+                            'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.ctaDescription()
                         },
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
@@ -493,13 +590,13 @@ class Dependents {
                             if (item != '') {
                                 viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'].push(
                                     {
-                                        'item': item,
+                                        'item': item.trim(),
                                         'image': {
                                             'customImage': {
-                                                'small': smallImageList[index] === undefined ? '' : smallImageList[index],
-                                                'large': largeImageList[index] === undefined ? '' : largeImageList[index]
+                                                'small': smallImageList[index] === undefined ? '' : smallImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                                                'large': largeImageList[index] === undefined ? '' : largeImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim()
                                             },
-                                            'link': itemsUrlList[index] === undefined ? '' : itemsUrlList[index],
+                                            'link': itemsUrlList[index] === undefined ? '' : itemsUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                             'description': imageDescriptionList[index] === undefined ? '' : imageDescriptionList[index]
                                         }
                                     }
@@ -515,18 +612,18 @@ class Dependents {
                         var imageDescriptionList = viewModel.imageDescription().replace(/\n/g, ',').split(',');
 
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
-                            'text': viewModel.section(),
-                            'link': viewModel.sectionUrl(),
+                            'text': viewModel.section().replace(/é/g, "&#233;"),
+                            'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['headline'] = {
-                            'text': viewModel.headline(),
-                            'link': viewModel.headlineUrl(),
+                            'text': viewModel.headline().replace(/é/g, "&#233;"),
+                            'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.headlineDescription()
                         },
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['cta'] = {
-                            'text': viewModel.cta(),
-                            'link': viewModel.ctaUrl(),
+                            'text': viewModel.cta().replace(/é/g, "&#233;"),
+                            'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.ctaDescription()
                         },
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
@@ -535,13 +632,13 @@ class Dependents {
                             if (item != '') {
                                 viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'].push(
                                     {
-                                        'item': item,
+                                        'item': item.trim(),
                                         'image': {
                                             'customImage': {
-                                                'small': smallImageList[index] === undefined ? '' : smallImageList[index],
-                                                'large': largeImageList[index] === undefined ? '' : largeImageList[index]
+                                                'small': smallImageList[index] === undefined ? '' : smallImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                                                'large': largeImageList[index] === undefined ? '' : largeImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim()
                                             },
-                                            'link': itemsUrlList[index] === undefined ? '' : itemsUrlList[index],
+                                            'link': itemsUrlList[index] === undefined ? '' : itemsUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                             'description': imageDescriptionList[index] === undefined ? '' : imageDescriptionList[index]
                                         }
                                     }
@@ -551,8 +648,8 @@ class Dependents {
                     break;
                     case 'text-link-module':
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
-                            'text': viewModel.section(),
-                            'link': viewModel.sectionUrl(),
+                            'text': viewModel.section().replace(/é/g, "&#233;"),
+                            'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
@@ -561,15 +658,15 @@ class Dependents {
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl(),
-                                        "large": viewModel.imageLargeUrl()
+                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
                                     },
-                                    'link': viewModel.itemUrl(),
+                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
                                 },
                                 'cta': {
-                                    'text': viewModel.cta(),
-                                    'link': viewModel.ctaUrl(),
+                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
+                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.ctaDescription()
                                 }
                             }
@@ -577,8 +674,8 @@ class Dependents {
                     break;
                     case 'image-link-double-module':
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
-                            'text': viewModel.section(),
-                            'link': viewModel.sectionUrl(),
+                            'text': viewModel.section().replace(/é/g, "&#233;"),
+                            'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
@@ -587,15 +684,15 @@ class Dependents {
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl(),
-                                        "large": viewModel.imageLargeUrl()
+                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
                                     },
-                                    'link': viewModel.itemUrl(),
+                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
                                 },
                                 'cta': {
-                                    'text': viewModel.cta(),
-                                    'link': viewModel.ctaUrl(),
+                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
+                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.ctaDescription()
                                 }
                             }
@@ -603,8 +700,8 @@ class Dependents {
                     break;
                     case 'button-link-double-module':
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
-                            'text': viewModel.section(),
-                            'link': viewModel.sectionUrl(),
+                            'text': viewModel.section().replace(/é/g, "&#233;"),
+                            'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
                         viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
@@ -613,19 +710,84 @@ class Dependents {
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl(),
-                                        "large": viewModel.imageLargeUrl()
+                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
                                     },
-                                    'link': viewModel.itemUrl(),
+                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
                                 },
                                 'cta': {
-                                    'text': viewModel.cta(),
-                                    'link': viewModel.ctaUrl(),
+                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
+                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.ctaDescription()
                                 }
                             }
                         ]
+                    break;
+                    case 'seo-link-module':
+                        var seo1ctaList = viewModel.seo1cta().replace(/\n/g, ',').split(',');
+                        var seo1ctaUrlList = viewModel.seo1ctaUrl().replace(/\n/g, ',').split(',');
+                        var seo1ctaDescriptionList = viewModel.seo1ctaDescription().replace(/\n/g, ',').split(',');
+
+                        var seo2ItemsList = viewModel.seo2ItemNumber().replace(/\n/g, ',').split(',');
+                        var seo2ItemsUrlList = viewModel.seo2ItemUrl().replace(/\n/g, ',').split(',');
+                        var seo2SmallImageList = viewModel.seo2ImageSmallUrl().replace(/\n/g, ',').split(',');
+                        var seo2LargeImageList = viewModel.seo2ImageLargeUrl().replace(/\n/g, ',').split(',');
+                        var seo2ImageDescriptionList = viewModel.seo2ImageDescription().replace(/\n/g, ',').split(',');
+                        var seo2ctaList = viewModel.seo2cta().replace(/\n/g, ',').split(',');
+                        var seo2ctaUrlList = viewModel.seo2ctaUrl().replace(/\n/g, ',').split(',');
+                        var seo2ctaDescriptionList = viewModel.seo2ctaDescription().replace(/\n/g, ',').split(',');
+
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo1'] = {}
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo1']['section'] = {
+                            'text': viewModel.seo1Section().replace(/é/g, "&#233;"),
+                            'link': viewModel.seo1SectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                            'description': viewModel.seo1SectionDescription()
+                        },
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo1']['sections'] = []
+                        seo1ctaList.forEach((item, index) => {
+                            if (item != '') {
+                                viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo1']['sections'].push(
+                                    {
+                                        'cta': {
+                                            'text': item.trim(),
+                                            'link': seo1ctaUrlList[index] === undefined ? '' : seo1ctaUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                                            'description': seo1ctaDescriptionList[index] === undefined ? '' : seo1ctaDescriptionList[index]
+                                        }
+                                    }
+                                )
+                            }
+                        })
+
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo2'] = {}
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo2']['section'] = {
+                            'text': viewModel.seo2Section().replace(/é/g, "&#233;"),
+                            'link': viewModel.seo2SectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                            'description': viewModel.seo2SectionDescription()
+                        },
+                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo2']['sections'] = []
+                        seo2ItemsList.forEach((item, index) => {
+                            if (item != '') {
+                                viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo2']['sections'].push(
+                                    {
+                                        'item': item.trim(),
+                                        'image': {
+                                            'customImage': {
+                                                'small': seo2SmallImageList[index] === undefined ? '' : seo2SmallImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                                                'large': seo2LargeImageList[index] === undefined ? '' : seo2LargeImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                                            },
+                                            'link': seo2ItemsUrlList[index] === undefined ? '' : seo2ItemsUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                                            'description': seo2ImageDescriptionList[index] === undefined ? '' : seo2ImageDescriptionList[index]
+                                        },
+                                        'cta': {
+                                            'text': seo2ctaList[index] === undefined ? '' : seo2ctaList[index].replace(/é/g, "&#233;").trim(),
+                                            'link': seo2ctaUrlList[index] === undefined ? '' : seo2ctaUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                                            'description': seo2ctaDescriptionList[index] === undefined ? '' : seo2ctaDescriptionList[index]
+                                        }
+                                    }
+                                )
+                            }
+                        })
                     break;
                 }
             }
@@ -1515,6 +1677,132 @@ ko.components.register('button-link-double-module', {
         </div>`, synchronous: true
 });
 
+ko.components.register('seo-link-module', {
+    viewModel: class SeoLinkModuleComponentModel extends Dependents {
+        constructor(params) {
+          super(params);
+          this.params = params;
+          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
+        }
+    },
+    template: `
+        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+            <div class="flexContainer">
+                <div class="small-11 columns">
+                    <dl class="accordion" data-accordion="" role="tablist">
+                        <dd class="accordion-navigation">
+                            <a data-bind="text: 'SEO Links Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+
+                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                                <div class="row">
+                                    <div class="small-12 columns">
+                                        <h3>TL SEO 1</h3>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section</label>
+                                        <input data-bind="textInput: seo1Section" type="text" placeholder="Section">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section URL</label>
+                                        <input data-bind="textInput: seo1SectionUrl" type="text" placeholder="Section URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section Description Tag</label>
+                                        <input data-bind="textInput: seo1SectionDescription" type="text" placeholder="Section Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA</label>
+                                        <textarea rows="4" type="text" placeholder="CTA" data-bind="textInput: seo1cta"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA URL</label>
+                                        <textarea rows="4" type="text" placeholder="CTA URL" data-bind="textInput: seo1ctaUrl"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA Description Tag</label>
+                                        <textarea rows="4" type="text" placeholder="CTA Description Tag" data-bind="textInput: seo1ctaDescription"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 columns">
+                                        <h3>LD SEO 2</h3>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section</label>
+                                        <input data-bind="textInput: seo2Section" type="text" placeholder="Section">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section URL</label>
+                                        <input data-bind="textInput: seo2SectionUrl" type="text" placeholder="Section URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section Description Tag</label>
+                                        <input data-bind="textInput: seo2SectionDescription" type="text" placeholder="Section Description Tag"></input>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-6 columns">
+                                        <label>Item #</label>
+                                        <textarea rows="6" type="text" placeholder="Item #" data-bind="textInput: seo2ItemNumber"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-6 columns">
+                                        <label>Item URL</label>
+                                        <textarea rows="6" type="text" placeholder="Item URL" data-bind="textInput: seo2ItemUrl"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Small Image URL</label>
+                                        <textarea rows="6" type="text" placeholder="Small Image URL" data-bind="textInput: seo2ImageSmallUrl"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Large Image URL</label>
+                                        <textarea rows="6" type="text" placeholder="Large Image URL" data-bind="textInput: seo2ImageLargeUrl"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Image Description Tag</label>
+                                        <textarea rows="6" type="text" placeholder="Image Description Tag" data-bind="textInput: seo2ImageDescription"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA</label>
+                                        <textarea rows="6" type="text" placeholder="CTA" data-bind="textInput: seo2cta"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA URL</label>
+                                        <textarea rows="6" type="text" placeholder="CTA URLL" data-bind="textInput: seo2ctaUrl"></textarea>
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>CTA Description Tag</label>
+                                        <textarea rows="6" type="text" placeholder="CTA Description Tag" data-bind="textInput: seo2ctaDescription"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="small-1 text-center columns removeModule">
+                    <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
+                </div>
+            </div>
+        </div>`, synchronous: true
+});
+
 function reducerFilter(acc, xs) {
   xs.map((item, index) => {
       if (xs[index] === xs[index+1]) {
@@ -1548,7 +1836,8 @@ ko.components.register('homePageTool', {
               {name: 'Carousel (CL)', value: 'carousel-module'},
               {name: 'Text Link (TL)', value: 'text-link-module'},
               {name: 'Image Link Double (LD)', value: 'image-link-double-module'},
-              {name: 'Button Link Double (BD)', value: 'button-link-double-module'}
+              {name: 'Button Link Double (BD)', value: 'button-link-double-module'},
+              {name: 'SEO Links (SEO)', value: 'seo-link-module'}
           ];
           this.jsonOrder = function(arry) {
               var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -1621,10 +1910,8 @@ ko.components.register('homePageTool', {
               })
 
               duplicateObjects = duplicateObjects.filter(function(n){ return n != '' });
-              console.log('duplicateObjects ',duplicateObjects);
               this.jsonOrder(duplicateObjects);
           }
-
           this.reRender = function renderLoadedJson() {
               this.selectedModules.removeAll();
               Object.keys(mappingOrder).forEach((letter, i) => {
@@ -1651,7 +1938,6 @@ ko.components.register('homePageTool', {
                           case 'extended-story-module':
                              var sectionsArry = mappingOrder[letter][module].sections;
                              sectionsArry.forEach((el,index) => {
-                                //this.itemNumber(mappingOrder[letter][module].sections[index].item);
                                 this.selectedModules.push(module);
                             })
                           break
@@ -1681,6 +1967,10 @@ ko.components.register('homePageTool', {
                                 this.selectedModules.push(module);
                             })
                           break
+                          case 'seo-link-module':
+                             var sectionsArry = mappingOrder[letter][module].sections;
+                             this.selectedModules.push(module);
+                          break
                      }
                   })
               })
@@ -1702,6 +1992,9 @@ ko.components.register('homePageTool', {
                      self.reRender();
                   }
               })
+          }
+          this.createNewHomePage = function(e) {
+              window.location.reload();
           }
           ko.bindingHandlers.datepicker = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -1739,14 +2032,18 @@ ko.components.register('homePageTool', {
         </div>
 
         <div class="row">
-            <div class="small-4 columns end">
+            <div class="small-12 columns">
+                <button data-bind="event:{ click: createNewHomePage }">Create New Home Page</button>
+                <button data-bind="event:{ click: loadHomePage }">Load Home Page</button>
+                <button data-bind="event:{ click: previewHomepage }">Preview Home Page</button>
+            </div>
+
+            <div class="small-4 columns">
                 <select data-bind="options: moduleTypes, value: selection ,optionsText: 'name', optionsValue: 'value', optionsCaption: 'Choose Module Type'"></select>
             </div>
+
             <div class="small-8 columns end">
-                <button>Create New Home Page</button>
-                <button data-bind="event:{ click: loadHomePage }">Load Home Page</button>
                 <button data-bind="event:{ click: createModule }">Create Module</button>
-                <button data-bind="event:{ click: previewHomepage }">Preview Home Page</button>
             </div>
         </div>
 

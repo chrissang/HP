@@ -1274,15 +1274,15 @@ ko.components.register('seo-link-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'TL_SEO1', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="seoLinks text-link-module background-color-off-white">
+        <section data-bind="resizeView: 'TL_SEO1', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }, attr: { class: 'seoLinks text-link-module background-color-off-white' } ">
             <!-- ko if: viewPortSize() === 'small' -->
                 <div class"row">
                     <div class="small-12 small-centered columns container">
-                        <!-- ko if: seo1.text -->
+                        <!-- ko if: seo1.section.text -->
                             <div class="row">
                                 <div class="small-12 text-center columns">
                                     <h2>
-                                        <a class="a-secondary" data-bind="html: seo1.text, attr: { href: addUgDomain(seo1.link), 'data-type': 'Section', 'data-description': seo1.description }"></a>
+                                        <a class="a-secondary" data-bind="html: seo1.section.text, attr: { href: addUgDomain(seo1.section.link), 'data-type': 'Section', 'data-description': seo1.section.description }"></a>
                                     </h2>
                                 </div>
                             </div>
@@ -1317,7 +1317,7 @@ ko.components.register('seo-link-module', {
                             <div class="small-12 text-center columns">
                                 <div>
                                     <div class="topCatContent">
-                                        <span data-bind="html: seo1.text"></span>
+                                        <span data-bind="html: seo1.section.text"></span>
                                         <div class="displayInline">
                                             <!-- ko foreach: seo1Sections -->
                                                 <a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }" class="body-small-crumbs"></a>
@@ -1326,7 +1326,7 @@ ko.components.register('seo-link-module', {
                                     </div>
 
                                     <div>
-                                        <span data-bind="html: seo2.text"></span>
+                                        <span data-bind="html: seo2.section.text"></span>
                                         <div class="displayInline">
                                             <!-- ko foreach: seo2Sections -->
                                                 <a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }" class="body-small-crumbs"></a>
@@ -1351,38 +1351,40 @@ ko.components.register('seo-link-module', {
             <!-- /ko -->
         </section>
 
-        <section data-bind="resizeView: 'LD_SEO2', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="seoLinks2 image-link-double-module background-color-off-white">
-            <!-- ko if: viewPortSize() === 'small' -->
-                <div class="row container">
-                    <div class="small-12 small-centered columns">
-                        <!-- ko if: seo2.text -->
-                            <div class="row">
-                                <div class="small-12 xlarge-10 text-center xlarge-centered columns">
-                                    <h2>
-                                        <a class="a-secondary" data-bind="html: seo2.text, attr: { href: addUgDomain(seo2.link), 'data-type': 'Section', 'data-description': seo2.description }"></a>
-                                    </h2>
-                                </div>
-                            </div>
-                        <!-- /ko -->
-                    </div>
-
-                    <div class="small-11 small-centered columns">
-                        <ul data-bind="attr: { class: className(seo2Sections) }">
-                            <!-- ko foreach: seo2Sections -->
-                                <li class="text-center content">
-                                    <div class="responsively-lazy preventReflow">
-                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
-                                            <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
-                                        </a>
+        <!-- ko if: viewPortSize() === 'small' -->
+            <section data-bind="resizeView: 'LD_SEO2', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="seoLinks2 image-link-double-module background-color-off-white">
+                <!-- ko if: viewPortSize() === 'small' -->
+                    <div class="row container">
+                        <div class="small-12 small-centered columns">
+                            <!-- ko if: seo2.section.text -->
+                                <div class="row">
+                                    <div class="small-12 xlarge-10 text-center xlarge-centered columns">
+                                        <h2>
+                                            <a class="a-secondary" data-bind="html: seo2.section.text, attr: { href: addUgDomain(seo2.section.link), 'data-type': 'Section', 'data-description': seo2.section.description }"></a>
+                                        </h2>
                                     </div>
-                                    <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></h4>
-                                </li>
+                                </div>
                             <!-- /ko -->
-                        </ul>
+                        </div>
+
+                        <div class="small-11 small-centered columns">
+                            <ul data-bind="attr: { class: className(seo2Sections) }">
+                                <!-- ko foreach: seo2Sections -->
+                                    <li class="text-center content">
+                                        <div class="responsively-lazy preventReflow">
+                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                                <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
+                                            </a>
+                                        </div>
+                                        <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></h4>
+                                    </li>
+                                <!-- /ko -->
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            <!-- /ko -->
-        </section>`, synchronous: true
+                <!-- /ko -->
+            </section>
+        <!-- /ko -->`, synchronous: true
 });
 
 ko.components.register('homePage-container', {
