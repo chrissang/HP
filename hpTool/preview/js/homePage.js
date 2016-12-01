@@ -1396,7 +1396,6 @@ ko.components.register('homePage-container', {
 
     viewModel: class HomePageContainerComponentModel extends Dependents {
         constructor(params) {
-            console.log('mappingOrder ',mappingOrder);
             super(params);
             this.seoLinks = params.seoLinks;
             this.totalModules = Object.keys(mappingOrder).length;

@@ -1,6 +1,12 @@
 var mappingOrder = {};
+var initViewModels = [];
+var counter = 0;
+// var loadingModelData = ko.observableArray();
+
 class Dependents {
     constructor(params) {
+        this.loadingModelData = ko.observableArray().extend({ deferred: true });
+
         this.itemNumber = ko.observable("");
         this.itemUrl = ko.observable("");
 
@@ -51,8 +57,6 @@ class Dependents {
         this.seo2ctaUrl = ko.observable("");
         this.seo2ctaDescription = ko.observable("");
 
-
-
         this.moduleType = ko.observable("");
         this.displayModuleOn = ko.observable("");
         this.screenSizes = ko.observableArray(['small', 'medium', 'large', 'xlarge']);
@@ -87,7 +91,6 @@ class Dependents {
           ko.removeNode(container);
           delete this.params.data.mappingOrder[e.uniqueId];;
         }
-
         this.bindingHandlers = {
             init: $(function () {
                 $(document).foundation({
@@ -104,302 +107,352 @@ class Dependents {
         ko.bindingHandlers.sortable = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 if (Object.keys(mappingOrder).length != 0) {
-                    //console.log('mappingOrder ',mappingOrder );
-                    //console.log(viewModel.params.data.selectedModules().length);
-                    //console.log('viewModel ',bindingContext.$parent);
+                    viewModel.params.data.loadingModelData.push(bindingContext);
 
+                    if (counter === viewModel.params.data.selectedModules().length) {
+                        var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                        var result = viewModel.params.data.loadingModelData().reduce(function(prev, curr) {
+                            if (prev.length && curr.$parent === prev[prev.length - 1][0].$parent) {
+                                prev[prev.length - 1].push(curr);
+                            }
+                            else {
+                                prev.push([curr]);
+                            }
+                            return prev;
+                        }, []);
 
-                    if (viewModel.params.data.selectedModules().length <= Object.keys(mappingOrder).length) {
-                        findModule(bindingContext.$parent);
+                        console.log(result);
 
-                    }
+                        result.forEach((section, index) => {
+                            var alphaChar = alpha.charAt(index);
+                            var moduleType = section[0].$parent;
+                            section.forEach((binding,i) => {
+                                //console.log(mappingOrder[alphaChar][moduleType]['sections'][i]);
 
-                    function findModule(viewModelModule) {
-                        Object.keys(mappingOrder).forEach((letter, i) => {
-                            Object.keys(mappingOrder[letter]).forEach((module, index) => {
-                                if (viewModelModule === module){
-                                    switch (module) {
-                                        case 'large-feature-module':
-                                            //console.log(mappingOrder[letter][module]['sections'][index].cta.link);
-                                            viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
-                                            viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
+                                binding.$data.itemNumber(!!mappingOrder[alphaChar][moduleType]['sections'][i].item ? mappingOrder[alphaChar][moduleType]['sections'][i].item : '');
+                                binding.$data.itemUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.link : '');
+                                binding.$data.selectedModuleScreenSize(!!mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn ? mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn : '');
 
-                                            viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
-                                            viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
-                                            viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
-                                            viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
+                                binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small : '');
+                                binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large : '');
+                                binding.$data.imageDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.description : '');
 
-                                            viewModel.headline(mappingOrder[letter][module]['sections'][index].headline.text);
-                                            viewModel.headlineUrl(mappingOrder[letter][module]['sections'][index].headline.link);
-                                            viewModel.headlineDescription(mappingOrder[letter][module]['sections'][index].headline.description);
+                                binding.$data.section(!!mappingOrder[alphaChar][moduleType]['sections'][i].section ? mappingOrder[alphaChar][moduleType]['sections'][i].section.text : '');
+                                binding.$data.sectionUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].section ? mappingOrder[alphaChar][moduleType]['sections'][i].section.link : '');
+                                binding.$data.sectionDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].section ? mappingOrder[alphaChar][moduleType]['sections'][i].section.description : '');
 
-                                            viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
-                                            viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
-                                            viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
-                                        break
-                                        case 'small-feature-module':
-                                            viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
-                                            viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
+                                binding.$data.headline(!!mappingOrder[alphaChar][moduleType]['sections'][i].headline ? mappingOrder[alphaChar][moduleType]['sections'][i].headline.text : '');
+                                binding.$data.headlineUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].headline ? mappingOrder[alphaChar][moduleType]['sections'][i].headline.link : '');
+                                binding.$data.headlineDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].headline ? mappingOrder[alphaChar][moduleType]['sections'][i].headline.description : '');
 
-                                            viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
-                                            viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
-                                            viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
-                                            viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
+                                binding.$data.copy(!!mappingOrder[alphaChar][moduleType]['sections'][i].copy ? mappingOrder[alphaChar][moduleType]['sections'][i].copy.text : '');
+                                binding.$data.copyUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].copy ? mappingOrder[alphaChar][moduleType]['sections'][i].copy.link : '');
+                                binding.$data.copyDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].copy ? mappingOrder[alphaChar][moduleType]['sections'][i].copy.description : '');
 
-                                            viewModel.section(mappingOrder[letter][module]['sections'][index].section.text);
-                                            viewModel.sectionUrl(mappingOrder[letter][module]['sections'][index].section.link);
-                                            viewModel.sectionDescription(mappingOrder[letter][module]['sections'][index].section.description);
+                                binding.$data.cta(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.text : '');
+                                binding.$data.ctaUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.link : '');
+                                binding.$data.ctaDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.description : '');
 
-                                            viewModel.headline(mappingOrder[letter][module]['sections'][index].headline.text);
-                                            viewModel.headlineUrl(mappingOrder[letter][module]['sections'][index].headline.link);
-                                            viewModel.headlineDescription(mappingOrder[letter][module]['sections'][index].headline.description);
+                                //binding.$data.section(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.text : '');
+                                //binding.$data.sectionUrl(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.link : '');
+                                //binding.$data.sectionDescription(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.description : '');
 
-                                            viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
-                                            viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
-                                            viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
-                                        break
-                                        case 'basic-story-module':
-                                            viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
-                                            viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
-
-                                            viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
-                                            viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
-                                            viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
-                                            viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
-
-                                            viewModel.section(mappingOrder[letter][module]['sections'][index].section.text);
-                                            viewModel.sectionUrl(mappingOrder[letter][module]['sections'][index].section.link);
-                                            viewModel.sectionDescription(mappingOrder[letter][module]['sections'][index].section.description);
-
-                                            viewModel.headline(mappingOrder[letter][module]['sections'][index].headline.text);
-                                            viewModel.headlineUrl(mappingOrder[letter][module]['sections'][index].headline.link);
-                                            viewModel.headlineDescription(mappingOrder[letter][module]['sections'][index].headline.description);
-
-                                            viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
-                                            viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
-                                            viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
-                                        break
-                                        case 'extended-story-module':
-                                            viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
-                                            viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
-
-                                            viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
-                                            viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
-                                            viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
-                                            viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
-
-                                            viewModel.section(mappingOrder[letter][module]['sections'][index].section.text);
-                                            viewModel.sectionUrl(mappingOrder[letter][module]['sections'][index].section.link);
-                                            viewModel.sectionDescription(mappingOrder[letter][module]['sections'][index].section.description);
-
-                                            viewModel.headline(mappingOrder[letter][module]['sections'][index].headline.text);
-                                            viewModel.headlineUrl(mappingOrder[letter][module]['sections'][index].headline.link);
-                                            viewModel.headlineDescription(mappingOrder[letter][module]['sections'][index].headline.description);
-
-                                            viewModel.copy(mappingOrder[letter][module]['sections'][index].copy.text);
-                                            viewModel.copyUrl(mappingOrder[letter][module]['sections'][index].copy.link);
-                                            viewModel.copyDescription(mappingOrder[letter][module]['sections'][index].copy.description);
-
-                                            viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
-                                            viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
-                                            viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
-                                        break
-                                        case 'collection-grid-module':
-                                            var itemNumbers = [];
-                                            var itemUrls = [];
-                                            var smallImageUrls = [];
-                                            var largeImageUrls = [];
-                                            var imageDescriptions = [];
-                                            mappingOrder[letter][module]['sections'].forEach((item, index) => {
-                                                itemNumbers.push(item.item);
-                                                itemUrls.push(item.image.link);
-                                                smallImageUrls.push(item.image.customImage.small);
-                                                largeImageUrls.push(item.image.customImage.small);
-                                                imageDescriptions.push(item.image.customImage.small);
-                                            })
-                                            itemNumbers = itemNumbers.join("\n");
-                                            itemUrls = itemUrls.join("\n");
-                                            smallImageUrls = smallImageUrls.join("\n");
-                                            largeImageUrls = largeImageUrls.join("\n");
-                                            imageDescriptions = imageDescriptions.join("\n");
-
-                                            viewModel.itemNumber(itemNumbers);
-                                            viewModel.itemUrl(itemUrls);
-                                            viewModel.imageSmallUrl(smallImageUrls);
-                                            viewModel.imageLargeUrl(largeImageUrls);
-                                            viewModel.imageDescription(imageDescriptions);
-
-                                            viewModel.section(mappingOrder[letter][module]['section'].text);
-                                            viewModel.sectionUrl(mappingOrder[letter][module]['section'].link);
-                                            viewModel.sectionDescription(mappingOrder[letter][module]['section'].description);
-
-                                            viewModel.headline(mappingOrder[letter][module]['headline'].text);
-                                            viewModel.headlineUrl(mappingOrder[letter][module]['headline'].link);
-                                            viewModel.headlineDescription(mappingOrder[letter][module]['headline'].description);
-
-                                            viewModel.cta(mappingOrder[letter][module]['cta'].text);
-                                            viewModel.ctaUrl(mappingOrder[letter][module]['cta'].link);
-                                            viewModel.ctaDescription(mappingOrder[letter][module]['cta'].description);
-                                        break
-                                        case 'carousel-module':
-                                            var itemNumbers = [];
-                                            var itemUrls = [];
-                                            var smallImageUrls = [];
-                                            var largeImageUrls = [];
-                                            var imageDescriptions = [];
-                                            mappingOrder[letter][module]['sections'].forEach((item, index) => {
-                                                itemNumbers.push(item.item);
-                                                itemUrls.push(item.image.link);
-                                                smallImageUrls.push(item.image.customImage.small);
-                                                largeImageUrls.push(item.image.customImage.small);
-                                                imageDescriptions.push(item.image.customImage.small);
-                                            })
-                                            itemNumbers = itemNumbers.join("\n");
-                                            itemUrls = itemUrls.join("\n");
-                                            smallImageUrls = smallImageUrls.join("\n");
-                                            largeImageUrls = largeImageUrls.join("\n");
-                                            imageDescriptions = imageDescriptions.join("\n");
-
-                                            viewModel.itemNumber(itemNumbers);
-                                            viewModel.itemUrl(itemUrls);
-                                            viewModel.imageSmallUrl(smallImageUrls);
-                                            viewModel.imageLargeUrl(largeImageUrls);
-                                            viewModel.imageDescription(imageDescriptions);
-
-                                            viewModel.section(mappingOrder[letter][module]['section'].text);
-                                            viewModel.sectionUrl(mappingOrder[letter][module]['section'].link);
-                                            viewModel.sectionDescription(mappingOrder[letter][module]['section'].description);
-
-                                            viewModel.headline(mappingOrder[letter][module]['headline'].text);
-                                            viewModel.headlineUrl(mappingOrder[letter][module]['headline'].link);
-                                            viewModel.headlineDescription(mappingOrder[letter][module]['headline'].description);
-
-                                            viewModel.cta(mappingOrder[letter][module]['cta'].text);
-                                            viewModel.ctaUrl(mappingOrder[letter][module]['cta'].link);
-                                            viewModel.ctaDescription(mappingOrder[letter][module]['cta'].description);
-                                        break
-                                        case 'text-link-module':
-                                            viewModel.section(mappingOrder[letter][module].section.text);
-                                            viewModel.sectionUrl(mappingOrder[letter][module].section.link);
-                                            viewModel.sectionDescription(mappingOrder[letter][module].section.description);
-
-                                            viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
-                                            viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
-
-                                            viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
-                                            viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
-                                            viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
-                                            viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
-
-                                            viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
-                                            viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
-                                            viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
-                                        break
-                                        case 'image-link-double-module':
-                                            viewModel.section(mappingOrder[letter][module].section.text);
-                                            viewModel.sectionUrl(mappingOrder[letter][module].section.link);
-                                            viewModel.sectionDescription(mappingOrder[letter][module].section.description);
-
-                                            viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
-                                            viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
-
-                                            viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
-                                            viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
-                                            viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
-                                            viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
-
-                                            viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
-                                            viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
-                                            viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
-                                        break
-                                        case 'button-link-double-module':
-                                            viewModel.section(mappingOrder[letter][module].section.text);
-                                            viewModel.sectionUrl(mappingOrder[letter][module].section.link);
-                                            viewModel.sectionDescription(mappingOrder[letter][module].section.description);
-
-                                            viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
-                                            viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
-
-                                            viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
-                                            viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
-                                            viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
-                                            viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
-
-                                            viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
-                                            viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
-                                            viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
-                                        break
-                                        case 'seo-link-module':
-                                            var seo1cta = [];
-                                            var seo1ctaUrl = [];
-                                            var seo1ctaDescription = [];
-
-                                            var seo2cta = [];
-                                            var seo2ctaUrl = [];
-                                            var seo2ctaDescription = [];
-                                            var itemNumbers = [];
-                                            var itemUrls = [];
-                                            var imageDescriptions = [];
-                                            var smallImageUrls = [];
-                                            var largeImageUrls = [];
-
-                                            mappingOrder[letter][module]['seo1']['sections'].forEach((item, index) => {
-                                                seo1cta.push(item.cta.text);
-                                                seo1ctaUrl.push(item.cta.link);
-                                                seo1ctaDescription.push(item.cta.description);
-                                            })
-
-                                            mappingOrder[letter][module]['seo2']['sections'].forEach((item, index) => {
-                                                itemNumbers.push(item.item);
-                                                itemUrls.push(item.image.link);
-                                                imageDescriptions.push(item.image.description);
-                                                smallImageUrls.push(item.image.customImage.small);
-                                                largeImageUrls.push(item.image.customImage.large);
-                                                seo2cta.push(item.cta.text);
-                                                seo2ctaUrl.push(item.cta.link);
-                                                seo2ctaDescription.push(item.cta.description);
-                                            })
-
-                                            seo1cta = seo1cta.join("\n");
-                                            seo1ctaUrl = seo1ctaUrl.join("\n");
-                                            seo1ctaDescription = seo1ctaDescription.join("\n");
-
-                                            itemNumbers = itemNumbers.join("\n");
-                                            itemUrls = itemUrls.join("\n");
-                                            smallImageUrls = smallImageUrls.join("\n");
-                                            largeImageUrls = largeImageUrls.join("\n");
-                                            imageDescriptions = imageDescriptions.join("\n");
-                                            seo2cta = seo2cta.join("\n");
-                                            seo2ctaUrl = seo2ctaUrl.join("\n");
-                                            seo2ctaDescription = seo2ctaDescription.join("\n");
-
-                                            viewModel.seo1Section(mappingOrder[letter][module]['seo1']['section'].text);
-                                            viewModel.seo1SectionUrl(mappingOrder[letter][module]['seo1']['section'].link);
-                                            viewModel.seo1SectionDescription(mappingOrder[letter][module]['seo1']['section'].description);
-
-                                            viewModel.seo1cta(seo1cta);
-                                            viewModel.seo1ctaUrl(seo1ctaUrl);
-                                            viewModel.seo1ctaDescription(seo1ctaDescription);
-
-                                            viewModel.seo2Section(mappingOrder[letter][module]['seo2']['section'].text);
-                                            viewModel.seo2SectionUrl(mappingOrder[letter][module]['seo2']['section'].link);
-                                            viewModel.seo2SectionDescription(mappingOrder[letter][module]['seo2']['section'].description);
-
-                                            viewModel.seo2ItemNumber(itemNumbers);
-                                            viewModel.seo2ItemUrl(itemUrls);
-                                            viewModel.seo2ImageSmallUrl(smallImageUrls);
-                                            viewModel.seo2ImageLargeUrl(largeImageUrls);
-                                            viewModel.seo2ImageDescription(imageDescriptions);
-
-                                            viewModel.seo2cta(seo2cta);
-                                            viewModel.seo2ctaUrl(seo2ctaUrl);
-                                            viewModel.seo2ctaDescription(seo2ctaDescription);
-                                        break
-                                    }
-                                }
                             })
                         })
+
                     }
+
+                    // if (viewModel.params.data.selectedModules().length <= Object.keys(mappingOrder).length) {
+                    //     findModule(bindingContext.$parent);
+                    //
+                    // }
+                    //
+                    // function findModule(viewModelModule) {
+                        // Object.keys(mappingOrder).forEach((letter, i) => {
+                        //     Object.keys(mappingOrder[letter]).forEach((module, index) => {
+                    //             if (viewModelModule === module){
+                    //                 switch (module) {
+                    //                     case 'large-feature-module':
+                    //                         //console.log(mappingOrder[letter][module]['sections'][index].cta.link);
+                    //                         viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
+                    //                         viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
+                    //
+                    //                         viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
+                    //                         viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
+                    //                         viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
+                    //                         viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
+                    //
+                    //                         viewModel.headline(mappingOrder[letter][module]['sections'][index].headline.text);
+                    //                         viewModel.headlineUrl(mappingOrder[letter][module]['sections'][index].headline.link);
+                    //                         viewModel.headlineDescription(mappingOrder[letter][module]['sections'][index].headline.description);
+                    //
+                    //                         viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
+                    //                         viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
+                    //                         viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
+                    //                     break
+                    //                     case 'small-feature-module':
+                    //                         viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
+                    //                         viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
+                    //
+                    //                         viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
+                    //                         viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
+                    //                         viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
+                    //                         viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
+                    //
+                    //                         viewModel.section(mappingOrder[letter][module]['sections'][index].section.text);
+                    //                         viewModel.sectionUrl(mappingOrder[letter][module]['sections'][index].section.link);
+                    //                         viewModel.sectionDescription(mappingOrder[letter][module]['sections'][index].section.description);
+                    //
+                    //                         viewModel.headline(mappingOrder[letter][module]['sections'][index].headline.text);
+                    //                         viewModel.headlineUrl(mappingOrder[letter][module]['sections'][index].headline.link);
+                    //                         viewModel.headlineDescription(mappingOrder[letter][module]['sections'][index].headline.description);
+                    //
+                    //                         viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
+                    //                         viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
+                    //                         viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
+                    //                     break
+                    //                     case 'basic-story-module':
+                                            // viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
+                                            // viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
+                                            //
+                                            // viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
+                                            // viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
+                                            // viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
+                                            // viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
+                                            //
+                                            // viewModel.section(mappingOrder[letter][module]['sections'][index].section.text);
+                                            // viewModel.sectionUrl(mappingOrder[letter][module]['sections'][index].section.link);
+                                            // viewModel.sectionDescription(mappingOrder[letter][module]['sections'][index].section.description);
+                                            //
+                                            // viewModel.headline(mappingOrder[letter][module]['sections'][index].headline.text);
+                                            // viewModel.headlineUrl(mappingOrder[letter][module]['sections'][index].headline.link);
+                                            // viewModel.headlineDescription(mappingOrder[letter][module]['sections'][index].headline.description);
+                                            //
+                                            // viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
+                                            // viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
+                                            // viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
+                    //                     break
+                    //                     case 'extended-story-module':
+                    //                         viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
+                    //                         viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
+                    //
+                    //                         viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
+                    //                         viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
+                    //                         viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
+                    //                         viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
+                    //
+                    //                         viewModel.section(mappingOrder[letter][module]['sections'][index].section.text);
+                    //                         viewModel.sectionUrl(mappingOrder[letter][module]['sections'][index].section.link);
+                    //                         viewModel.sectionDescription(mappingOrder[letter][module]['sections'][index].section.description);
+                    //
+                    //                         viewModel.headline(mappingOrder[letter][module]['sections'][index].headline.text);
+                    //                         viewModel.headlineUrl(mappingOrder[letter][module]['sections'][index].headline.link);
+                    //                         viewModel.headlineDescription(mappingOrder[letter][module]['sections'][index].headline.description);
+                    //
+                    //                         viewModel.copy(mappingOrder[letter][module]['sections'][index].copy.text);
+                    //                         viewModel.copyUrl(mappingOrder[letter][module]['sections'][index].copy.link);
+                    //                         viewModel.copyDescription(mappingOrder[letter][module]['sections'][index].copy.description);
+                    //
+                    //                         viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
+                    //                         viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
+                    //                         viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
+                    //                     break
+                    //                     case 'collection-grid-module':
+                    //                         var itemNumbers = [];
+                    //                         var itemUrls = [];
+                    //                         var smallImageUrls = [];
+                    //                         var largeImageUrls = [];
+                    //                         var imageDescriptions = [];
+                    //                         mappingOrder[letter][module]['sections'].forEach((item, index) => {
+                    //                             itemNumbers.push(item.item);
+                    //                             itemUrls.push(item.image.link);
+                    //                             smallImageUrls.push(item.image.customImage.small);
+                    //                             largeImageUrls.push(item.image.customImage.small);
+                    //                             imageDescriptions.push(item.image.customImage.small);
+                    //                         })
+                    //                         itemNumbers = itemNumbers.join("\n");
+                    //                         itemUrls = itemUrls.join("\n");
+                    //                         smallImageUrls = smallImageUrls.join("\n");
+                    //                         largeImageUrls = largeImageUrls.join("\n");
+                    //                         imageDescriptions = imageDescriptions.join("\n");
+                    //
+                    //                         viewModel.itemNumber(itemNumbers);
+                    //                         viewModel.itemUrl(itemUrls);
+                    //                         viewModel.imageSmallUrl(smallImageUrls);
+                    //                         viewModel.imageLargeUrl(largeImageUrls);
+                    //                         viewModel.imageDescription(imageDescriptions);
+                    //
+                    //                         viewModel.section(mappingOrder[letter][module]['section'].text);
+                    //                         viewModel.sectionUrl(mappingOrder[letter][module]['section'].link);
+                    //                         viewModel.sectionDescription(mappingOrder[letter][module]['section'].description);
+                    //
+                    //                         viewModel.headline(mappingOrder[letter][module]['headline'].text);
+                    //                         viewModel.headlineUrl(mappingOrder[letter][module]['headline'].link);
+                    //                         viewModel.headlineDescription(mappingOrder[letter][module]['headline'].description);
+                    //
+                    //                         viewModel.cta(mappingOrder[letter][module]['cta'].text);
+                    //                         viewModel.ctaUrl(mappingOrder[letter][module]['cta'].link);
+                    //                         viewModel.ctaDescription(mappingOrder[letter][module]['cta'].description);
+                    //                     break
+                    //                     case 'carousel-module':
+                    //                         var itemNumbers = [];
+                    //                         var itemUrls = [];
+                    //                         var smallImageUrls = [];
+                    //                         var largeImageUrls = [];
+                    //                         var imageDescriptions = [];
+                    //                         mappingOrder[letter][module]['sections'].forEach((item, index) => {
+                    //                             itemNumbers.push(item.item);
+                    //                             itemUrls.push(item.image.link);
+                    //                             smallImageUrls.push(item.image.customImage.small);
+                    //                             largeImageUrls.push(item.image.customImage.small);
+                    //                             imageDescriptions.push(item.image.customImage.small);
+                    //                         })
+                    //                         itemNumbers = itemNumbers.join("\n");
+                    //                         itemUrls = itemUrls.join("\n");
+                    //                         smallImageUrls = smallImageUrls.join("\n");
+                    //                         largeImageUrls = largeImageUrls.join("\n");
+                    //                         imageDescriptions = imageDescriptions.join("\n");
+                    //
+                    //                         viewModel.itemNumber(itemNumbers);
+                    //                         viewModel.itemUrl(itemUrls);
+                    //                         viewModel.imageSmallUrl(smallImageUrls);
+                    //                         viewModel.imageLargeUrl(largeImageUrls);
+                    //                         viewModel.imageDescription(imageDescriptions);
+                    //
+                    //                         viewModel.section(mappingOrder[letter][module]['section'].text);
+                    //                         viewModel.sectionUrl(mappingOrder[letter][module]['section'].link);
+                    //                         viewModel.sectionDescription(mappingOrder[letter][module]['section'].description);
+                    //
+                    //                         viewModel.headline(mappingOrder[letter][module]['headline'].text);
+                    //                         viewModel.headlineUrl(mappingOrder[letter][module]['headline'].link);
+                    //                         viewModel.headlineDescription(mappingOrder[letter][module]['headline'].description);
+                    //
+                    //                         viewModel.cta(mappingOrder[letter][module]['cta'].text);
+                    //                         viewModel.ctaUrl(mappingOrder[letter][module]['cta'].link);
+                    //                         viewModel.ctaDescription(mappingOrder[letter][module]['cta'].description);
+                    //                     break
+                    //                     case 'text-link-module':
+                    //                         viewModel.section(mappingOrder[letter][module].section.text);
+                    //                         viewModel.sectionUrl(mappingOrder[letter][module].section.link);
+                    //                         viewModel.sectionDescription(mappingOrder[letter][module].section.description);
+                    //
+                    //                         viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
+                    //                         viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
+                    //
+                    //                         viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
+                    //                         viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
+                    //                         viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
+                    //                         viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
+                    //
+                    //                         viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
+                    //                         viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
+                    //                         viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
+                    //                     break
+                    //                     case 'image-link-double-module':
+                    //                         viewModel.section(mappingOrder[letter][module].section.text);
+                    //                         viewModel.sectionUrl(mappingOrder[letter][module].section.link);
+                    //                         viewModel.sectionDescription(mappingOrder[letter][module].section.description);
+                    //
+                    //                         viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
+                    //                         viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
+                    //
+                    //                         viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
+                    //                         viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
+                    //                         viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
+                    //                         viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
+                    //
+                    //                         viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
+                    //                         viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
+                    //                         viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
+                    //                     break
+                    //                     case 'button-link-double-module':
+                    //                         viewModel.section(mappingOrder[letter][module].section.text);
+                    //                         viewModel.sectionUrl(mappingOrder[letter][module].section.link);
+                    //                         viewModel.sectionDescription(mappingOrder[letter][module].section.description);
+                    //
+                    //                         viewModel.itemNumber(mappingOrder[letter][module]['sections'][index].item);
+                    //                         viewModel.selectedModuleScreenSize(mappingOrder[letter][module]['sections'][index].displayModuleOn);
+                    //
+                    //                         viewModel.itemUrl(mappingOrder[letter][module]['sections'][index].image.link);
+                    //                         viewModel.imageSmallUrl(mappingOrder[letter][module]['sections'][index].image.customImage.small);
+                    //                         viewModel.imageLargeUrl(mappingOrder[letter][module]['sections'][index].image.customImage.large);
+                    //                         viewModel.imageDescription(mappingOrder[letter][module]['sections'][index].image.description);
+                    //
+                    //                         viewModel.cta(mappingOrder[letter][module]['sections'][index].cta.text);
+                    //                         viewModel.ctaUrl(mappingOrder[letter][module]['sections'][index].cta.link);
+                    //                         viewModel.ctaDescription(mappingOrder[letter][module]['sections'][index].cta.description);
+                    //                     break
+                    //                     case 'seo-link-module':
+                    //                         var seo1cta = [];
+                    //                         var seo1ctaUrl = [];
+                    //                         var seo1ctaDescription = [];
+                    //
+                    //                         var seo2cta = [];
+                    //                         var seo2ctaUrl = [];
+                    //                         var seo2ctaDescription = [];
+                    //                         var itemNumbers = [];
+                    //                         var itemUrls = [];
+                    //                         var imageDescriptions = [];
+                    //                         var smallImageUrls = [];
+                    //                         var largeImageUrls = [];
+                    //
+                    //                         mappingOrder[letter][module]['seo1']['sections'].forEach((item, index) => {
+                    //                             seo1cta.push(item.cta.text);
+                    //                             seo1ctaUrl.push(item.cta.link);
+                    //                             seo1ctaDescription.push(item.cta.description);
+                    //                         })
+                    //
+                    //                         mappingOrder[letter][module]['seo2']['sections'].forEach((item, index) => {
+                    //                             itemNumbers.push(item.item);
+                    //                             itemUrls.push(item.image.link);
+                    //                             imageDescriptions.push(item.image.description);
+                    //                             smallImageUrls.push(item.image.customImage.small);
+                    //                             largeImageUrls.push(item.image.customImage.large);
+                    //                             seo2cta.push(item.cta.text);
+                    //                             seo2ctaUrl.push(item.cta.link);
+                    //                             seo2ctaDescription.push(item.cta.description);
+                    //                         })
+                    //
+                    //                         seo1cta = seo1cta.join("\n");
+                    //                         seo1ctaUrl = seo1ctaUrl.join("\n");
+                    //                         seo1ctaDescription = seo1ctaDescription.join("\n");
+                    //
+                    //                         itemNumbers = itemNumbers.join("\n");
+                    //                         itemUrls = itemUrls.join("\n");
+                    //                         smallImageUrls = smallImageUrls.join("\n");
+                    //                         largeImageUrls = largeImageUrls.join("\n");
+                    //                         imageDescriptions = imageDescriptions.join("\n");
+                    //                         seo2cta = seo2cta.join("\n");
+                    //                         seo2ctaUrl = seo2ctaUrl.join("\n");
+                    //                         seo2ctaDescription = seo2ctaDescription.join("\n");
+                    //
+                    //                         viewModel.seo1Section(mappingOrder[letter][module]['seo1']['section'].text);
+                    //                         viewModel.seo1SectionUrl(mappingOrder[letter][module]['seo1']['section'].link);
+                    //                         viewModel.seo1SectionDescription(mappingOrder[letter][module]['seo1']['section'].description);
+                    //
+                    //                         viewModel.seo1cta(seo1cta);
+                    //                         viewModel.seo1ctaUrl(seo1ctaUrl);
+                    //                         viewModel.seo1ctaDescription(seo1ctaDescription);
+                    //
+                    //                         viewModel.seo2Section(mappingOrder[letter][module]['seo2']['section'].text);
+                    //                         viewModel.seo2SectionUrl(mappingOrder[letter][module]['seo2']['section'].link);
+                    //                         viewModel.seo2SectionDescription(mappingOrder[letter][module]['seo2']['section'].description);
+                    //
+                    //                         viewModel.seo2ItemNumber(itemNumbers);
+                    //                         viewModel.seo2ItemUrl(itemUrls);
+                    //                         viewModel.seo2ImageSmallUrl(smallImageUrls);
+                    //                         viewModel.seo2ImageLargeUrl(largeImageUrls);
+                    //                         viewModel.seo2ImageDescription(imageDescriptions);
+                    //
+                    //                         viewModel.seo2cta(seo2cta);
+                    //                         viewModel.seo2ctaUrl(seo2ctaUrl);
+                    //                         viewModel.seo2ctaDescription(seo2ctaDescription);
+                    //                     break
+                    //                 }
+                    //             }
+                    //         })
+                    //     })
+                    // }
                 }
             },
             update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -809,9 +862,9 @@ ko.components.register('large-feature-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Large Feature Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Large Feature Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
 
-                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -897,9 +950,9 @@ ko.components.register('small-feature-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Small Feature Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Small Feature Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
 
-                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1000,9 +1053,9 @@ ko.components.register('basic-story-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Basic Story Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Basic Story Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
 
-                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1103,9 +1156,9 @@ ko.components.register('extended-story-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Extended Story Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Extended Story Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
 
-                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1169,7 +1222,7 @@ ko.components.register('extended-story-module', {
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Copy</label>
-                                        <input data-bind="textInput: copy" type="text" placeholder="Copy">
+                                        <textarea rows="6" type="text" placeholder="Copy" data-bind="textInput: copy"></textarea>
                                     </div>
                                     <div class="small-12 medium-4 columns">
                                         <label>Copy URL</label>
@@ -1221,9 +1274,9 @@ ko.components.register('collection-grid-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Collection Grid Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Collection Grid Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
 
-                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1324,9 +1377,9 @@ ko.components.register('carousel-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Carousel Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Carousel Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
 
-                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1427,9 +1480,9 @@ ko.components.register('text-link-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Text Link Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Text Link Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
 
-                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Section</label>
@@ -1515,9 +1568,9 @@ ko.components.register('image-link-double-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Image Link Double Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Image Link Double Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
 
-                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Section</label>
@@ -1603,9 +1656,9 @@ ko.components.register('button-link-double-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Button Link Double Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Button Link Double Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
 
-                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Section</label>
@@ -1691,9 +1744,9 @@ ko.components.register('seo-link-module', {
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'SEO Links Module', attr: { href: '#accordion'+accordionIndex(), id: 'accordion-heading'+accordionIndex(), role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'SEO Links Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
 
-                            <div data-bind="sortable: accordionIndex(), attr: { id: 'accordion'+accordionIndex(), 'aria-labelledby': 'accordion-heading'+accordionIndex(), role: 'tabpanel' }" class="content">
+                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 columns">
                                         <h3>TL SEO 1</h3>
@@ -1875,19 +1928,17 @@ ko.components.register('homePageTool', {
           this.previewHomepage = function(e) {
               //console.log('preview click ',this.mappingOrder);
               var mappingOrderCopy = JSON.parse(JSON.stringify(this.mappingOrder));
-
               var cleanJson = {};
               var duplicateModuleNames = [];
               var duplicateObjects = [];
               var concatArray = [];
-
               var orderedJson = {};
-
 
               //removes uniqueIds
               Object.keys(mappingOrderCopy).forEach(function(key) {
                  Object.assign(cleanJson, mappingOrderCopy[key]);
               });
+
 
               Object.keys(cleanJson).sort().forEach(function(key,index) {
                   orderedJson[key] = cleanJson[key];
@@ -1910,12 +1961,22 @@ ko.components.register('homePageTool', {
               })
 
               duplicateObjects = duplicateObjects.filter(function(n){ return n != '' });
+              console.log('duplicateObjects ',duplicateObjects)
               this.jsonOrder(duplicateObjects);
           }
           this.reRender = function renderLoadedJson() {
               this.selectedModules.removeAll();
+              counter = 0;
               Object.keys(mappingOrder).forEach((letter, i) => {
                   Object.keys(mappingOrder[letter]).forEach((module, index) => {
+
+                      if (module != 'collection-grid-module' || module != 'carousel-module') {
+                          counter += mappingOrder[letter][module]['sections'].length;
+                      } else {
+                          counter += 1
+                      }
+
+
                       switch (module) {
                           case 'large-feature-module':
                              var sectionsArry = mappingOrder[letter][module].sections;
@@ -2051,5 +2112,7 @@ ko.components.register('homePageTool', {
             <!-- ko component: {name: $data, params: { data: $parent } } --><!-- /ko -->
         </div>`, synchronous: true
 });
+// .extend({ deferred: true })
 
+//ko.options.deferUpdates = true;
 ko.applyBindings();
