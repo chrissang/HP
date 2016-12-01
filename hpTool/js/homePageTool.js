@@ -2,7 +2,6 @@ var mappingOrder = {};
 var initViewModels = [];
 var load = false;
 var counter = 0;
-// var loadingModelData = ko.observableArray();
 
 class Dependents {
     constructor(params) {
@@ -107,12 +106,9 @@ class Dependents {
 
         ko.bindingHandlers.sortable = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-
                 if (Object.keys(mappingOrder).length != 0 && load === true) {
-                    //console.log('init running');
                     viewModel.params.data.loadingModelData.push(bindingContext);
                     if (counter === viewModel.params.data.selectedModules().length) {
-                        console.log('init');
                         var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
                         var result = viewModel.params.data.loadingModelData().reduce(function(prev, curr) {
                             if (prev.length && curr.$parent === prev[prev.length - 1][0].$parent) {
@@ -124,16 +120,10 @@ class Dependents {
                             return prev;
                         }, []);
 
-
                         result.forEach((section, index) => {
                             var alphaChar = alpha.charAt(index);
                             var moduleType = section[0].$parent;
                             section.forEach((binding,i) => {
-                                // console.log(ko.dataFor(element))
-                                // console.log(ko.contextFor(element))
-                                //console.log(mappingOrder[alphaChar][moduleType]['sections'][i]);
-                                //console.log(binding)
-
                                 switch (binding.$parent) {
                                     case 'text-link-module':
                                         binding.$data.section(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.text : '');
@@ -362,7 +352,6 @@ class Dependents {
                             })
                         })
                     }
-
                 }
             },
             update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -384,8 +373,6 @@ class Dependents {
                     },
                     // // dragging ended
                     onEnd: function (/**Event*/evt) {
-                        //var oldIndex = evt.oldIndex;  // element's old index within parent
-                        //var newIndex = evt.newIndex;  // element's new index within parent
                         var order = sortable.toArray();
                         ko.dataFor(evt.item).params.data.uniqueIdModified(order);
                         ko.dataFor(evt.item).params.data.sortMappingOrder();
@@ -1850,7 +1837,6 @@ ko.components.register('homePageTool', {
                  Object.assign(cleanJson, mappingOrderCopy[key]);
               });
 
-
               Object.keys(cleanJson).sort().forEach(function(key,index) {
                   orderedJson[key] = cleanJson[key];
               });
@@ -1872,7 +1858,6 @@ ko.components.register('homePageTool', {
               })
 
               duplicateObjects = duplicateObjects.filter(function(n){ return n != '' });
-              console.log('duplicateObjects ',duplicateObjects)
               this.jsonOrder(duplicateObjects);
           }
           this.reRender = function renderLoadedJson() {
@@ -1953,19 +1938,19 @@ ko.components.register('homePageTool', {
               var loadDate = this.date();
               var self = this;
               load = true;
+
               $.ajax({
                   type: "GET",
                   url: "http://localhost:5000/hp_config/"+loadDate+".js",
                   success: function(data) {
-
                      var clearModules = [];
                      clearModules = Array.from(document.getElementById('sortableContainer').querySelectorAll('.module'));
                      clearModules.forEach((el, index)=> {
                          ko.removeNode(el);
                          delete self.mappingOrder[el.getAttribute('id')];
                      })
-                     self.reRender();
-                  }
+                    self.reRender();
+                 }
               })
           }
           this.createNewHomePage = function(e) {
@@ -2026,7 +2011,4 @@ ko.components.register('homePageTool', {
             <!-- ko component: {name: $data, params: { data: $parent } } --><!-- /ko -->
         </div>`, synchronous: true
 });
-// .extend({ deferred: true })
-
-//ko.options.deferUpdates = true;
 ko.applyBindings();
