@@ -38,10 +38,6 @@ class Dependents {
             }
         }
         this.responsiveImage = function(itemId, largeImage, smallImage) {
-            console.log('itemId ',itemId);
-            console.log('largeImage ',largeImage);
-            console.log('smallImage ',smallImage);
-
             var responsiveLarge = function() {
                 return largeImage ? largeImage + ' 1024w, ' + largeImage + ' 640w, ' : productImgPath(itemId,640) + ' 1024w, ' +  productImgPath(itemId,640) + ' 640w, ';
             }
@@ -60,7 +56,6 @@ class Dependents {
             return index % 2 === 0 ? true : false
         }
         this.className = function(sectionData) {
-            console.log('sectionData ',sectionData);
             this.nonHiddenModuleSections = [];
             if (this.viewPortSize() === 'small') {
                 return 'small-block-grid-2';
@@ -960,7 +955,7 @@ ko.components.register('text-link-module', {
             super(params);
             this.section = params.data.section;
             this.textLinkModuleSections = params.data.sections;
-            // this.nonHiddenModuleSections = [];
+            this.nonHiddenModuleSections = [];
             this.displayGroupViewPortSize = this.displayGroup(this.textLinkModuleSections);
         }
     },
@@ -1088,12 +1083,12 @@ ko.components.register('button-link-double-module', {
             this.arrayContent5 = this.buttonLinkDoubleModuleSections[4];
             this.arrayContent6 = this.buttonLinkDoubleModuleSections[5];
             this.displayGroupViewPortSize = this.displayGroup(this.buttonLinkDoubleModuleSections);
-            this.nonHiddenModuleSections = [];
-            this.hidePrefooterLine = function() {
-                return this.modulePosition === params.parent.totalModules ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : '';
-            }
+            //this.nonHiddenModuleSections = [];
+            // this.hidePrefooterLine = function() {
+            //     return this.modulePosition === params.parent.totalModules ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : '';
+            // }
             this.shouldStack = function() {
-                //this.hidePrefooterLine();
+                // this.hidePrefooterLine();
                 return this.viewPortSize() === 'xlarge' && this.buttonLinkDoubleModuleSections.length === 6 ? true : false;
             }
             this.showBtnContainerInside = function() {
