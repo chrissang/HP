@@ -10,8 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "font-awesome": "^4.7.0",
+    "foundation-datepicker": "^1.5.5",
     "jquery": "^2.2.3",
     "knockout": "^3.4.0",
+    "sortablejs": "^1.5.0-rc1",
+    "systemjs": "^0.19.41",
     "typescript": "^1.8.10"
   }
 }

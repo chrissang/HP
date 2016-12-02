@@ -61,7 +61,7 @@ class Dependents {
         this.displayModuleOn = ko.observable("");
         this.screenSizes = ko.observableArray(['small', 'medium', 'large', 'xlarge']);
         this.selectedGroupScreenSize = ko.observable('small');
-        this.selectedModuleScreenSize = ko.observable('small')
+        this.selectedModuleScreenSize = ko.observable('small');
 
         this.alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         this.mappingOrder = {};
@@ -69,7 +69,7 @@ class Dependents {
         this.uniqueId = new Date().getTime();
         this.sortMappingOrder = function() {
             var uniqueIdReordered = this.uniqueIdModified();
-
+            console.log('uniqueIdReordered ',uniqueIdReordered)
             function reorderAlpha(obj, curr, updated) {
                 var jsonString = JSON.stringify(obj);
                 jsonString = jsonString.replace(curr, updated);
@@ -89,9 +89,9 @@ class Dependents {
           var removeIndex = this.params.data.selectedModules().indexOf(ko.contextFor(container).$parent);
           this.params.data.selectedModules().splice(removeIndex, 1)
           ko.removeNode(container);
-          delete this.params.data.mappingOrder[e.uniqueId];;
+          delete this.params.data.mappingOrder[e.uniqueId];
         }
-            this.bindingHandlers = {
+        this.bindingHandlers = {
             init: $(function () {
                 $(document).foundation({
                     accordion: {
@@ -110,9 +110,15 @@ class Dependents {
                     viewModel.params.data.loadingModelData.push(bindingContext);
                     if (counter === viewModel.params.data.selectedModules().length) {
                         var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+                        //groups modules that are the same and next to each other into array
                         var result = viewModel.params.data.loadingModelData().reduce(function(prev, curr) {
                             if (prev.length && curr.$parent === prev[prev.length - 1][0].$parent) {
-                                prev[prev.length - 1].push(curr);
+                                if (curr.$parent === 'collection-grid-module' || curr.$parent === 'carousel-module' || curr.$parent === 'seo-link-module') {
+                                    prev.push([curr]);
+                                } else {
+                                    prev[prev.length - 1].push(curr);
+                                }
                             }
                             else {
                                 prev.push([curr]);
@@ -196,24 +202,27 @@ class Dependents {
                                         var smallImageUrls = [];
                                         var largeImageUrls = [];
                                         var imageDescriptions = [];
-                                        mappingOrder[alphaChar][moduleType]['sections'].forEach((item, index) => {
-                                            itemNumbers.push(item.item);
-                                            itemUrls.push(item.image.link);
-                                            smallImageUrls.push(item.image.customImage.small);
-                                            largeImageUrls.push(item.image.customImage.large);
-                                            imageDescriptions.push(item.image.description);
-                                        })
-                                        itemNumbers = itemNumbers.join("\n");
-                                        itemUrls = itemUrls.join("\n");
-                                        smallImageUrls = smallImageUrls.join("\n");
-                                        largeImageUrls = largeImageUrls.join("\n");
-                                        imageDescriptions = imageDescriptions.join("\n");
 
-                                        binding.$data.itemNumber(itemNumbers ? itemNumbers : '');
-                                        binding.$data.itemUrl(itemUrls ? itemUrls : '');
-                                        binding.$data.imageSmallUrl(smallImageUrls ? smallImageUrls : '');
-                                        binding.$data.imageLargeUrl(largeImageUrls ? largeImageUrls : '');
-                                        binding.$data.imageDescription(imageDescriptions ? imageDescriptions : '');
+                                        if (mappingOrder[alphaChar][moduleType]['sections'] != undefined) {
+                                            mappingOrder[alphaChar][moduleType]['sections'].forEach((item, index) => {
+                                                itemNumbers.push(item.item);
+                                                itemUrls.push(item.image.link);
+                                                smallImageUrls.push(item.image.customImage.small);
+                                                largeImageUrls.push(item.image.customImage.large);
+                                                imageDescriptions.push(item.image.description);
+                                            })
+                                            itemNumbers = itemNumbers.join("\n");
+                                            itemUrls = itemUrls.join("\n");
+                                            smallImageUrls = smallImageUrls.join("\n");
+                                            largeImageUrls = largeImageUrls.join("\n");
+                                            imageDescriptions = imageDescriptions.join("\n");
+
+                                            binding.$data.itemNumber(itemNumbers ? itemNumbers : '');
+                                            binding.$data.itemUrl(itemUrls ? itemUrls : '');
+                                            binding.$data.imageSmallUrl(smallImageUrls ? smallImageUrls : '');
+                                            binding.$data.imageLargeUrl(largeImageUrls ? largeImageUrls : '');
+                                            binding.$data.imageDescription(imageDescriptions ? imageDescriptions : '');
+                                        }
                                     break;
                                     case 'carousel-module':
                                         binding.$data.selectedModuleScreenSize(!!mappingOrder[alphaChar][moduleType].displayModuleOn ? mappingOrder[alphaChar][moduleType].displayModuleOn : '');
@@ -235,24 +244,27 @@ class Dependents {
                                         var smallImageUrls = [];
                                         var largeImageUrls = [];
                                         var imageDescriptions = [];
-                                        mappingOrder[alphaChar][moduleType]['sections'].forEach((item, index) => {
-                                            itemNumbers.push(item.item);
-                                            itemUrls.push(item.image.link);
-                                            smallImageUrls.push(item.image.customImage.small);
-                                            largeImageUrls.push(item.image.customImage.large);
-                                            imageDescriptions.push(item.image.description);
-                                        })
-                                        itemNumbers = itemNumbers.join("\n");
-                                        itemUrls = itemUrls.join("\n");
-                                        smallImageUrls = smallImageUrls.join("\n");
-                                        largeImageUrls = largeImageUrls.join("\n");
-                                        imageDescriptions = imageDescriptions.join("\n");
 
-                                        binding.$data.itemNumber(itemNumbers ? itemNumbers : '');
-                                        binding.$data.itemUrl(itemUrls ? itemUrls : '');
-                                        binding.$data.imageSmallUrl(smallImageUrls ? smallImageUrls : '');
-                                        binding.$data.imageLargeUrl(largeImageUrls ? largeImageUrls : '');
-                                        binding.$data.imageDescription(imageDescriptions ? imageDescriptions : '');
+                                        if (mappingOrder[alphaChar][moduleType]['sections'] != undefined) {
+                                            mappingOrder[alphaChar][moduleType]['sections'].forEach((item, index) => {
+                                                itemNumbers.push(item.item);
+                                                itemUrls.push(item.image.link);
+                                                smallImageUrls.push(item.image.customImage.small);
+                                                largeImageUrls.push(item.image.customImage.large);
+                                                imageDescriptions.push(item.image.description);
+                                            })
+                                            itemNumbers = itemNumbers.join("\n");
+                                            itemUrls = itemUrls.join("\n");
+                                            smallImageUrls = smallImageUrls.join("\n");
+                                            largeImageUrls = largeImageUrls.join("\n");
+                                            imageDescriptions = imageDescriptions.join("\n");
+
+                                            binding.$data.itemNumber(itemNumbers ? itemNumbers : '');
+                                            binding.$data.itemUrl(itemUrls ? itemUrls : '');
+                                            binding.$data.imageSmallUrl(smallImageUrls ? smallImageUrls : '');
+                                            binding.$data.imageLargeUrl(largeImageUrls ? largeImageUrls : '');
+                                            binding.$data.imageDescription(imageDescriptions ? imageDescriptions : '');
+                                        }
                                     break;
                                     case 'seo-link-module':
                                         binding.$data.seo1Section(!!mappingOrder[alphaChar][moduleType]['seo1'].section ? mappingOrder[alphaChar][moduleType]['seo1'].section.text : '');
@@ -278,21 +290,26 @@ class Dependents {
                                         var seo2_large_images = [];
                                         var seo2_image_descriptions = [];
 
-                                        mappingOrder[alphaChar][moduleType]['seo1']['sections'].forEach((item, index) => {
-                                            seo1_cta_text.push(item.cta.text);
-                                            seo1_cta_link.push(item.cta.link);
-                                            seo1_cta_description.push(item.cta.description);
-                                        });
-                                        mappingOrder[alphaChar][moduleType]['seo2']['sections'].forEach((item, index) => {
-                                            seo2_cta_text.push(item.cta.text);
-                                            seo2_cta_link.push(item.cta.link);
-                                            seo2_cta_description.push(item.cta.description);
-                                            seo2_items.push(item.item);
-                                            seo2_items_urls.push(item.image.link);
-                                            seo2_small_images.push(item.image.customImage.small);
-                                            seo2_large_images.push(item.image.customImage.large);
-                                            seo2_image_descriptions.push(item.image.description);
-                                        });
+                                        if (mappingOrder[alphaChar][moduleType]['seo1']['sections'] != undefined) {
+                                            mappingOrder[alphaChar][moduleType]['seo1']['sections'].forEach((item, index) => {
+                                                seo1_cta_text.push(item.cta.text);
+                                                seo1_cta_link.push(item.cta.link);
+                                                seo1_cta_description.push(item.cta.description);
+                                            });
+                                        }
+
+                                        if (mappingOrder[alphaChar][moduleType]['seo2']['sections'] != undefined) {
+                                            mappingOrder[alphaChar][moduleType]['seo2']['sections'].forEach((item, index) => {
+                                                seo2_cta_text.push(item.cta.text);
+                                                seo2_cta_link.push(item.cta.link);
+                                                seo2_cta_description.push(item.cta.description);
+                                                seo2_items.push(item.item);
+                                                seo2_items_urls.push(item.image.link);
+                                                seo2_small_images.push(item.image.customImage.small);
+                                                seo2_large_images.push(item.image.customImage.large);
+                                                seo2_image_descriptions.push(item.image.description);
+                                            });
+                                        }
 
                                         seo1_cta_text = seo1_cta_text.join("\n");
                                         seo1_cta_link = seo1_cta_link.join("\n");
@@ -378,18 +395,20 @@ class Dependents {
                         ko.dataFor(evt.item).params.data.sortMappingOrder();
                     }
                 });
+
                 var uniqueId = viewModel.uniqueId;
-                var alphaChar = viewModel.alpha.charAt(viewModel.accordionIndex());
+                // var alphaChar = viewModel.alpha.charAt(viewModel.accordionIndex());
+                var accordionIndex = viewModel.accordionIndex();
                 var moduleType = bindingContext.$parent;
                 viewModel.moduleType(bindingContext.$parent);
 
                 viewModel.params.data.mappingOrder[uniqueId] = {};
-                viewModel.params.data.mappingOrder[uniqueId][alphaChar] = {};
-                viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType] = {};
+                viewModel.params.data.mappingOrder[uniqueId][accordionIndex] = {};
+                viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType] = {};
 
                 switch (moduleType) {
                     case 'large-feature-module':
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -415,7 +434,7 @@ class Dependents {
                         ]
                     break;
                     case 'small-feature-module':
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -446,7 +465,7 @@ class Dependents {
                         ]
                     break;
                     case 'basic-story-module':
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -477,7 +496,7 @@ class Dependents {
                         ]
                     break;
                     case 'extended-story-module':
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -519,26 +538,26 @@ class Dependents {
                         var largeImageList = viewModel.imageLargeUrl().replace(/\n/g, ',').split(',');
                         var imageDescriptionList = viewModel.imageDescription().replace(/\n/g, ',').split(',');
 
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['section'] = {
                             'text': viewModel.section().replace(/é/g, "&#233;"),
                             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['headline'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['headline'] = {
                             'text': viewModel.headline().replace(/é/g, "&#233;"),
                             'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.headlineDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['cta'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['cta'] = {
                             'text': viewModel.cta().replace(/é/g, "&#233;"),
                             'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.ctaDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = []
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = []
                         itemsList.forEach((item, index) => {
                             if (item != '') {
-                                viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'].push(
+                                viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'].push(
                                     {
                                         'item': item.trim(),
                                         'image': {
@@ -561,26 +580,26 @@ class Dependents {
                         var largeImageList = viewModel.imageLargeUrl().replace(/\n/g, ',').split(',');
                         var imageDescriptionList = viewModel.imageDescription().replace(/\n/g, ',').split(',');
 
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['section'] = {
                             'text': viewModel.section().replace(/é/g, "&#233;"),
                             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['headline'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['headline'] = {
                             'text': viewModel.headline().replace(/é/g, "&#233;"),
                             'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.headlineDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['cta'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['cta'] = {
                             'text': viewModel.cta().replace(/é/g, "&#233;"),
                             'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.ctaDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = []
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = []
                         itemsList.forEach((item, index) => {
                             if (item != '') {
-                                viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'].push(
+                                viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'].push(
                                     {
                                         'item': item.trim(),
                                         'image': {
@@ -597,12 +616,12 @@ class Dependents {
                         })
                     break;
                     case 'text-link-module':
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['section'] = {
                             'text': viewModel.section().replace(/é/g, "&#233;"),
                             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -623,12 +642,12 @@ class Dependents {
                         ]
                     break;
                     case 'image-link-double-module':
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['section'] = {
                             'text': viewModel.section().replace(/é/g, "&#233;"),
                             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -649,12 +668,12 @@ class Dependents {
                         ]
                     break;
                     case 'button-link-double-module':
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['section'] = {
                             'text': viewModel.section().replace(/é/g, "&#233;"),
                             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -688,16 +707,17 @@ class Dependents {
                         var seo2ctaUrlList = viewModel.seo2ctaUrl().replace(/\n/g, ',').split(',');
                         var seo2ctaDescriptionList = viewModel.seo2ctaDescription().replace(/\n/g, ',').split(',');
 
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo1'] = {}
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo1']['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo1'] = {}
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo1']['section'] = {
                             'text': viewModel.seo1Section().replace(/é/g, "&#233;"),
                             'link': viewModel.seo1SectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.seo1SectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo1']['sections'] = []
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo1']['sections'] = []
+
                         seo1ctaList.forEach((item, index) => {
                             if (item != '') {
-                                viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo1']['sections'].push(
+                                viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo1']['sections'].push(
                                     {
                                         'cta': {
                                             'text': item.trim(),
@@ -709,16 +729,16 @@ class Dependents {
                             }
                         })
 
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo2'] = {}
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo2']['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo2'] = {}
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo2']['section'] = {
                             'text': viewModel.seo2Section().replace(/é/g, "&#233;"),
                             'link': viewModel.seo2SectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.seo2SectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo2']['sections'] = []
+                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo2']['sections'] = []
                         seo2ItemsList.forEach((item, index) => {
                             if (item != '') {
-                                viewModel.params.data.mappingOrder[uniqueId][alphaChar][moduleType]['seo2']['sections'].push(
+                                viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo2']['sections'].push(
                                     {
                                         'item': item.trim(),
                                         'image': {
@@ -740,6 +760,7 @@ class Dependents {
                         })
                     break;
                 }
+                //console.log('mapping ',viewModel.params.data.mappingOrder);
             }
         };
     }
@@ -1382,21 +1403,6 @@ ko.components.register('text-link-module', {
                             <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
-                                        <label>Section</label>
-                                        <input data-bind="textInput: section" type="text" placeholder="Section">
-                                    </div>
-                                    <div class="small-12 medium-4 columns">
-                                        <label>Section URL</label>
-                                        <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
-                                    </div>
-                                    <div class="small-12 medium-4 columns">
-                                        <label>Section Description Tag</label>
-                                        <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
                                         <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
                                     </div>
@@ -1422,6 +1428,21 @@ ko.components.register('text-link-module', {
                                     <div class="small-12 medium-4 columns">
                                         <label>Image Description Tag</label>
                                         <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section</label>
+                                        <input data-bind="textInput: section" type="text" placeholder="Section">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section URL</label>
+                                        <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section Description Tag</label>
+                                        <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
                                     </div>
                                 </div>
 
@@ -1470,21 +1491,6 @@ ko.components.register('image-link-double-module', {
                             <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
-                                        <label>Section</label>
-                                        <input data-bind="textInput: section" type="text" placeholder="Section">
-                                    </div>
-                                    <div class="small-12 medium-4 columns">
-                                        <label>Section URL</label>
-                                        <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
-                                    </div>
-                                    <div class="small-12 medium-4 columns">
-                                        <label>Section Description Tag</label>
-                                        <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
                                         <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
                                     </div>
@@ -1510,6 +1516,21 @@ ko.components.register('image-link-double-module', {
                                     <div class="small-12 medium-4 columns">
                                         <label>Image Description Tag</label>
                                         <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section</label>
+                                        <input data-bind="textInput: section" type="text" placeholder="Section">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section URL</label>
+                                        <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section Description Tag</label>
+                                        <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
                                     </div>
                                 </div>
 
@@ -1558,21 +1579,6 @@ ko.components.register('button-link-double-module', {
                             <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
-                                        <label>Section</label>
-                                        <input data-bind="textInput: section" type="text" placeholder="Section">
-                                    </div>
-                                    <div class="small-12 medium-4 columns">
-                                        <label>Section URL</label>
-                                        <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
-                                    </div>
-                                    <div class="small-12 medium-4 columns">
-                                        <label>Section Description Tag</label>
-                                        <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
                                         <input data-bind="textInput: itemNumber" type="text" placeholder="Item #">
                                     </div>
@@ -1598,6 +1604,21 @@ ko.components.register('button-link-double-module', {
                                     <div class="small-12 medium-4 columns">
                                         <label>Image Description Tag</label>
                                         <input data-bind="textInput: imageDescription" type="text" placeholder="Image Description Tag">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section</label>
+                                        <input data-bind="textInput: section" type="text" placeholder="Section">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section URL</label>
+                                        <input data-bind="textInput: sectionUrl" type="text" placeholder="Section URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section Description Tag</label>
+                                        <input data-bind="textInput: sectionDescription" type="text" placeholder="Section Description Tag"></input>
                                     </div>
                                 </div>
 
@@ -1687,21 +1708,6 @@ ko.components.register('seo-link-module', {
                                 </div>
 
                                 <div class="row">
-                                    <div class="small-12 medium-4 columns">
-                                        <label>Section</label>
-                                        <input data-bind="textInput: seo2Section" type="text" placeholder="Section">
-                                    </div>
-                                    <div class="small-12 medium-4 columns">
-                                        <label>Section URL</label>
-                                        <input data-bind="textInput: seo2SectionUrl" type="text" placeholder="Section URL">
-                                    </div>
-                                    <div class="small-12 medium-4 columns">
-                                        <label>Section Description Tag</label>
-                                        <input data-bind="textInput: seo2SectionDescription" type="text" placeholder="Section Description Tag"></input>
-                                    </div>
-                                </div>
-
-                                <div class="row">
                                     <div class="small-12 medium-6 columns">
                                         <label>Item #</label>
                                         <textarea rows="6" type="text" placeholder="Item #" data-bind="textInput: seo2ItemNumber"></textarea>
@@ -1724,6 +1730,21 @@ ko.components.register('seo-link-module', {
                                     <div class="small-12 medium-4 columns">
                                         <label>Image Description Tag</label>
                                         <textarea rows="6" type="text" placeholder="Image Description Tag" data-bind="textInput: seo2ImageDescription"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section</label>
+                                        <input data-bind="textInput: seo2Section" type="text" placeholder="Section">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section URL</label>
+                                        <input data-bind="textInput: seo2SectionUrl" type="text" placeholder="Section URL">
+                                    </div>
+                                    <div class="small-12 medium-4 columns">
+                                        <label>Section Description Tag</label>
+                                        <input data-bind="textInput: seo2SectionDescription" type="text" placeholder="Section Description Tag"></input>
                                     </div>
                                 </div>
 
@@ -1775,7 +1796,7 @@ ko.components.register('homePageTool', {
       constructor(params) {
           super(params);
           this.selection = ko.observable();
-          this.selectedModules = ko.observableArray();
+          this.selectedModules = ko.observableArray([]);
           this.date = ko.observable();
           this.moduleTypes = [
               {name: 'Large Feature (LF)', value: 'large-feature-module'},
@@ -1817,16 +1838,24 @@ ko.components.register('homePageTool', {
                   };
               }
           }
+
+          this.addToView = ko.observable();
           this.createModule = function (e) {
               load = false;
-              if (this.selection()) {
-                  this.selectedModules.push(this.selection());
-              }
+              this.addToView(this.selection());
+              console.log( this.addToView())
+
+
+              this.selectedModules.push(this.selection());
+            //   if (this.selection()) {
+            //       this.selectedModules.push(this.selection());
+            //       console.log('selectedModules after ',this.selectedModules());
+            //   }
           }
           this.previewHomepage = function(e) {
               //console.log('preview click ',this.mappingOrder);
               var mappingOrderCopy = JSON.parse(JSON.stringify(this.mappingOrder));
-              var cleanJson = {};
+              var removedUniqueIdJson = {};
               var duplicateModuleNames = [];
               var duplicateObjects = [];
               var concatArray = [];
@@ -1834,17 +1863,16 @@ ko.components.register('homePageTool', {
 
               //removes uniqueIds
               Object.keys(mappingOrderCopy).forEach(function(key) {
-                 Object.assign(cleanJson, mappingOrderCopy[key]);
+                 Object.assign(removedUniqueIdJson, mappingOrderCopy[key]);
               });
 
-              Object.keys(cleanJson).sort().forEach(function(key,index) {
-                  orderedJson[key] = cleanJson[key];
+              Object.keys(removedUniqueIdJson).sort().forEach(function(key,index) {
+                  orderedJson[key] = removedUniqueIdJson[key];
               });
 
               Object.keys(orderedJson).forEach(function(key,index) {
                   duplicateModuleNames.push(Object.keys(orderedJson[key])[0]);
                   duplicateObjects.push(orderedJson[key]);
-
               });
 
               var adjecentCombine = reducerFilter([],duplicateModuleNames);
@@ -1860,85 +1888,86 @@ ko.components.register('homePageTool', {
               duplicateObjects = duplicateObjects.filter(function(n){ return n != '' });
               this.jsonOrder(duplicateObjects);
           }
+          // TODO: Need to compare global and local mappingOrder before reRender runs
           this.reRender = function renderLoadedJson() {
               this.selectedModules.removeAll();
               counter = 0;
+
+              Object.keys(mappingOrder).forEach((letter, i) => {
+                  Object.keys(mappingOrder[letter]).forEach((module, index) => {
+                      if (module === 'collection-grid-module' || module === 'carousel-module' || module === 'seo-link-module') {
+                          counter ++;
+                      } else {
+                          counter += mappingOrder[letter][module]['sections'].length;
+                      }
+                  })
+              })
+
               Object.keys(mappingOrder).forEach((letter, i) => {
                   Object.keys(mappingOrder[letter]).forEach((module, index) => {
                       switch (module) {
                           case 'large-feature-module':
-                             counter += mappingOrder[letter][module]['sections'].length;
                              var sectionsArry = mappingOrder[letter][module].sections;
                              sectionsArry.forEach((el,index) => {
                                 this.selectedModules.push(module);
                             })
                           break
                           case 'small-feature-module':
-                             counter += mappingOrder[letter][module]['sections'].length;
                              var sectionsArry = mappingOrder[letter][module].sections;
                              sectionsArry.forEach((el,index) => {
                                 this.selectedModules.push(module);
                             })
                           break
                           case 'basic-story-module':
-                             counter += mappingOrder[letter][module]['sections'].length;
                              var sectionsArry = mappingOrder[letter][module].sections;
                              sectionsArry.forEach((el,index) => {
                                 this.selectedModules.push(module);
                             })
                           break
                           case 'extended-story-module':
-                             counter += mappingOrder[letter][module]['sections'].length;
                              var sectionsArry = mappingOrder[letter][module].sections;
                              sectionsArry.forEach((el,index) => {
                                 this.selectedModules.push(module);
                             })
                           break
                           case 'collection-grid-module':
-                             counter ++;
-                             var sectionsArry = mappingOrder[letter][module].sections;
                              this.selectedModules.push(module);
                           break
                           case 'carousel-module':
-                             counter ++;
-                             var sectionsArry = mappingOrder[letter][module].sections;
                              this.selectedModules.push(module);
                           break
                           case 'text-link-module':
-                             counter += mappingOrder[letter][module]['sections'].length;
                              var sectionsArry = mappingOrder[letter][module].sections;
                              sectionsArry.forEach((el,index) => {
                                 this.selectedModules.push(module);
                             })
                           break
                           case 'image-link-double-module':
-                             counter += mappingOrder[letter][module]['sections'].length;
                              var sectionsArry = mappingOrder[letter][module].sections;
                              sectionsArry.forEach((el,index) => {
                                 this.selectedModules.push(module);
                             })
                           break
                           case 'button-link-double-module':
-                             counter += mappingOrder[letter][module]['sections'].length;
                              var sectionsArry = mappingOrder[letter][module].sections;
                              sectionsArry.forEach((el,index) => {
                                 this.selectedModules.push(module);
                             })
                           break
                           case 'seo-link-module':
-                             counter ++;
-                             var sectionsArry = mappingOrder[letter][module].sections;
                              this.selectedModules.push(module);
                           break
-                     }
+                      }
                   })
               })
+
+
           };
           this.loadHomePage = function(e) {
               var loadDate = this.date();
               var self = this;
               load = true;
-
+              this.loadingModelData.removeAll();
               $.ajax({
                   type: "GET",
                   url: "http://localhost:5000/hp_config/"+loadDate+".js",
@@ -1950,7 +1979,12 @@ ko.components.register('homePageTool', {
                          delete self.mappingOrder[el.getAttribute('id')];
                      })
                     self.reRender();
-                 }
+                },
+                error: function(jqXHR, status, error){
+                    if (jqXHR.status === 404) {
+                        alert('No data found for '+loadDate+'');
+                    }
+                }
               })
           }
           this.createNewHomePage = function(e) {
@@ -2006,6 +2040,7 @@ ko.components.register('homePageTool', {
                 <button data-bind="event:{ click: createModule }">Create Module</button>
             </div>
         </div>
+
 
         <div data-bind="foreach: selectedModules()" id="sortableContainer">
             <!-- ko component: {name: $data, params: { data: $parent } } --><!-- /ko -->

@@ -1,8 +1,7 @@
 {
   "name": "homepage",
   "version": "1.0.0",
-  "description": "",
-  "main": "homePage-m.js",
+  "main": "homePage.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -12,6 +11,9 @@
   "dependencies": {
     "jquery": "^2.2.3",
     "knockout": "^3.4.0",
+    "responsively-lazy": "^2.0.0",
     "typescript": "^1.8.10"
-  }
+  },
+  "devDependencies": {},
+  "description": ""
 }
