@@ -1774,6 +1774,16 @@ ko.components.register('seo-link-module', {
         </div>`, synchronous: true
 });
 
+ko.components.register('ug-component', {
+    viewModel: function (params) {
+        this.params = params.params || {};
+        this.component = params.component || {};
+        console.log('this.params ',this.params);
+        console.log('this.component ',this.component);
+    },
+    template: `<!-- ko component: {name: component, params: { data: params }} --><!-- /ko -->`,synchronous: true
+});
+
 function reducerFilter(acc, xs) {
   xs.map((item, index) => {
       if (xs[index] === xs[index+1]) {
@@ -1790,7 +1800,7 @@ function reducerFilter(acc, xs) {
   return acc;
 }
 
-// TODO: refactor accordionIndex and see if i need selectedModules for anyhting other than rendering modules
+//TODO testing new way of rendering modules
 ko.components.register('homePageTool', {
     viewModel: class HomePageToolComponentModel extends Dependents {
       constructor(params) {
@@ -1842,10 +1852,6 @@ ko.components.register('homePageTool', {
           this.addToView = ko.observable();
           this.createModule = function (e) {
               load = false;
-              this.addToView(this.selection());
-              console.log( this.addToView())
-
-
               this.selectedModules.push(this.selection());
             //   if (this.selection()) {
             //       this.selectedModules.push(this.selection());
@@ -2043,7 +2049,7 @@ ko.components.register('homePageTool', {
 
 
         <div data-bind="foreach: selectedModules()" id="sortableContainer">
-            <!-- ko component: {name: $data, params: { data: $parent } } --><!-- /ko -->
+            <ug-component params='component: $data, params: $parent' class='draggable'></ug-component>
         </div>`, synchronous: true
 });
 ko.applyBindings();
