@@ -152,7 +152,6 @@ class Dependents {
                                 var itemNumber = el.getAttribute("data-itemNumber");
                                 var sectionDescription = el.getAttribute("data-sectionDescription");
 
-
                                 // console.log('ID ',alphaChar + linkNumber + '_' + module);
                                 // console.log('NAME ',ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog"));
                                 // console.log('CREATIVE ',itemNumber ? itemNumber : 'NA');
@@ -162,7 +161,6 @@ class Dependents {
                                 var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
                                 var creative = itemNumber ? itemNumber : 'NA';
                                 var pos = sectionDescription ? sectionDescription : 'NA';
-
                                 //console.log(trackingCode);
                                 trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
 
@@ -226,15 +224,24 @@ class Dependents {
                                 var dataDescription =el.getAttribute('data-description').split(' ').join('_');
                                 var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module +'_'+ dataDescription;
                                 var trackingLink = el.getAttribute("href");
+
+                                var ctaText = el.getAttribute("data-cta");
+                                var itemNumber = el.getAttribute("data-itemNumber");
+                                var sectionDescription = el.getAttribute("data-sectionDescription");
+
+                                var id = alphaChar + linkNumber + '_' + module;
+                                var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
+                                var creative = itemNumber ? itemNumber : 'NA';
+                                var pos = sectionDescription ? sectionDescription : 'NA';
                                 //console.log(trackingCode)
                                 trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
 
                                 if (trackingLink !== '') {
                                     if (trackingLink.includes("//blog.uncommongoods.com")) {
                                         trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
-                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
                                     } else {
-                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
                                     }
                                 } else {
                                     $('a[href=""]').click(function (event) { // where href are blank
@@ -325,7 +332,7 @@ ko.components.register('large-feature-module', {
                             </a>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row fullwidth">
                         <div class="small-12 medium-8 large-6 small-centered columns">
                             <div class="white-box-container text-center">
                                 <a class="a-secondary" data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text }">
@@ -465,13 +472,13 @@ ko.components.register('basic-story-module', {
                             <div class="small-12 columns">
                                 <div class="row">
                                     <div class="small-10 small-centered text-center columns">
-                                        <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description }"><h2 data-bind="html: headline.text"></h2></a>
-                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                        <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
+                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <div class="responsively-lazy preventReflow itemPhoto">
                                                 <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
                                             </div>
                                         </a>
-                                        <a data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }">
+                                        <a data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <button class="btn-secondary expand" data-bind="html: cta.text"></button>
                                         </a>
                                     </div>
@@ -489,7 +496,7 @@ ko.components.register('basic-story-module', {
                             <div class="row fullwidth">
                                 <div class="container">
                                     <div class="medium-7 columns">
-                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <div class="responsively-lazy preventReflow">
                                                 <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
                                             </div>
@@ -499,10 +506,10 @@ ko.components.register('basic-story-module', {
                                     <div class="medium-5 columns text-center">
                                         <div class="copyContainer">
                                             <!-- ko if: section.text -->
-                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a></label>
+                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                             <!-- /ko -->
-                                            <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description }"><h2 data-bind="html: headline.text"></h2></a>
-                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></p>
+                                            <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
+                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                         </div>
                                     </div>
                                 </div>
@@ -515,14 +522,14 @@ ko.components.register('basic-story-module', {
                                     <div class="medium-5 columns text-center">
                                         <div class="copyContainer">
                                             <!-- ko if: section.text -->
-                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a></label>
+                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                             <!-- /ko -->
-                                            <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description }"><h2 data-bind="html: headline.text"></h2></a>
-                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></p>
+                                            <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
+                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                         </div>
                                     </div>
                                     <div class="medium-7 columns">
-                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <div class="responsively-lazy preventReflow">
                                                 <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
                                             </div>
@@ -542,7 +549,7 @@ ko.components.register('basic-story-module', {
                             <!-- ko foreach: basicStoryModulesSections -->
                                 <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                     <div data-bind="attr: { class: $parent.columnLen() }">
-                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <div class="responsively-lazy preventReflow">
                                                 <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
                                             </div>
@@ -551,10 +558,10 @@ ko.components.register('basic-story-module', {
                                             <div class="large-12 large-centered columns">
                                                 <div class="white-box-container text-center">
                                                     <!-- ko if: section.text -->
-                                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section' , 'data-description': section.description}"></a></label>
+                                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section' , 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                                     <!-- /ko -->
-                                                    <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description }"><h2 data-bind="html: headline.text"></h2></a>
-                                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></p>
+                                                    <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
+                                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -585,16 +592,16 @@ ko.components.register('extended-story-module', {
                             <div class="small-12 text-center columns">
                                 <!-- ko if: section.text -->
                                     <div class="small-12 text-center columns">
-                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a></label>
+                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description}"></a></label>
                                     </div>
                                 <!-- /ko -->
                                 <div class="small-12 text-center columns">
-                                    <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description }"><h2 data-bind="html: headline.text"></h2></a>
+                                    <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
                                 </div>
                                 <div class="small-12 text-center columns">
                                     <div class="row">
                                         <div class="small-11 small-centered columns">
-                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                                 <div class="responsively-lazy preventReflow itemPhoto">
                                                     <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
                                                 </div>
@@ -604,9 +611,9 @@ ko.components.register('extended-story-module', {
                                 </div>
                                 <div class="small-11 text-center columns">
                                     <p class="text-left">
-                                        <a class="a-secondary" data-bind="html: copy.text, attr: { href: addUgDomain(copy.link), 'data-type': 'Copy', 'data-description': copy.description }"></a>
+                                        <a class="a-secondary" data-bind="html: copy.text, attr: { href: addUgDomain(copy.link), 'data-type': 'Copy', 'data-description': copy.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a>
                                     </p>
-                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></p>
+                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                 </div>
                             </div>
                         </div>
@@ -623,7 +630,7 @@ ko.components.register('extended-story-module', {
                                     <div class="row">
                                         <div class="container">
                                             <div class="medium-7 large-8 columns">
-                                                <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                                <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                                     <div class="responsively-lazy preventReflow">
                                                         <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
                                                     </div>
@@ -633,13 +640,13 @@ ko.components.register('extended-story-module', {
                                             <div class="medium-5 large-4 columns text-center">
                                                 <div class="copyContainer">
                                                     <!-- ko if: section.text -->
-                                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a></label>
+                                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                                     <!-- /ko -->
-                                                    <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description }"><h2 data-bind="html: headline.text"></h2></a>
+                                                    <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
                                                     <p class="text-left">
-                                                        <a class="a-secondary" data-bind="html: copy.text, attr: { href: addUgDomain(copy.link), 'data-type': 'Copy', 'data-description': copy.description }"></a>
+                                                        <a class="a-secondary" data-bind="html: copy.text, attr: { href: addUgDomain(copy.link), 'data-type': 'Copy', 'data-description': copy.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a>
                                                     </p>
-                                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></p>
+                                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -656,17 +663,17 @@ ko.components.register('extended-story-module', {
                                             <div class="medium-5 large-4 columns text-center">
                                                 <div class="copyContainer">
                                                     <!-- ko if: section.text -->
-                                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a></label>
+                                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                                     <!-- /ko -->
-                                                    <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description }"><h2 data-bind="html: headline.text"></h2></a>
+                                                    <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
                                                     <p class="text-left">
-                                                        <a class="a-secondary" data-bind="html: copy.text, attr: { href: addUgDomain(copy.link), 'data-type': 'Copy', 'data-description': copy.description }"></a>
+                                                        <a class="a-secondary" data-bind="html: copy.text, attr: { href: addUgDomain(copy.link), 'data-type': 'Copy', 'data-description': copy.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a>
                                                     </p>
-                                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></p>
+                                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                                 </div>
                                             </div>
                                             <div class="medium-7 large-8 columns">
-                                                <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                                <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                                     <div class="responsively-lazy preventReflow">
                                                         <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
                                                     </div>
@@ -708,7 +715,7 @@ ko.components.register('collection-grid-module', {
                         <div class="small-12 medium-6 columns">
                             <div class="flex">
                                 <div class="small-8-width">
-                                    <a data-bind="attr: { href: addUgDomain(arrayContent1.image.link), 'data-type': 'Image', 'data-description': arrayContent1.image.description }">
+                                    <a data-bind="attr: { href: addUgDomain(arrayContent1.image.link), 'data-type': 'Image', 'data-description': arrayContent1.image.description, 'data-itemNumber': arrayContent1.item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                         <div class="responsively-lazy preventReflow">
                                             <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent1.item, arrayContent1.image.customImage.large, arrayContent1.image.customImage.small), src: arrayContent1.image.customImage.large ? arrayContent1.image.customImage.large : productImgPath(arrayContent1.item,360), alt: cta.text }"/>
                                         </div>
@@ -716,14 +723,14 @@ ko.components.register('collection-grid-module', {
                                 </div>
                                 <div class="small-4-width">
                                     <div>
-                                        <a data-bind="attr: { href: addUgDomain(arrayContent2.image.link), 'data-type': 'Image', 'data-description': arrayContent2.image.description }">
+                                        <a data-bind="attr: { href: addUgDomain(arrayContent2.image.link), 'data-type': 'Image', 'data-description': arrayContent2.image.description, 'data-itemNumber': arrayContent2.item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <div class="responsively-lazy preventReflow">
                                                 <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent2.item, arrayContent2.image.customImage.large, arrayContent2.image.customImage.small), src: arrayContent2.image.customImage.large ? arrayContent2.image.customImage.large : productImgPath(arrayContent2.item,360), alt: cta.text }"/>
                                             </div>
                                         </a>
                                     </div>
                                     <div>
-                                        <a data-bind="attr: { href: addUgDomain(arrayContent3.image.link), 'data-type': 'Image', 'data-description': arrayContent3.image.description }">
+                                        <a data-bind="attr: { href: addUgDomain(arrayContent3.image.link), 'data-type': 'Image', 'data-description': arrayContent3.image.description, 'data-itemNumber': arrayContent3.item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <div class="responsively-lazy preventReflow">
                                                 <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent3.item, arrayContent3.image.customImage.large, arrayContent3.image.customImage.small), src: arrayContent3.image.customImage.large ? arrayContent3.image.customImage.large : productImgPath(arrayContent3.item,360), alt: cta.text }"/>
                                             </div>
@@ -736,21 +743,21 @@ ko.components.register('collection-grid-module', {
                         <!-- ko if: viewPortSize() === 'small' -->
                             <div class="small-12 text-center columns white-box-container">
                                 <!-- ko if: section.text -->
-                                    <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a></label>
+                                    <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                 <!-- /ko -->
 
-                                <a class="a-secondary" data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description }">
+                                <a class="a-secondary" data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                     <h3 data-bind="html: headline.text"></h3>
                                 </a>
 
-                                <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></p>
+                                <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                             </div>
                         <!-- /ko -->
 
                         <div class="small-12 medium-6 columns">
                             <div class="flex">
                                 <div class="small-8-width">
-                                    <a data-bind="attr: { href: addUgDomain(arrayContent4.image.link), 'data-type': 'Image', 'data-description': arrayContent4.image.description }">
+                                    <a data-bind="attr: { href: addUgDomain(arrayContent4.image.link), 'data-type': 'Image', 'data-description': arrayContent4.image.description, 'data-itemNumber': arrayContent4.item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                         <div class="responsively-lazy preventReflow">
                                             <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent4.item, arrayContent4.image.customImage.large, arrayContent4.image.customImage.small), src: arrayContent4.image.customImage.large ? arrayContent4.image.customImage.large : productImgPath(arrayContent4.item,360), alt: cta.text }"/>
                                         </div>
@@ -758,14 +765,14 @@ ko.components.register('collection-grid-module', {
                                 </div>
                                 <div class="small-4-width">
                                     <div>
-                                        <a data-bind="attr: { href: addUgDomain(arrayContent5.image.link), 'data-type': 'Image', 'data-description': arrayContent5.image.description }">
+                                        <a data-bind="attr: { href: addUgDomain(arrayContent5.image.link), 'data-type': 'Image', 'data-description': arrayContent5.image.description, 'data-itemNumber': arrayContent5.item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <div class="responsively-lazy preventReflow">
                                                 <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent5.item, arrayContent5.image.customImage.large, arrayContent5.image.customImage.small), src: arrayContent5.image.customImage.large ? arrayContent5.image.customImage.large : productImgPath(arrayContent5.item,360), alt: cta.text }"/>
                                             </div>
                                         </a>
                                     </div>
                                     <div>
-                                        <a data-bind="attr: { href: addUgDomain(arrayContent6.image.link), 'data-type': 'Image', 'data-description': arrayContent6.image.description }">
+                                        <a data-bind="attr: { href: addUgDomain(arrayContent6.image.link), 'data-type': 'Image', 'data-description': arrayContent6.image.description, 'data-itemNumber': arrayContent6.item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <div class="responsively-lazy preventReflow">
                                                 <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent6.item, arrayContent6.image.customImage.large, arrayContent6.image.customImage.small), src: arrayContent6.image.customImage.large ? arrayContent6.image.customImage.large : productImgPath(arrayContent6.item,360), alt: cta.text }"/>
                                             </div>
@@ -781,10 +788,10 @@ ko.components.register('collection-grid-module', {
                                     <div class="medium-8 large-6 medium-centered columns">
                                         <div class="white-box-container text-center">
                                             <!-- ko if: section.text -->
-                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a></label>
+                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                             <!-- /ko -->
-                                            <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description }"><h1 data-bind="html: headline.text"></h1></a>
-                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></p>
+                                            <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h1 data-bind="html: headline.text"></h1></a>
+                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                         </div>
                                     </div>
                                 </div>
@@ -849,12 +856,12 @@ ko.components.register('carousel-module', {
                 <!-- ko if: viewPortSize() === 'small' -->
                     <!-- ko if: section.text -->
                         <div class="small-12 text-center columns">
-                            <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a></label>
+                            <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                         </div>
                     <!-- /ko -->
 
                     <div class="small-12 text-center columns">
-                        <a class="a-secondary" data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description }">
+                        <a class="a-secondary" data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                             <h3 data-bind="html: headline.text"></h3>
                         </a>
                     </div>
@@ -864,7 +871,7 @@ ko.components.register('carousel-module', {
                             <div class="swiper-wrapper">
                                 <!-- ko foreach: carouselModulesSections -->
                                     <div class="swiper-slide">
-                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': $parent.cta.text, 'data-sectionDescription': $parent.section.description }">
                                             <div class="responsively-lazy preventReflow">
                                                 <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: $parent.cta.text }"/>
                                             </div>
@@ -877,7 +884,7 @@ ko.components.register('carousel-module', {
                         </div>
                     </div>
                     <div class="small-10 small-centered columns" data-bind="reinit">
-                        <a data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }">
+                        <a data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                             <button class="btn-secondary expand" data-bind="html: cta.text"></button>
                         </a>
                     </div>
@@ -889,7 +896,7 @@ ko.components.register('carousel-module', {
                             <div class="small-12 medium-6 columns">
                                 <div class="flex">
                                     <div class="small-8-width">
-                                        <a data-bind="attr: { href: addUgDomain(arrayContent1.image.link), 'data-type': 'Image', 'data-description': arrayContent1.image.description }">
+                                        <a data-bind="attr: { href: addUgDomain(arrayContent1.image.link), 'data-type': 'Image', 'data-description': arrayContent1.image.description, 'data-itemNumber': arrayContent1.item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <div class="responsively-lazy preventReflow">
                                                 <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent1.item, arrayContent1.image.customImage.large, arrayContent1.image.customImage.small), src: arrayContent1.image.customImage.large ? arrayContent1.image.customImage.large : productImgPath(arrayContent1.item,360), alt: cta.text }"/>
                                             </div>
@@ -898,14 +905,14 @@ ko.components.register('carousel-module', {
 
                                     <div class="small-4-width">
                                         <div>
-                                            <a data-bind="attr: { href: addUgDomain(arrayContent2.image.link), 'data-type': 'Image', 'data-description': arrayContent2.image.description }">
+                                            <a data-bind="attr: { href: addUgDomain(arrayContent2.image.link), 'data-type': 'Image', 'data-description': arrayContent2.image.description, 'data-itemNumber': arrayContent2.item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                                 <div class="responsively-lazy preventReflow">
                                                     <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent2.item, arrayContent2.image.customImage.large, arrayContent2.image.customImage.small), src: arrayContent2.image.customImage.large ? arrayContent2.image.customImage.large : productImgPath(arrayContent2.item,360), alt: cta.text }"/>
                                                 </div>
                                             </a>
                                         </div>
                                         <div>
-                                            <a data-bind="attr: { href: addUgDomain(arrayContent3.image.link), 'data-type': 'Image', 'data-description': arrayContent3.image.description }">
+                                            <a data-bind="attr: { href: addUgDomain(arrayContent3.image.link), 'data-type': 'Image', 'data-description': arrayContent3.image.description, 'data-itemNumber': arrayContent3.item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                                 <div class="responsively-lazy preventReflow">
                                                     <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent3.item, arrayContent3.image.customImage.large, arrayContent3.image.customImage.small), src: arrayContent3.image.customImage.large ? arrayContent3.image.customImage.large : productImgPath(arrayContent3.item,360), alt: cta.text }"/>
                                                 </div>
@@ -918,7 +925,7 @@ ko.components.register('carousel-module', {
                             <div class="small-12 medium-6 columns">
                                 <div class="flex">
                                     <div class="small-8-width">
-                                        <a data-bind="attr: { href: addUgDomain(arrayContent4.image.link), 'data-type': 'Image', 'data-description': arrayContent4.image.description }">
+                                        <a data-bind="attr: { href: addUgDomain(arrayContent4.image.link), 'data-type': 'Image', 'data-description': arrayContent4.image.description, 'data-itemNumber': arrayContent4.item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <div class="responsively-lazy preventReflow">
                                                 <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent4.item, arrayContent4.image.customImage.large, arrayContent4.image.customImage.small), src: arrayContent4.image.customImage.large ? arrayContent4.image.customImage.large : productImgPath(arrayContent4.item,360), alt: cta.text }"/>
                                             </div>
@@ -927,14 +934,14 @@ ko.components.register('carousel-module', {
 
                                     <div class="small-4-width">
                                         <div>
-                                            <a data-bind="attr: { href: addUgDomain(arrayContent5.image.link), 'data-type': 'Image', 'data-description': arrayContent5.image.description }">
+                                            <a data-bind="attr: { href: addUgDomain(arrayContent5.image.link), 'data-type': 'Image', 'data-description': arrayContent5.image.description, 'data-itemNumber': arrayContent5.item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                                 <div class="responsively-lazy preventReflow">
                                                     <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent5.item, arrayContent5.image.customImage.large, arrayContent5.image.customImage.small), src: arrayContent5.image.customImage.large ? arrayContent5.image.customImage.large : productImgPath(arrayContent5.item,360), alt: cta.text }"/>
                                                 </div>
                                             </a>
                                         </div>
                                         <div>
-                                            <a data-bind="attr: { href: addUgDomain(arrayContent6.image.link), 'data-type': 'Image', 'data-description': arrayContent6.image.description }">
+                                            <a data-bind="attr: { href: addUgDomain(arrayContent6.image.link), 'data-type': 'Image', 'data-description': arrayContent6.image.description, 'data-itemNumber': arrayContent6.item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                                 <div class="responsively-lazy preventReflow">
                                                     <img data-bind="attr: { 'data-srcset': responsiveImage(arrayContent6.item, arrayContent6.image.customImage.large, arrayContent6.image.customImage.small), src: arrayContent6.image.customImage.large ? arrayContent6.image.customImage.large : productImgPath(arrayContent6.item,360), alt: cta.text }"/>
                                                 </div>
@@ -949,10 +956,10 @@ ko.components.register('carousel-module', {
                                     <div class="medium-8 large-6 medium-centered columns">
                                         <div class="white-box-container text-center">
                                             <!-- ko if: section.text -->
-                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a></label>
+                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                             <!-- /ko -->
-                                            <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description }"><h1 data-bind="html: headline.text"></h1></a>
-                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></p>
+                                            <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h1 data-bind="html: headline.text"></h1></a>
+                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                         </div>
                                     </div>
                                 </div>
@@ -982,7 +989,7 @@ ko.components.register('text-link-module', {
                         <!-- ko if: section.text -->
                             <div class="row">
                                 <div class="small-12 text-center columns">
-                                    <a class="a-secondary" data-bind="attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }">
+                                    <a class="a-secondary" data-bind="attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }">
                                         <h2 data-bind="html: section.text"></h2>
                                     </a>
                                 </div>
@@ -996,7 +1003,7 @@ ko.components.register('text-link-module', {
                                         <div class="small-6 columns">
                                             <div class="text-link-container">
                                                 <div class="content">
-                                                    <a class="a-secondary" data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }">
+                                                    <a class="a-secondary" data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
                                                         <h4 data-bind="html: cta.text">/h4>
                                                     </a><
                                                 </div>
@@ -1015,11 +1022,11 @@ ko.components.register('text-link-module', {
                                             <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                                 <li class="text-center content">
                                                     <div class="responsively-lazy preventReflow">
-                                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
                                                             <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
                                                         </a>
                                                     </div>
-                                                    <a class="a-secondary" data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }">
+                                                    <a class="a-secondary" data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
                                                         <h4 data-bind="html: cta.text"></h4>
                                                     </a>
                                                 </li>
@@ -1055,7 +1062,7 @@ ko.components.register('image-link-double-module', {
                             <div class="row">
                                 <div class="small-12 xlarge-8 text-center xlarge-centered columns">
                                     <h2>
-                                        <a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a>
+                                        <a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }"></a>
                                     </h2>
                                 </div>
                             </div>
@@ -1068,11 +1075,11 @@ ko.components.register('image-link-double-module', {
                                         <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                             <li class="text-center content">
                                                 <div class="responsively-lazy preventReflow">
-                                                    <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                                    <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
                                                         <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
                                                     </a>
                                                 </div>
-                                                <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></h4>
+                                                <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }"></a></h4>
                                             </li>
                                         <!-- /ko -->
                                     <!-- /ko -->
@@ -1130,7 +1137,7 @@ ko.components.register('button-link-double-module', {
                 <div class="row">
                     <div class="small-12 xlarge-8 xlarge-centered text-center columns">
                         <h2>
-                            <a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a>
+                            <a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }"></a>
                         </h2>
                     </div>
                 </div>
@@ -1144,12 +1151,12 @@ ko.components.register('button-link-double-module', {
                                 <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                     <li class="text-center">
                                         <div class="responsively-lazy preventReflow">
-                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
                                                 <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
                                             </a>
                                             <!-- ko if: $parent.showBtnContainerInside() -->
                                                 <div class="btnContainerInside">
-                                                    <a data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }">
+                                                    <a data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
                                                         <button class="btn-secondary expand" data-bind="html: cta.text"></button>
                                                     </a>
                                                 </div>
@@ -1157,7 +1164,7 @@ ko.components.register('button-link-double-module', {
                                         </div>
                                         <!-- ko if: $parent.showBtnContainerHanging() -->
                                             <div class="btnContainerHanging">
-                                                <a data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }">
+                                                <a data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
                                                     <button class="btn-secondary expand" data-bind="html: cta.text"></button>
                                                 </a>
                                             </div>

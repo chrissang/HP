@@ -159,7 +159,6 @@
         border:1px solid $active-secondary;
         background-color: $white;
         border-radius:3px;
-		padding: 1rem 0 0 0;
         h3 {
             margin: 0.75rem;
             word-wrap: break-word;
@@ -351,6 +350,9 @@ body:before {
 	}
 	.text-link-module {
 		padding-bottom: 1rem;
+		.container {
+			padding: 1rem 0 0 0;
+		}
 		h2 {
 			font-size: 1.0625rem;
 			line-height: 1.25rem;
@@ -590,9 +592,7 @@ body:before {
 	.text-link-module {
 		padding-bottom: 0;
 		.container {
-			.medium-12 {
-				padding: 0 .75rem;
-			}
+			padding: 1rem .75rem 0 .75rem;
 			.content {
 				h4 {
 					padding: .5rem 0 1rem 0;
@@ -614,13 +614,11 @@ body:before {
 	.image-link-double-module {
 		padding-bottom: 0;
 		.container {
+			padding: 1rem .375rem 0 .375rem;
 			.content {
 				h4 {
 					padding-top: .5rem;
 				}
-			}
-			.medium-12 {
-				padding: 0 .75rem;
 			}
 		}
 		.waterColor {
