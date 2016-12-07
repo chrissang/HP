@@ -69,7 +69,8 @@ class Dependents {
         this.uniqueId = new Date().getTime();
         this.sortMappingOrder = function() {
             var uniqueIdReordered = this.uniqueIdModified();
-            console.log('uniqueIdReordered ',uniqueIdReordered)
+            // console.log('uniqueIdReordered ',uniqueIdReordered)
+            // console.log('selectedModules before ',this.selectedModules());
             function reorderAlpha(obj, curr, updated) {
                 var jsonString = JSON.stringify(obj);
                 jsonString = jsonString.replace(curr, updated);
@@ -83,6 +84,7 @@ class Dependents {
                     this.mappingOrder[el] = reorderAlpha(this.mappingOrder[el],curr, alphaChar);
                 }
             });
+
         }
         this.removeModule = function(e) {
           var container = document.getElementById(e.uniqueId);
@@ -1780,6 +1782,7 @@ ko.components.register('ug-component', {
         this.component = params.component || {};
         console.log('this.params ',this.params);
         console.log('this.component ',this.component);
+
     },
     template: `<!-- ko component: {name: component, params: { data: params }} --><!-- /ko -->`,synchronous: true
 });
@@ -2049,7 +2052,7 @@ ko.components.register('homePageTool', {
 
 
         <div data-bind="foreach: selectedModules()" id="sortableContainer">
-            <ug-component params='component: $data, params: $parent' class='draggable'></ug-component>
+            <!-- ko component: {name: $data, params: { data: $parent }} --><!-- /ko -->
         </div>`, synchronous: true
 });
 ko.applyBindings();
