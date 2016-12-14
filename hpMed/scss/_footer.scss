@@ -23,7 +23,7 @@ footer, footer *, footer *:hover{
 
 .prefooter {
 	background-color: $white;
-	margin-top: 1rem;
+	padding-top: 1rem;
     h4 {
         margin-bottom: 0.375rem;
         a {
@@ -256,6 +256,14 @@ footer, footer *, footer *:hover{
 		padding-top:1rem;
 		padding-bottom:1rem;
 	}
+	.prefooter {
+		.ourContainer {
+			flex-direction: column;
+			.copyContainer {
+				text-align: center;
+			}
+		}
+	}
 }
 @media #{$medium-up} {
 	#site-footer #footer-sections > div{
@@ -292,6 +300,15 @@ footer#site-footer hr{
 	border:none;
 	background-color:#d1d3d4;
 	margin:0;
+}
+footer#site-footer .prefooter hr{
+	background-repeat: repeat-x;
+    background-position: center;
+    background-image: url(/images/shear_active-secondary.svg);
+    border: none;
+    margin: 0;
+    height: 0.5625rem;
+    background-color: #ffffff;
 }
 #site-footer #footer-contact .collapse .collapse .small-3{
 	/* 'contact', 'hours', 'address'*/
@@ -368,6 +385,15 @@ footer#site-footer hr{
     	padding-top: 1.5rem !important;
     	margin-top: .75rem;
 	}
+	.prefooter {
+		padding-top: 1.5rem;
+		.ourContainer {
+			flex-direction: column;
+			.copyContainer {
+				text-align: center;
+			}
+		}
+	}
 }
 @media #{$large-up} {
 	#site-footer #footer-contact{
@@ -383,6 +409,19 @@ footer#site-footer hr{
 	}
 	#site-footer .small-7{
 		left:0em;
+	}
+	.prefooter {
+		padding-top: 2rem;
+		.ourContainer {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			.copyContainer {
+				display: flex;
+				flex-direction: column;
+				text-align: left;
+			}
+		}
 	}
 }
 #site-footer .icon-facebook_circle:before {

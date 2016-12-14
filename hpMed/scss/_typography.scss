@@ -98,12 +98,12 @@ label, blockquote{
 	font-family:$font-family-serif;
 }
 a{color:inherit}
-div > a:not(.button),
-div > a:not(.button):link,
-div > a:not(.button):visited,
-div > a:not(.button):hover,
-div > a:not(.button):active,
-div > a:not(.button):focus{
+div > a:not(.button):not(.body-small-crumbs),
+div > a:not(.button):not(.body-small-crumbs):link,
+div > a:not(.button):not(.body-small-crumbs):visited,
+div > a:not(.button):not(.body-small-crumbs):hover,
+div > a:not(.button):not(.body-small-crumbs):active,
+div > a:not(.button):not(.body-small-crumbs):focus{
 	color:inherit;
 	text-decoration:none;
 }
@@ -136,12 +136,12 @@ div > a:not(.button):focus{
 	}
 }
 
-a.a-secondary,
-a.a-secondary:link,
-a.a-secondary:visited,
-a.a-tertiary,
-a.a-tertiary:link,
-a.a-tertiary:visited{
+.a-secondary,
+.a-secondary:link,
+.a-secondary:visited,
+.a-tertiary,
+.a-tertiary:link,
+.a-tertiary:visited{
 	text-decoration:none;
 	border-bottom:0;
 	color:inherit;
@@ -149,16 +149,22 @@ a.a-tertiary:visited{
 		@include linkDecor();
 	}
 }
-a.a-tertiary,
-a.a-tertiary:link,
-a.a-tertiary:visited{
+.a-tertiary,
+.a-tertiary:link,
+.a-tertiary:visited{
 	font-style:italic;
 	color:inherit;
+    position: relative;
 	&::after{
 		font-family:UncommonGoods;
 		content: " \58";
-		font-size:.4375rem;
+		font-size:.4375em;
 		font-style:normal;
+        top: 50%;
+        position: absolute;
+        right: -1.5em;
+        line-height: .4375em;
+        transform: translateY(-50%);
 	}
 }
 @mixin noLinkDecor(){
@@ -222,25 +228,11 @@ input[type="radio"]:disabled+label, input[type="checkbox"]:disabled+label{
 		line-height:rem-calc(16);
 	}
 }
-a.body-small{
-	font-style:italic;
-	&:after{
-		@include link-decoration;
-		 display: inline-block;
-	}
-}
 .body-small-crumbs{
-	font-family:$font-family-sans-serif;
+    @extend .body-small;
 	color:$secondary-color;
-	font-size:rem-calc(14);
-	line-height:rem-calc(26);
-	margin-bottom:.75rem;
 	white-space:nowrap;
-	@media #{$medium-up} {
-		font-size:rem-calc(12);
-		line-height:rem-calc(18);
-	}		
-	 @include pipe();
+    @include pipe();
 	&:link,
 	&:visited,
 	&:visited:hover,
@@ -250,15 +242,8 @@ a.body-small{
 	}
 }
 .body-small-caps{
-	font-family:$font-family-sans-serif;
+	@extend .body-small;
 	text-transform:uppercase;
-	font-size:rem-calc(14);
-	line-height:rem-calc(18);
-	margin-bottom:.75rem;
-	@media #{$medium-up} {
-		font-size:rem-calc(12);
-		line-height:rem-calc(16);
-	}
 }
 .body-mini, .pr-snippet-read-write a.pr-snippet-link, .pr-snippet-write-first-review p{
 	font-family:$font-family-sans-serif;
@@ -435,10 +420,12 @@ a.body-small{
 	del{
 		color:$inactive;
 		text-decoration:line-through;
+        white-space:nowrap;
 	}
 	ins{
 		color:$highlight;
 		text-decoration:none;
+        white-space:nowrap;
 	}
 }
 .error:not(input){
@@ -484,7 +471,14 @@ a.body-small{
 	}
 /* pagination */
 table{
-	border-collapse: collapse; 
+	border-collapse: collapse;
+}
+table input,
+table select,
+table input[type="checkbox"]+label,
+table input[type="radio"]+label,
+table button{
+    margin-bottom:0!important;
 }
 table tr{
 	background-color:$white;	

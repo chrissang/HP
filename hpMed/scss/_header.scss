@@ -122,7 +122,7 @@ main > #mainContent{
 	
 
 	
-$headerBottomMargin: .75rem;	
+$headerBottomMargin: 0;	
 	header{
 		background-color:$white;
 		border-bottom:1px solid $offwhite;
@@ -184,6 +184,13 @@ $headerBottomMargin: .75rem;
 		& .oneOpen .headerTabContainer:first-child .headerTabLabel {
     		border-right-color: transparent !important;
 		}
+        & [data-wlcount]::after {
+            content: " ("attr(data-wlcount)")";
+        }
+        & [data-wlcount=""]::after,
+        & [data-wlcount="0"]::after{
+            content: "";
+        }
 		& .icon-heart_small::before{
 			color:$highlight;
 		}
@@ -1158,7 +1165,9 @@ nav#categoryNav{
 #categoryNav > a:visited {
 	color:inherit;
 }
-
+main{
+    margin-top:.75rem;
+}
 .main-extra{
 	background-position:bottom center;
 	background-repeat:no-repeat;
@@ -1198,7 +1207,9 @@ nav#categoryNav{
 		padding-bottom:3rem;
 	}
 }
-
+.main-exact{
+    margin-top:0;
+}
 .megaMenu{
 	/*max-height:0;*/
 	/*transition: opacity .5s;
@@ -1463,12 +1474,17 @@ nav#categoryNav{
 
 /* international flags */
 #flag51{
-    background: transparent url("/images/international/csg-51642e22d5dfb.png") no-repeat scroll 0% 0%;
     width: 24px;
     height: 16px;
     margin: 0 !important;
     vertical-align: middle;
     display: inline-block;
+}
+#flag51:not(.US){
+    background: transparent url("/images/international/csg-51642e22d5dfb.png") no-repeat scroll 0% 0%;
+}
+#flag51.US{
+    background: transparent url("/images/international/csg-us.png") no-repeat scroll 0% 0%;
 }
 $col_1: "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AN", "AO", "AQ", "AR", "AS", "AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BV", "BW", "BY", "BZ", "CA", "CA21x14SUi", "CC", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CS", "CU", "CV", "CW", "CX", "CY", "CZ", "DE", "DJ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "EH", "ER", "ES";
 $col_2: "ET", "EU", "FI", "FJ", "FK", "FM", "FO", "FR", "GA", "GB", "GD", "GE", "GF", "GG", "GH", "GI", "GL", "GM", "GN", "GP", "GQ", "GR", "GS", "GT", "GU", "GW", "GY", "HK", "HM", "HN", "HR", "HT", "HU", "IC", "ID", "IE", "IL", "IM", "IN", "IO", "IQ", "IR", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI", "KM", "KN", "KP", "KR", "KW", "KY", "KZ", "LA", "LB", "LC", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA";

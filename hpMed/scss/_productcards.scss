@@ -11,8 +11,11 @@ ul.products li{
     height: auto;
     /*padding: 0px 0.625rem 1.25rem;*/
     padding:0 .375rem 1.5rem;
-    @media #{$medium-up} {
-    	padding:0 0.375rem .75rem
+    @media #{$medium-only} {
+    	padding:0 0.625rem .75rem
+	}
+    @media #{$large-only} {
+    	padding:0 0.75rem .75rem
 	}
 	@media #{$xlarge-up} {
 		padding:0 1rem 1rem;
@@ -22,7 +25,7 @@ ul.products li{
 /* show X items across started at Y em wide  (X, Y) */
 @each $across, $ACbreakpoint in (2, 0),
 								(3, 56),
-								(4, 85),
+								(4, 72),
 								(5, 120){
 	@media only screen and (min-width:#{$ACbreakpoint}em){
 		
@@ -50,6 +53,10 @@ ul.products li{
 		}
 	}
 }
+article.product{
+    position:relative;
+    max-width:22.5rem;
+}
 article.product > *,
 article.product div > *{
 	margin-bottom:.25rem;
@@ -59,8 +66,40 @@ article.product div *::before,
 article.product div *::after{
 	vertical-align:top;
 }
+article.product > a:first-child{
+	height:0;
+	position:relative;
+	padding-bottom:100%;
+	width:100%;
+	display:block;
+    background: none!important;
+}
 article.product img{
+	position:absolute;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
 	border:1px solid $offwhite;
+}
+article.product .icon-loveIt{
+    position:absolute;
+    top: 0;
+    right: 0;
+    margin:0;
+    width:2.75rem;
+    height:2.75rem;
+	@media #{$medium-up} {
+		width:2.3125rem;
+        height:2.3125rem;
+	}
+    &:before,
+    &:after{
+        @extend [class^="icon-"].icon-md;
+    }
+    &:hover{
+        cursor:pointer;
+    }
 }
 .newFlag,
 .stockFlag{
@@ -108,21 +147,17 @@ article.product img{
 */
 span[class^='fontStars-']{
 	font-size:.5265rem;
-	color:#FBD568;
+	color:$reviews;
 	font-family: 'UncommonGoods';
 	letter-spacing: .5rem;
-	&.noReviews{
+	&.fontStars-0,
+    &.fontStars-0_0{
 		color:$offwhite;
 	}
-	&.noReviews::before{
-		content:"\55\55\55\55\55"!important;
-	}
-	
 }
 .fontStars-0::before,
 .fontStars-0_0::before{
-	content:"\41\41\41\41\41";
-	/* maybe do a gray for this? */
+	content:"\55\55\55\55\55";
 }
 .fontStars-0_5::before{
 	content:"\5a\41\41\41\41";

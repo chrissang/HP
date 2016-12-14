@@ -2,6 +2,7 @@
 var moduleOrderStatic = [];
 var moduleOrder = [];
 var elementsArray = [];
+var elements = [];
 
 const imageDir = 'https://www.uncommongoods.com/images';
 const ugWeb = 'https://www.uncommongoods.com';
@@ -55,7 +56,7 @@ class Dependents {
         this.isEven = function(index) {
             return index % 2 === 0 ? true : false
         }
-        this.className = function(sectionData) {
+        this.classNameBlockGrid = function(sectionData) {
             this.nonHiddenModuleSections = [];
             if (this.viewPortSize() === 'small') {
                 return 'small-block-grid-2';
@@ -91,6 +92,33 @@ class Dependents {
                     '6': 'medium-block-grid-6'
                 }[this.nonHiddenModuleSections.length];
             }
+
+        }
+        this.className = function(sectionData) {
+            var nonHiddenModuleSections = [];
+            if(this.viewPortSize() === 'large') {
+                sectionData.forEach((module,index) => {
+                    if (module.displayModuleOn === 'small' || module.displayModuleOn === 'medium' || module.displayModuleOn === 'large') {
+                        nonHiddenModuleSections.push(module.displayModuleOn)
+                    }
+                })
+                return {
+                    '2': 'large-6 columns',
+                    '3': 'large-4 columns',
+                    '4': 'large-6 columns'
+                }[nonHiddenModuleSections.length];
+            } else {
+                sectionData.forEach((module,index) => {
+                    if (module.displayModuleOn === 'small' || module.displayModuleOn === 'medium' || module.displayModuleOn === 'large' || module.displayModuleOn === 'xlarge') {
+                        nonHiddenModuleSections.push(module.displayModuleOn)
+                    }
+                })
+                return {
+                    '2': 'large-6 columns',
+                    '3': 'large-4 columns',
+                    '4': 'large-6 columns'
+                }[nonHiddenModuleSections.length];
+            }
         }
         ko.bindingHandlers.resizeView = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -108,21 +136,26 @@ class Dependents {
 
                 if (display === 'block') {
                     moduleOrder.push(section);
+
                 } else {
                    moduleOrder.push('');
                 }
+                moduleOrder = moduleOrder.filter(Boolean);
 
                 $(document).ready(function () {
+
                     var breakpoint = breakpointValue();
                     viewModel.viewPortSize(breakpoint);
 
                     elementsArray.push($(element)[0]);
 
-                    if (viewModel.modulePosition === totalModules) {
+                    if (viewModel.modulePosition+1 === totalModules+1 && breakpoint === 'small') {
                         var moduleOrderRefresh = moduleOrder;
                         var elementsArrayRefresh = [];
-
+                        console.log(elementsArray)
                         moduleOrderRefresh = moduleOrderRefresh.filter(Boolean);
+
+                        moduleOrderRefresh[moduleOrderRefresh.length - 1] === 'BD' ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : document.getElementsByClassName("prefooterLine")[0].style.display='block';
 
                         moduleOrder.forEach((module,index) => {
                             if (module != '') {
@@ -140,28 +173,27 @@ class Dependents {
                                     filitered.splice(i, 1);
                                 }
                             }
+
                             //Adds tracking to all anchor tags
                             filitered.forEach((el,i) => {
                                 var linkNumber = i+1;
                                 var dataType = el.getAttribute("data-type");
                                 var dataDescription = el.getAttribute('data-description').split(' ').join('_');
-                                var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module +'_'+ dataDescription;
+                                if(dataDescription != '') {
+                                    dataDescription = '_'+dataDescription;
+                                }
+                                var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module + dataDescription;
                                 var trackingLink = el.getAttribute("href");
 
                                 var ctaText = el.getAttribute("data-cta");
                                 var itemNumber = el.getAttribute("data-itemNumber");
                                 var sectionDescription = el.getAttribute("data-sectionDescription");
 
-                                // console.log('ID ',alphaChar + linkNumber + '_' + module);
-                                // console.log('NAME ',ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog"));
-                                // console.log('CREATIVE ',itemNumber ? itemNumber : 'NA');
-                                // console.log('POSITION ',sectionDescription ? sectionDescription : 'NA');
-
                                 var id = alphaChar + linkNumber + '_' + module;
                                 var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
                                 var creative = itemNumber ? itemNumber : 'NA';
                                 var pos = sectionDescription ? sectionDescription : 'NA';
-                                //console.log(trackingCode);
+                                // console.log(trackingCode);
                                 trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
 
                                 if (trackingLink !== '') {
@@ -172,6 +204,71 @@ class Dependents {
                                         $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
                                     }
                                 } else {
+                                    $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
+                                    $('a[href=""]').click(function (event) { // where href are blank
+                                        event.preventDefault();
+                                    })
+                                }
+                            })
+                        })
+                    }
+                    if (viewModel.modulePosition === totalModules && breakpoint != 'small') {
+
+                        var moduleOrderRefresh = moduleOrder;
+                        var elementsArrayRefresh = [];
+
+                        moduleOrderRefresh = moduleOrderRefresh.filter(Boolean);
+
+                        moduleOrderRefresh[moduleOrderRefresh.length - 1] === 'BD' ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : document.getElementsByClassName("prefooterLine")[0].style.display='block';
+
+                        moduleOrder.forEach((module,index) => {
+                            if (module != '') {
+                                elementsArrayRefresh.push(elementsArray[index]);
+                            }
+                        })
+                        //Removes duplicate anchor tags created by swiper plugin only needed if loop is true
+                        moduleOrderRefresh.forEach((module,index) => {
+                            var alphaChar = alpha.charAt(index);
+                            var elements = elementsArrayRefresh[index].querySelectorAll('a');
+                            var filitered = Array.from(elements);
+                            var i = filitered.length;
+                            while (i--) {
+                                if (filitered[i].parentElement.classList.contains("swiper-slide-duplicate")) {
+                                    filitered.splice(i, 1);
+                                }
+                            }
+
+                            //Adds tracking to all anchor tags
+                            filitered.forEach((el,i) => {
+                                var linkNumber = i+1;
+                                var dataType = el.getAttribute("data-type");
+                                var dataDescription = el.getAttribute('data-description').split(' ').join('_');
+                                if(dataDescription != '') {
+                                    dataDescription = '_'+dataDescription;
+                                }
+                                var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module + dataDescription;
+                                var trackingLink = el.getAttribute("href");
+
+                                var ctaText = el.getAttribute("data-cta");
+                                var itemNumber = el.getAttribute("data-itemNumber");
+                                var sectionDescription = el.getAttribute("data-sectionDescription");
+
+                                var id = alphaChar + linkNumber + '_' + module;
+                                var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
+                                var creative = itemNumber ? itemNumber : 'NA';
+                                var pos = sectionDescription ? sectionDescription : 'NA';
+                                // console.log(trackingCode);
+                                trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
+
+                                if (trackingLink !== '') {
+                                    if (trackingLink.includes("//blog.uncommongoods.com")) {
+                                        trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
+                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
+                                    } else {
+                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
+                                    }
+                                } else {
+                                    $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
                                     $('a[href=""]').click(function (event) { // where href are blank
                                         event.preventDefault();
                                     })
@@ -187,6 +284,8 @@ class Dependents {
                 var totalModules = bindingContext.$parents[1].totalModules;
                 var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+
+
                 if (display === 'block') {
                     moduleOrder[index] = moduleOrderStatic[index];
                 }
@@ -196,10 +295,16 @@ class Dependents {
 
                 elementsArray.push($(element)[0]);
 
+
                 $(document).ready(function () {
                     if (viewModel.modulePosition === totalModules) {
                         var moduleOrderRefresh = moduleOrder.filter(Boolean);
                         var elementsArrayRefresh = [];
+
+
+
+
+                        moduleOrderRefresh[moduleOrderRefresh.length - 1] === 'BD' ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : document.getElementsByClassName("prefooterLine")[0].style.display='block';
                         //Gets section elements
                         moduleOrder.forEach((module,index) => {
                             if (module != '') {
@@ -222,7 +327,10 @@ class Dependents {
                                 var linkNumber = i+1;
                                 var dataType = el.getAttribute("data-type");
                                 var dataDescription =el.getAttribute('data-description').split(' ').join('_');
-                                var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module +'_'+ dataDescription;
+                                if(dataDescription != '') {
+                                    dataDescription = '_'+dataDescription;
+                                }
+                                var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module + dataDescription;
                                 var trackingLink = el.getAttribute("href");
 
                                 var ctaText = el.getAttribute("data-cta");
@@ -233,17 +341,20 @@ class Dependents {
                                 var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
                                 var creative = itemNumber ? itemNumber : 'NA';
                                 var pos = sectionDescription ? sectionDescription : 'NA';
-                                //console.log(trackingCode)
+
+                                //console.log(trackingCode);
+
                                 trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
 
                                 if (trackingLink !== '') {
                                     if (trackingLink.includes("//blog.uncommongoods.com")) {
                                         trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
-                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
+                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
                                     } else {
-                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
+                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
                                     }
                                 } else {
+                                    $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
                                     $('a[href=""]').click(function (event) { // where href are blank
                                         event.preventDefault();
                                     })
@@ -286,8 +397,6 @@ function addUgDomain(link) {
     }
 }
 //Mobile HP modules
-
-// TODO: need to create seo link module
 ko.components.register('large-feature-module', {
     viewModel: class LargeFeatureModuleComponentModel extends Dependents {
         constructor(params) {
@@ -301,7 +410,7 @@ ko.components.register('large-feature-module', {
             <!-- ko foreach: largeFeatureModulesSections -->
                 <!-- ko if: $parent.displayOn(displayModuleOn) -->
                     <div class="row fullwidth">
-                        <div class="small-12 large-11 xlarge-8 large-centered columns">
+                        <div class="small-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
                             <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text }">
                                 <picture>
                                     <!--[if IE 9]><video style="display: none;"><![endif]-->
@@ -338,7 +447,7 @@ ko.components.register('large-feature-module', {
                                 <a class="a-secondary" data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text }">
                                     <h1 data-bind="html: headline.text"></h1>
                                 </a>
-                                <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text }"></a></p>
+                                <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text }"></a></p>
                             </div>
                         </div>
                     </div>
@@ -352,9 +461,6 @@ ko.components.register('small-feature-module', {
         constructor(params) {
             super(params);
             this.smModulesSections = params.data.sections;
-            this.columnLen = function() {
-                return this.smModulesSections.length === 3 ? 'large-4 columns' : 'large-6 columns';
-            }
             this.displayGroupViewPortSize = this.displayGroup(this.smModulesSections);
         }
     },
@@ -367,20 +473,21 @@ ko.components.register('small-feature-module', {
                             <div class="row fullwidth">
                                 <div class="container">
                                     <div class="small-6 medium-7 columns">
-                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
-                                            <div class="responsively-lazy preventReflow">
-                                                <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
-                                            </div>
-                                        </a>
+                                        <div data-bind="style: { margin: $parent.viewPortSize() === 'medium' ? '-1.5rem 0 0 -1.5rem' : '0' }">
+                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
+                                                <div class="responsively-lazy preventReflow">
+                                                    <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
+                                                </div>
+                                            </a>
+                                        </div>
                                     </div>
-
                                     <div class="small-6 medium-5 columns text-center">
                                         <div class="copyContainer">
                                             <!-- ko if: section.text -->
-                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
+                                                <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                             <!-- /ko -->
                                             <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h3 data-bind="html: headline.text"></h3></a>
-                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text }"></a></p>
+                                            <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text }"></a></p>
                                         </div>
                                     </div>
                                 </div>
@@ -393,18 +500,20 @@ ko.components.register('small-feature-module', {
                                     <div class="small-6 medium-5 columns text-center">
                                         <div class="copyContainer">
                                             <!-- ko if: section.text -->
-                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
+                                                <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                             <!-- /ko -->
                                             <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h3 data-bind="html: headline.text"></h3></a>
-                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
+                                            <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                         </div>
                                     </div>
                                     <div class="small-6 medium-7 columns">
-                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description}">
-                                            <div class="responsively-lazy preventReflow">
-                                                <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
-                                            </div>
-                                        </a>
+                                        <div data-bind="style: { margin: $parent.viewPortSize() === 'medium' ? '-1.5rem -1.5rem 0 0' : '0' }">
+                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description}">
+                                                <div class="responsively-lazy preventReflow">
+                                                    <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
+                                                </div>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -415,11 +524,11 @@ ko.components.register('small-feature-module', {
 
             <!-- ko if: viewPortSize() === 'large' || viewPortSize() === 'xlarge' -->
                 <div class="row fullwidth">
-                    <div class="large-11 xlarge-8 large-centered columns">
+                    <div class="large-11 xlarge-10 xxlarge-8 large-centered columns">
                         <div class="row fullwidth">
                             <!-- ko foreach: smModulesSections -->
                                 <!-- ko if: $parent.displayOn(displayModuleOn) -->
-                                    <div data-bind="attr: { class: $parent.columnLen() }">
+                                    <div data-bind="attr: { class: $parent.className($parent.smModulesSections) }">
                                         <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <div class="responsively-lazy preventReflow">
                                                 <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
@@ -429,10 +538,10 @@ ko.components.register('small-feature-module', {
                                             <div class="large-12 large-centered columns">
                                                 <div class="white-box-container text-center">
                                                     <!-- ko if: section.text -->
-                                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
+                                                        <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                                     <!-- /ko -->
                                                     <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
-                                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
+                                                    <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -451,9 +560,6 @@ ko.components.register('basic-story-module', {
         constructor(params) {
             super(params);
             this.basicStoryModulesSections = params.data.sections;
-            this.columnLen = function() {
-                return this.basicStoryModulesSections.length === 3 ? 'large-4 columns' : 'large-6 columns';
-            }
             this.displayGroupViewPortSize = this.displayGroup(this.basicStoryModulesSections);
         }
     },
@@ -465,7 +571,7 @@ ko.components.register('basic-story-module', {
                         <div class="row container">
                             <!-- ko if: section.text -->
                                 <div class="small-12 text-center columns">
-                                    <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a></label>
+                                    <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a></label>
                                 </div>
                             <!-- /ko -->
 
@@ -474,7 +580,7 @@ ko.components.register('basic-story-module', {
                                     <div class="small-10 small-centered text-center columns">
                                         <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
                                         <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
-                                            <div class="responsively-lazy preventReflow itemPhoto">
+                                            <div class="responsively-lazy preventReflow">
                                                 <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
                                             </div>
                                         </a>
@@ -496,20 +602,22 @@ ko.components.register('basic-story-module', {
                             <div class="row fullwidth">
                                 <div class="container">
                                     <div class="medium-7 columns">
-                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
-                                            <div class="responsively-lazy preventReflow">
-                                                <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
-                                            </div>
-                                        </a>
+                                        <div style="margin-top: -1.5rem; margin-left: -1.5rem;">
+                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
+                                                <div class="responsively-lazy preventReflow">
+                                                    <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
+                                                </div>
+                                            </a>
+                                        </div>
                                     </div>
 
                                     <div class="medium-5 columns text-center">
                                         <div class="copyContainer">
                                             <!-- ko if: section.text -->
-                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
+                                                <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                             <!-- /ko -->
                                             <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
-                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
+                                            <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                         </div>
                                     </div>
                                 </div>
@@ -522,18 +630,20 @@ ko.components.register('basic-story-module', {
                                     <div class="medium-5 columns text-center">
                                         <div class="copyContainer">
                                             <!-- ko if: section.text -->
-                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
+                                                <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                             <!-- /ko -->
                                             <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
-                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
+                                            <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                         </div>
                                     </div>
                                     <div class="medium-7 columns">
-                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
-                                            <div class="responsively-lazy preventReflow">
-                                                <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
-                                            </div>
-                                        </a>
+                                        <div style="margin-top: -1.5rem; margin-right: -1.5rem;">
+                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
+                                                <div class="responsively-lazy preventReflow">
+                                                    <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
+                                                </div>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -544,11 +654,11 @@ ko.components.register('basic-story-module', {
 
             <!-- ko if: viewPortSize() === 'large' || viewPortSize() === 'xlarge' -->
                 <div class="row fullwidth">
-                    <div class="large-11 xlarge-8 large-centered columns">
+                    <div class="large-11 xlarge-10 xxlarge-8 large-centered columns">
                         <div class="row">
                             <!-- ko foreach: basicStoryModulesSections -->
                                 <!-- ko if: $parent.displayOn(displayModuleOn) -->
-                                    <div data-bind="attr: { class: $parent.columnLen() }">
+                                    <div data-bind="attr: { class: $parent.className($parent.basicStoryModulesSections) }">
                                         <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                             <div class="responsively-lazy preventReflow">
                                                 <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
@@ -558,10 +668,10 @@ ko.components.register('basic-story-module', {
                                             <div class="large-12 large-centered columns">
                                                 <div class="white-box-container text-center">
                                                     <!-- ko if: section.text -->
-                                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section' , 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
+                                                        <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section' , 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                                     <!-- /ko -->
                                                     <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
-                                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
+                                                    <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -592,7 +702,7 @@ ko.components.register('extended-story-module', {
                             <div class="small-12 text-center columns">
                                 <!-- ko if: section.text -->
                                     <div class="small-12 text-center columns">
-                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description}"></a></label>
+                                        <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description}"></a></label>
                                     </div>
                                 <!-- /ko -->
                                 <div class="small-12 text-center columns">
@@ -613,7 +723,7 @@ ko.components.register('extended-story-module', {
                                     <p class="text-left">
                                         <a class="a-secondary" data-bind="html: copy.text, attr: { href: addUgDomain(copy.link), 'data-type': 'Copy', 'data-description': copy.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a>
                                     </p>
-                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
+                                    <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                 </div>
                             </div>
                         </div>
@@ -626,27 +736,29 @@ ko.components.register('extended-story-module', {
                     <!-- ko if: $parent.displayOn(displayModuleOn) -->
                         <!-- ko if: $parent.isEven($index()) -->
                             <div class="row fullwidth">
-                                <div class="medium-12 large-11 xlarge-8 large-centered columns">
+                                <div class="medium-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
                                     <div class="row">
                                         <div class="container">
                                             <div class="medium-7 large-8 columns">
-                                                <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
-                                                    <div class="responsively-lazy preventReflow">
-                                                        <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
-                                                    </div>
-                                                </a>
+                                                <div style="margin: -1.5rem 0 0 -1.5rem;">
+                                                    <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
+                                                        <div class="responsively-lazy preventReflow">
+                                                            <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
+                                                        </div>
+                                                    </a>
+                                                </div>
                                             </div>
 
                                             <div class="medium-5 large-4 columns text-center">
                                                 <div class="copyContainer">
                                                     <!-- ko if: section.text -->
-                                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
+                                                        <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                                     <!-- /ko -->
                                                     <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
                                                     <p class="text-left">
                                                         <a class="a-secondary" data-bind="html: copy.text, attr: { href: addUgDomain(copy.link), 'data-type': 'Copy', 'data-description': copy.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a>
                                                     </p>
-                                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
+                                                    <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -657,27 +769,29 @@ ko.components.register('extended-story-module', {
 
                         <!-- ko if: !$parent.isEven($index()) -->
                             <div class="row fullwidth">
-                                <div class="medium-12 large-11 xlarge-8 large-centered columns">
+                                <div class="medium-12 large-11 xlarge-10 xxlarge-8  large-centered columns">
                                     <div class="row">
                                         <div class="container">
                                             <div class="medium-5 large-4 columns text-center">
                                                 <div class="copyContainer">
                                                     <!-- ko if: section.text -->
-                                                        <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
+                                                        <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                                     <!-- /ko -->
                                                     <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h2 data-bind="html: headline.text"></h2></a>
                                                     <p class="text-left">
                                                         <a class="a-secondary" data-bind="html: copy.text, attr: { href: addUgDomain(copy.link), 'data-type': 'Copy', 'data-description': copy.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a>
                                                     </p>
-                                                    <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
+                                                    <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                                 </div>
                                             </div>
                                             <div class="medium-7 large-8 columns">
-                                                <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
-                                                    <div class="responsively-lazy preventReflow">
-                                                        <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
-                                                    </div>
-                                                </a>
+                                                <div style="margin: -1.5rem -1.5rem 0 0;">
+                                                    <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
+                                                        <div class="responsively-lazy preventReflow">
+                                                            <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
+                                                        </div>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -710,7 +824,7 @@ ko.components.register('collection-grid-module', {
     template: `
         <section data-bind="resizeView: 'CG', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="collection-grid-module background-color-off-white">
             <div class="row fullwidth">
-                <div class="small-12 large-11 xlarge-8 large-centered columns">
+                <div class="small-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
                     <div class="row container">
                         <div class="small-12 medium-6 columns">
                             <div class="flex">
@@ -743,14 +857,14 @@ ko.components.register('collection-grid-module', {
                         <!-- ko if: viewPortSize() === 'small' -->
                             <div class="small-12 text-center columns white-box-container">
                                 <!-- ko if: section.text -->
-                                    <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
+                                    <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                 <!-- /ko -->
 
                                 <a class="a-secondary" data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                     <h3 data-bind="html: headline.text"></h3>
                                 </a>
 
-                                <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
+                                <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                             </div>
                         <!-- /ko -->
 
@@ -788,10 +902,10 @@ ko.components.register('collection-grid-module', {
                                     <div class="medium-8 large-6 medium-centered columns">
                                         <div class="white-box-container text-center">
                                             <!-- ko if: section.text -->
-                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
+                                                <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                             <!-- /ko -->
                                             <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h1 data-bind="html: headline.text"></h1></a>
-                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
+                                            <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                         </div>
                                     </div>
                                 </div>
@@ -856,7 +970,7 @@ ko.components.register('carousel-module', {
                 <!-- ko if: viewPortSize() === 'small' -->
                     <!-- ko if: section.text -->
                         <div class="small-12 text-center columns">
-                            <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
+                            <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                         </div>
                     <!-- /ko -->
 
@@ -891,7 +1005,7 @@ ko.components.register('carousel-module', {
                 <!-- /ko -->
 
                 <!-- ko if: viewPortSize() != 'small' -->
-                    <div class="small-12 large-11 xlarge-8 large-centered columns">
+                    <div class="small-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
                         <div class="row container">
                             <div class="small-12 medium-6 columns">
                                 <div class="flex">
@@ -956,10 +1070,10 @@ ko.components.register('carousel-module', {
                                     <div class="medium-8 large-6 medium-centered columns">
                                         <div class="white-box-container text-center">
                                             <!-- ko if: section.text -->
-                                                <label class="body-small-caps"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
+                                                <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></label>
                                             <!-- /ko -->
                                             <a data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"><h1 data-bind="html: headline.text"></h1></a>
-                                            <p class="body-small"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
+                                            <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': section.description }"></a></p>
                                         </div>
                                     </div>
                                 </div>
@@ -984,7 +1098,7 @@ ko.components.register('text-link-module', {
     template: `
         <section data-bind="resizeView: 'TL', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="text-link-module background-color-off-white">
             <div class="row fullwidth waterColor">
-                <div class="small-12 large-11 xlarge-8 small-centered columns">
+                <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns">
                     <div class="container">
                         <!-- ko if: section.text -->
                             <div class="row">
@@ -1017,7 +1131,7 @@ ko.components.register('text-link-module', {
                         <!-- ko if: viewPortSize() != 'small' -->
                             <div class="row">
                                 <div class="medium-12 columns">
-                                    <ul data-bind="attr: { class: className(textLinkModuleSections) }">
+                                    <ul data-bind="attr: { class: classNameBlockGrid(textLinkModuleSections) }">
                                         <!-- ko foreach: textLinkModuleSections -->
                                             <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                                 <li class="text-center content">
@@ -1056,11 +1170,11 @@ ko.components.register('image-link-double-module', {
     template: `
         <section data-bind="resizeView: 'LD', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="image-link-double-module background-color-off-white">
             <div class="row fullwidth waterColor">
-                <div class="small-12 large-11 xlarge-10 small-centered columns">
+                <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns">
                     <div class="container">
                         <!-- ko if: section.text -->
                             <div class="row">
-                                <div class="small-12 xlarge-8 text-center xlarge-centered columns">
+                                <div class="small-12 xlarge-10 xxlarge-8 text-center xlarge-centered columns">
                                     <h2>
                                         <a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }"></a>
                                     </h2>
@@ -1070,7 +1184,7 @@ ko.components.register('image-link-double-module', {
 
                         <div class="row">
                             <div class="small-11 medium-12 small-centered columns">
-                                <ul data-bind="attr: { class: className(imageLinkDoubleModuleSections) }">
+                                <ul data-bind="attr: { class: classNameBlockGrid(imageLinkDoubleModuleSections) }">
                                     <!-- ko foreach: imageLinkDoubleModuleSections -->
                                         <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                             <li class="text-center content">
@@ -1106,11 +1220,12 @@ ko.components.register('button-link-double-module', {
             this.arrayContent6 = this.buttonLinkDoubleModuleSections[5];
             this.displayGroupViewPortSize = this.displayGroup(this.buttonLinkDoubleModuleSections);
             this.nonHiddenModuleSections = [];
-            this.hidePrefooterLine = function() {
-                return this.modulePosition === params.parent.totalModules ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : '';
-            }
+
+            // this.hidePrefooterLine = function() {
+            //     return this.modulePosition === params.parent.totalModules ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : '';
+            // }
             this.shouldStack = function() {
-                this.hidePrefooterLine();
+                //this.hidePrefooterLine();
                 return this.viewPortSize() === 'xlarge' && this.buttonLinkDoubleModuleSections.length === 6 ? true : false;
             }
             this.showBtnContainerInside = function() {
@@ -1135,7 +1250,7 @@ ko.components.register('button-link-double-module', {
 
             <!-- ko if: section.text -->
                 <div class="row">
-                    <div class="small-12 xlarge-8 xlarge-centered text-center columns">
+                    <div class="small-12 small-centered text-center columns">
                         <h2>
                             <a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }"></a>
                         </h2>
@@ -1145,8 +1260,8 @@ ko.components.register('button-link-double-module', {
 
             <!-- ko if: !shouldStack() -->
                 <div class="row fullwidth">
-                    <div class="small-12 large-11 xlarge-8 large-centered columns">
-                        <ul data-bind="attr: { class: className(buttonLinkDoubleModuleSections) }">
+                    <div class="small-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
+                        <ul data-bind="attr: { class: classNameBlockGrid(buttonLinkDoubleModuleSections) }">
                             <!-- ko foreach: buttonLinkDoubleModuleSections -->
                                 <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                     <li class="text-center">
@@ -1179,7 +1294,7 @@ ko.components.register('button-link-double-module', {
 
             <!-- ko if: shouldStack() -->
                 <div class="row fullwidth">
-                    <div class="xlarge-8 xlarge-centered columns stackedMargin">
+                    <div class="xlarge-10 xxlarge-8 xlarge-centered columns stackedMargin">
                         <div class="row">
                             <div class="small-12 medium-6 columns">
                                 <div class="row">
@@ -1374,6 +1489,7 @@ ko.components.register('seo-link-module', {
         </section>
 
         <!-- ko if: viewPortSize() === 'small' -->
+
             <section data-bind="resizeView: 'LD_SEO', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="seoLinks2 image-link-double-module background-color-off-white">
                 <!-- ko if: viewPortSize() === 'small' -->
                     <div class="row container">
@@ -1390,7 +1506,7 @@ ko.components.register('seo-link-module', {
                         </div>
 
                         <div class="small-11 small-centered columns">
-                            <ul data-bind="attr: { class: className(seo2Sections) }">
+                            <ul data-bind="attr: { class: classNameBlockGrid(seo2Sections) }">
                                 <!-- ko foreach: seo2Sections -->
                                     <li class="text-center content">
                                         <div class="responsively-lazy preventReflow">

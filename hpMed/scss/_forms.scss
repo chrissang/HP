@@ -12,7 +12,7 @@ label, legend, .label, fieldset legend{
 	@media #{$medium-up} {
 		font-size:.8125rem;
 	}
-	text-transform:uppercase;
+	text-transform:capitalize;
 	padding-top:.25rem;
 	margin-bottom:.25rem;
 	line-height:1.125rem;
@@ -180,15 +180,6 @@ button, input[type="button"], .button, input[type="submit"]{
 	}
 	&.addedToCart{
 		background-color:$TBD!important;
-	}
-	.reveal-modal &, .modal_window &{
-		margin-bottom:0;
-		margin-top:.875rem;
-		+button, input[type="button"], .button, input[type="submit"]{
-		 	&:not(.btn-block){
-				margin-left:.5rem;
-			}
-		}
 	}
 }
 a.button{
@@ -426,16 +417,8 @@ input[type="radio"], input[type="checkbox"]{
 		line-height:rem-calc(24);		
 		&.fine-print{
 			/* from .body-small */
-			font-size: rem-calc(14);
-			line-height: rem-calc(18);
-			@media #{$medium-up}{
-				font-size:rem-calc(13);
-				line-height:rem-calc(18);
-			}
-			@media #{$large-up}{
-				font-size:rem-calc(12);
-				line-height:rem-calc(16);
-			}
+            @extend .body-small;
+            margin-bottom:rem-calc(20)
 		}
 		@media #{$medium-up}{
 			margin:0 .75rem 1.25rem 0;
@@ -549,11 +532,29 @@ input.error:focus+label.error{
 			text-decoration:none;
 		}
 	}
+    .modal-buttons{
+        text-align: right;
+        .btn-secondary{
+            margin-left:.5rem;
+        }
+        button{
+            margin-bottom: 0;
+            margin-top:.875rem;
+            @media #{$small-only}{
+                width:100%;
+                margin-left:0!important;
+                margin-right:0!important;
+            }
+        }
+    }
 }
 label.addRemove{
-	&:hover{
+	&:not(.disabled):hover{
 		cursor:pointer;
 	}
+    &.disabled{
+        color:$inactive;
+    }
 	@extend .body-small-caps;
 	padding-left:2.75rem;
 	padding-top:0;
@@ -626,4 +627,63 @@ label.addRemove{
 	& .icon-close~label.error{
 		margin-top:.375rem!important;
 	}
+}
+
+
+
+.socialNetwork{
+	@extend .body-small;
+    color:#FFF!important;
+    background-color:$active-light-mix;
+    border-radius:3px;
+    background-image:none!important;
+    padding:.25rem .375rem;
+    @media #{$medium-up}{
+        padding:.125rem .375rem;
+    }
+}
+.socialNetwork+.socialNetwork{
+    margin-left:.5rem;
+}
+.socialNetwork:before{
+	margin-right:.25rem;
+	font-family:"uncommongoods";
+	content:"\65";
+	
+	@extend .icon-sm;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+.socialNetwork.facebook{
+	/*background-color:$facebook;*/
+    background-color:#4267b2;
+}
+.socialNetwork.facebook:before{
+    @extend .icon-facebook;
+}
+.socialNetwork.pinterest{
+	background-color:$pinterest;
+}
+.socialNetwork.pinterest:before{
+	 @extend .icon-pinterest_hollow;
+}
+.socialNetwork.twitter{
+	background-color:$twitter;
+}
+.socialNetwork.twitter:before{
+	 @extend .icon-twitter;
+}
+.socialNetwork.instagram{
+	background-color:$instagram;
+}
+.socialNetwork.instagram:before{
+	 @extend .icon-instagram;
+}
+.socialNetwork.googleplus{
+	background-color:$googleplus;
+}
+.socialNetwork.googleplus:before{
+	 @extend .icon-googleplus;
 }
