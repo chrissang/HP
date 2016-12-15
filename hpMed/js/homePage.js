@@ -2,7 +2,8 @@
 var moduleOrderStatic = [];
 var moduleOrder = [];
 var elementsArray = [];
-var elements = [];
+
+var counter = 0
 
 const imageDir = 'https://www.uncommongoods.com/images';
 const ugWeb = 'https://www.uncommongoods.com';
@@ -117,6 +118,17 @@ class Dependents {
                 }[nonHiddenModuleSections.length];
             }
         }
+        this.myOrder = ko.observable();
+        // ko.bindingHandlers.render = {
+        //     update: function (element, valueAccessor, allBindings, viewModel) {
+        //
+        //         if(allBindings().if) {
+        //             console.log('afterRender ',allBindings().if);
+        //             console.log('element ',element.querySelectorAll('a'));
+        //         }
+        //     }
+        // }
+
         ko.bindingHandlers.resizeView = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 $(window).resize(function () {
@@ -241,7 +253,6 @@ class Dependents {
                 var totalModules = bindingContext.$parents[1].totalModules;
                 var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-
                 $(document).ready(function() {
                     if (display) {
                         moduleOrder[index] = moduleOrderStatic[index];
@@ -249,26 +260,108 @@ class Dependents {
                         moduleOrder[index] = '';
                     }
 
-                    elementsArray.push($(element)[0]);
-
-
-                    if(viewModel.modulePosition === moduleOrder.length) {
+                    if(viewModel.modulePosition === totalModules) {
                         var moduleOrderRefresh = moduleOrder.filter(Boolean);
-                        var elementsArrayRefresh = [];
+                        viewModel.params.parent.myOrder(moduleOrderRefresh)
+                    }
 
-                        moduleOrderRefresh[moduleOrderRefresh.length - 1] === 'BD' ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : document.getElementsByClassName("prefooterLine")[0].style.display='block';
-                        //Gets section elements
-                        moduleOrder.forEach((module,index) => {
-                            if (module != '') {
-                                elementsArrayRefresh.push(elementsArray[index]);
+                    if(display) {
+                        //var elements = element.querySelectorAll('a');
+                        var elements = Array.from(element.querySelectorAll('a'));
+                        var arryLength = elements.length;
+
+                        while (arryLength--) {
+                            if (elements[arryLength].parentElement.classList.contains("swiper-slide-duplicate")) {
+                                elements.splice(arryLength, 1);
                             }
+                        }
+
+                        elements.forEach((el,index) => {
+                            var linkNumber = index+1;
+                            var dataType = el.getAttribute("data-type");
+                            var dataDescription =el.getAttribute('data-description').split(' ').join('_');
+                            var moduleType = allBindings().resizeView;
+                            var alphaChar = alpha.charAt(ko.contextFor(el).$component.modulePosition-1);
+
+                            if(dataDescription != '') {
+                                dataDescription = '_'+dataDescription;
+                            }
+
+                            var trackingCode = 'hp_module_' + alphaChar + linkNumber + '_'+ dataType + '_' + moduleType + dataDescription;
+                            var trackingLink = el.getAttribute("href");
+
+                            var ctaText = el.getAttribute("data-cta") ? el.getAttribute("data-cta") : 'NA';
+                            var itemNumber = el.getAttribute("data-itemNumber") ? el.getAttribute("data-itemNumber") : "NA";
+                            var sectionDescription = el.getAttribute("data-sectionDescription") ? el.getAttribute("data-sectionDescription") : 'NA';
+
+                            var id = alphaChar + linkNumber + '_' + moduleType;
+                            var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
+                            var creative = itemNumber;
+                            var pos = sectionDescription;
+
+                            trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
+
+
+
+                            // console.log(trackingCode);
+                            //console.log(trackingLink);
+                            //onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`
+                            if (trackingLink !== '') {
+                                if (trackingLink.includes("//blog.uncommongoods.com")) {
+                                    trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
+                                    $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                                } else {
+                                    $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                                }
+                            } else {
+                                $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                                $('a[href=""]').click(function (event) { // where href are blank
+                                    event.preventDefault();
+                                })
+                            }
+
                         })
+                    }
+
+
+                })
+
+                // $(document).ready(function() {
+                    // if (display) {
+                    //     moduleOrder[index] = moduleOrderStatic[index];
+                    // } else {
+                    //     moduleOrder[index] = '';
+                    // }
+                //
+                //     elementsArray.push($(element)[0]);
+                //
+                //     //console.log(document.querySelector('html').querySelectorAll('section a'));
+                //     //console.log(element.querySelectorAll('section'));
+                //
+                //
+                //     if(viewModel.modulePosition === moduleOrder.length) {
+                //         var moduleOrderRefresh = moduleOrder.filter(Boolean);
+                //         var elementsArrayRefresh = [];
+                //
+                //         moduleOrderRefresh[moduleOrderRefresh.length - 1] === 'BD' ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : document.getElementsByClassName("prefooterLine")[0].style.display='block';
+                //         //Gets section elements
+                //         moduleOrder.forEach((module,index) => {
+                //             if (module != '') {
+                //                 elementsArrayRefresh.push(elementsArray[index]);
+                //             }
+                //         })
+
+
+
+            //console.log(document.querySelector('html').querySelectorAll('section'))
+
 
                         //Removes duplicate anchor tags created by swiper plugin only needed if loop is true
-                        moduleOrderRefresh.forEach((module,index) => {
-                            // var alphaChar = alpha.charAt(index);
-                            // var elements = elementsArrayRefresh[index].querySelectorAll('a');
-                            // var filitered = Array.from(elements);
+                        // moduleOrderRefresh.forEach((module,index) => {
+                        //
+                        //     var alphaChar = alpha.charAt(index);
+                        //     var elements = elementsArrayRefresh[index].querySelectorAll('a');
+                        //     var filitered = Array.from(elements);
                             // var i = filitered.length;
                             //
                             // while (i--) {
@@ -276,56 +369,56 @@ class Dependents {
                             //         filitered.splice(i, 1);
                             //     }
                             // }
-
-                            // console.log( ko.virtualElements.firstChild(elementsArrayRefresh[index]));
-                            //console.log( ko.virtualElements.firstChild(elementsArrayRefresh[index]).nextElementSibling );
-                            //console.log(document.getElementsByTagName("a"))
-
-                            //Adds tracking to all anchor tags
-                            // filitered.forEach((el,i) => {
-                            //     var linkNumber = i+1;
-                            //     var dataType = el.getAttribute("data-type");
-                            //     var dataDescription =el.getAttribute('data-description').split(' ').join('_');
-                            //     if(dataDescription != '') {
-                            //         dataDescription = '_'+dataDescription;
-                            //     }
-                            //     var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module + dataDescription;
-                            //     var trackingLink = el.getAttribute("href");
-                            //
-                            //     var ctaText = el.getAttribute("data-cta");
-                            //     var itemNumber = el.getAttribute("data-itemNumber");
-                            //     var sectionDescription = el.getAttribute("data-sectionDescription");
-                            //
-                            //     var id = alphaChar + linkNumber + '_' + module;
-                            //     var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
-                            //     var creative = itemNumber ? itemNumber : 'NA';
-                            //     var pos = sectionDescription ? sectionDescription : 'NA';
-                            //
-                            //     //console.log(trackingCode);
-                            //
-                            //     trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
-                            //
-                            //     if (trackingLink !== '') {
-                            //         if (trackingLink.includes("//blog.uncommongoods.com")) {
-                            //             trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
-                            //             $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
-                            //         } else {
-                            //             $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
-                            //         }
-                            //     } else {
-                            //         $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
-                            //         $('a[href=""]').click(function (event) { // where href are blank
-                            //             event.preventDefault();
-                            //         })
-                            //     }
-                            //})
-                        })
-
-
+                        //
+                        //     console.log( ko.virtualElements.firstChild(elementsArrayRefresh[index]) );
+                        //     console.log( ko.virtualElements.firstChild(elementsArrayRefresh[index]).nextElementSibling );
+                        //     console.log(document.getElementsByTagName("a"))
+                        //
+                        //     Adds tracking to all anchor tags
+                        //     filitered.forEach((el,i) => {
+                        //         var linkNumber = i+1;
+                        //         var dataType = el.getAttribute("data-type");
+                        //         var dataDescription =el.getAttribute('data-description').split(' ').join('_');
+                        //         if(dataDescription != '') {
+                        //             dataDescription = '_'+dataDescription;
+                        //         }
+                        //         var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module + dataDescription;
+                        //         var trackingLink = el.getAttribute("href");
+                        //
+                                // var ctaText = el.getAttribute("data-cta");
+                                // var itemNumber = el.getAttribute("data-itemNumber");
+                                // var sectionDescription = el.getAttribute("data-sectionDescription");
+                                //
+                                // var id = alphaChar + linkNumber + '_' + module;
+                                // var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
+                                // var creative = itemNumber ? itemNumber : 'NA';
+                                // var pos = sectionDescription ? sectionDescription : 'NA';
+                        //
+                        //         //console.log(trackingCode);
+                        //
+                        //         trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
+                        //
+                                // if (trackingLink !== '') {
+                                //     if (trackingLink.includes("//blog.uncommongoods.com")) {
+                                //         trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
+                                //         $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                                //     } else {
+                                //         $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                                //     }
+                                // } else {
+                                //     $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                                //     $('a[href=""]').click(function (event) { // where href are blank
+                                //         event.preventDefault();
+                                //     })
+                                // }
+                        //     })
+                        // })
 
 
 
-                    }
+
+
+                    //}
                     // if (viewModel.modulePosition === totalModules) {
                     //
                     //     var moduleOrderRefresh = moduleOrder.filter(Boolean);
@@ -396,10 +489,11 @@ class Dependents {
                     //         })
                     //     })
                     // }
-                })
+                // })
             }
         };
         ko.virtualElements.allowedBindings.resizeView = true;
+        // ko.virtualElements.allowedBindings.render = true;
     }
 };
 
@@ -436,12 +530,18 @@ ko.components.register('large-feature-module', {
     viewModel: class LargeFeatureModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
+            this.params = params;
             this.largeFeatureModulesSections = params.data.sections;
-            this.displayGroupViewPortSize = this.displayGroup(this.largeFeatureModulesSections);
+
+            this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize(this.displayGroup(this.largeFeatureModulesSections));
+
+
+            //this.displayGroupViewPortSize = this.displayGroup(this.largeFeatureModulesSections);
         }
     },
     template: `
-        <section data-bind="resizeView: 'LF', if: displayOn(displayGroupViewPortSize)" class="large-feature-module background-color-off-white">
+        <section data-bind="if: displayOn(displayGroupViewPortSize()), resizeView: 'LF'" class="large-feature-module background-color-off-white">
             <!-- ko foreach: largeFeatureModulesSections -->
                 <!-- ko if: $parent.displayOn(displayModuleOn) -->
                     <div class="row fullwidth">
@@ -495,12 +595,16 @@ ko.components.register('small-feature-module', {
     viewModel: class SmallFeatureModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
+            this.params = params;
             this.smModulesSections = params.data.sections;
-            this.displayGroupViewPortSize = this.displayGroup(this.smModulesSections);
+            this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize(this.displayGroup(this.smModulesSections));
+
+            //this.displayGroupViewPortSize = this.displayGroup(this.smModulesSections);
         }
     },
     template: `
-        <section data-bind="resizeView: 'SF', if: displayOn(displayGroupViewPortSize)" class="small-feature-module background-color-white">
+        <section data-bind="if: displayOn(displayGroupViewPortSize()), resizeView: 'SF'" class="small-feature-module background-color-white">
             <!-- ko if: viewPortSize() === 'small' || viewPortSize() === 'medium' -->
                 <!-- ko foreach: smModulesSections -->
                     <!-- ko if: $parent.displayOn(displayModuleOn) -->
@@ -594,19 +698,23 @@ ko.components.register('basic-story-module', {
     viewModel: class BasicStoryModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
+            this.params = params;
             this.basicStoryModulesSections = params.data.sections;
-            this.displayGroupViewPortSize = this.displayGroup(this.basicStoryModulesSections);
+
+            this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize(this.displayGroup(this.basicStoryModulesSections));
+            //this.displayGroupViewPortSize = this.displayGroup(this.basicStoryModulesSections);
         }
     },
     template: `
-        <section data-bind="resizeView: 'BS', if: displayOn(displayGroupViewPortSize)" class="basic-story-module background-color-off-white">
+        <section data-bind="if: displayOn(displayGroupViewPortSize()), resizeView: 'BS'" class="basic-story-module background-color-off-white">
             <!-- ko if: viewPortSize() === 'small' -->
                 <!-- ko foreach: basicStoryModulesSections -->
                     <!-- ko if: $parent.displayOn(displayModuleOn) -->
                         <div class="row container">
                             <!-- ko if: section.text -->
                                 <div class="small-12 text-center columns">
-                                    <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description }"></a></label>
+                                    <label class="body-small-caps-override"><a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description  }"></a></label>
                                 </div>
                             <!-- /ko -->
 
@@ -724,12 +832,16 @@ ko.components.register('extended-story-module', {
     viewModel: class ExtendedStoryModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
+            this.params = params;
             this.extendedStoryModulesSections = params.data.sections;
-            this.displayGroupViewPortSize = this.displayGroup(this.extendedStoryModulesSections);
+
+            this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize(this.displayGroup(this.extendedStoryModulesSections));
+            //this.displayGroupViewPortSize = this.displayGroup(this.extendedStoryModulesSections);
         }
     },
     template: `
-        <section data-bind="resizeView: 'ES', if: displayOn(displayGroupViewPortSize)" class="extended-story-module background-color-off-white">
+        <section data-bind="if: displayOn(displayGroupViewPortSize()), resizeView: 'ES'" class="extended-story-module background-color-off-white">
             <!-- ko if: viewPortSize() === 'small' -->
                 <!-- ko foreach: extendedStoryModulesSections -->
                     <!-- ko if: $parent.displayOn(displayModuleOn) -->
@@ -843,6 +955,7 @@ ko.components.register('collection-grid-module', {
     viewModel: class CollectionGridModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
+            this.params = params;
             this.section = params.data.section;
             this.headline = params.data.headline;
             this.cta = params.data.cta;
@@ -853,11 +966,14 @@ ko.components.register('collection-grid-module', {
             this.arrayContent4 = this.collectionGridModulesSections[3];
             this.arrayContent5 = this.collectionGridModulesSections[4];
             this.arrayContent6 = this.collectionGridModulesSections[5];
-            this.displayGroupViewPortSize = params.data.displayModuleOn;
+
+            this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize(params.data.displayModuleOn);
+            //this.displayGroupViewPortSize = params.data.displayModuleOn;
         }
     },
     template: `
-        <section data-bind="resizeView: 'CG', if: displayOn(displayGroupViewPortSize)" class="collection-grid-module background-color-off-white">
+        <section data-bind="if: displayOn(displayGroupViewPortSize()), resizeView: 'CG'" class="collection-grid-module background-color-off-white">
             <div class="row fullwidth">
                 <div class="small-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
                     <div class="row container">
@@ -956,6 +1072,7 @@ ko.components.register('carousel-module', {
     viewModel: class CarouselModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
+            this.params = params;
             this.section = params.data.section;
             this.headline = params.data.headline;
             this.cta = params.data.cta;
@@ -966,7 +1083,10 @@ ko.components.register('carousel-module', {
             this.arrayContent4 = this.carouselModulesSections[3];
             this.arrayContent5 = this.carouselModulesSections[4];
             this.arrayContent6 = this.carouselModulesSections[5];
-            this.displayGroupViewPortSize = params.data.displayModuleOn;
+
+            this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize(params.data.displayModuleOn);
+            //this.displayGroupViewPortSize = params.data.displayModuleOn;
             ko.bindingHandlers.reinit = {
                 update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                     $(function () {
@@ -1000,7 +1120,7 @@ ko.components.register('carousel-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'CL', if: displayOn(displayGroupViewPortSize)" class="carousel-module background-color-off-white">
+        <section data-bind="if: displayOn(displayGroupViewPortSize()), resizeView: 'CL'" class="carousel-module background-color-off-white">
             <div class="row fullwidth">
                 <!-- ko if: viewPortSize() === 'small' -->
                     <!-- ko if: section.text -->
@@ -1124,14 +1244,18 @@ ko.components.register('text-link-module', {
     viewModel: class TextLinkModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
+            this.params = params;
             this.section = params.data.section;
             this.textLinkModuleSections = params.data.sections;
             this.nonHiddenModuleSections = [];
-            this.displayGroupViewPortSize = this.displayGroup(this.textLinkModuleSections);
+
+            this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize(this.displayGroup(this.textLinkModuleSections));
+            //this.displayGroupViewPortSize = this.displayGroup(this.textLinkModuleSections);
         }
     },
     template: `
-        <section data-bind="resizeView: 'TL', if: displayOn(displayGroupViewPortSize)" class="text-link-module background-color-off-white">
+        <section data-bind="if: displayOn(displayGroupViewPortSize()), resizeView: 'TL'" class="text-link-module background-color-off-white">
             <div class="row fullwidth waterColor">
                 <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns">
                     <div class="container">
@@ -1196,57 +1320,58 @@ ko.components.register('image-link-double-module', {
     viewModel: class ImageLinkDoubleModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
+            this.params = params;
             this.section = params.data.section;
             this.imageLinkDoubleModuleSections = params.data.sections;
             this.nonHiddenModuleSections = [];
-            this.displayGroupViewPortSize = this.displayGroup(this.imageLinkDoubleModuleSections);
+            this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize(this.displayGroup(this.imageLinkDoubleModuleSections));
         }
     },
     template: `
-        <!-- ko resizeView: 'LD', if: displayOn(displayGroupViewPortSize) -->
-            <section class="image-link-double-module background-color-off-white">
-                <div class="row fullwidth waterColor">
-                    <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns">
-                        <div class="container">
-                            <!-- ko if: section.text -->
-                                <div class="row">
-                                    <div class="small-12 xlarge-10 xxlarge-8 text-center xlarge-centered columns">
-                                        <h2>
-                                            <a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }"></a>
-                                        </h2>
-                                    </div>
-                                </div>
-                            <!-- /ko -->
-
+        <section data-bind="if: displayOn(displayGroupViewPortSize()), resizeView: 'LD'" class="image-link-double-module background-color-off-white">
+            <div class="row fullwidth waterColor">
+                <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns">
+                    <div class="container">
+                        <!-- ko if: section.text -->
                             <div class="row">
-                                <div class="small-11 medium-12 small-centered columns">
-                                    <ul data-bind="attr: { class: classNameBlockGrid(imageLinkDoubleModuleSections) }">
-                                        <!-- ko foreach: imageLinkDoubleModuleSections -->
-                                            <!-- ko if: $parent.displayOn(displayModuleOn) -->
-                                                <li class="text-center content">
-                                                    <div class="responsively-lazy preventReflow">
-                                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
-                                                            <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
-                                                        </a>
-                                                    </div>
-                                                    <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }"></a></h4>
-                                                </li>
-                                            <!-- /ko -->
-                                        <!-- /ko -->
-                                    </ul>
+                                <div class="small-12 xlarge-10 xxlarge-8 text-center xlarge-centered columns">
+                                    <h2>
+                                        <a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }"></a>
+                                    </h2>
                                 </div>
+                            </div>
+                        <!-- /ko -->
+
+                        <div class="row">
+                            <div class="small-11 medium-12 small-centered columns">
+                                <ul data-bind="attr: { class: classNameBlockGrid(imageLinkDoubleModuleSections) }">
+                                    <!-- ko foreach: imageLinkDoubleModuleSections -->
+                                        <!-- ko if: $parent.displayOn(displayModuleOn) -->
+                                            <li class="text-center content">
+                                                <div class="responsively-lazy preventReflow">
+                                                    <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
+                                                        <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
+                                                    </a>
+                                                </div>
+                                                <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }"></a></h4>
+                                            </li>
+                                        <!-- /ko -->
+                                    <!-- /ko -->
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-        <!-- /ko -->`, synchronous: true
-});
+            </div>
+        </section>`, synchronous: true
+    });
 
 ko.components.register('button-link-double-module', {
     viewModel: class ButtonLinkDoubleModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
+            this.params = params;
             this.section = params.data.section;
             this.buttonLinkDoubleModuleSections = params.data.sections;
             this.arrayContent1 = this.buttonLinkDoubleModuleSections[0];
@@ -1255,7 +1380,11 @@ ko.components.register('button-link-double-module', {
             this.arrayContent4 = this.buttonLinkDoubleModuleSections[3];
             this.arrayContent5 = this.buttonLinkDoubleModuleSections[4];
             this.arrayContent6 = this.buttonLinkDoubleModuleSections[5];
-            this.displayGroupViewPortSize = this.displayGroup(this.buttonLinkDoubleModuleSections);
+
+            this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize(this.displayGroup(this.buttonLinkDoubleModuleSections));
+
+            //this.displayGroupViewPortSize = this.displayGroup(this.buttonLinkDoubleModuleSections);
             this.nonHiddenModuleSections = [];
 
             // this.hidePrefooterLine = function() {
@@ -1274,7 +1403,7 @@ ko.components.register('button-link-double-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'BD', if: displayOn(displayGroupViewPortSize)" class="button-link-double-module background-color-white">
+        <section data-bind="if: displayOn(displayGroupViewPortSize()), resizeView: 'BD', style: { display: displayOn(displayGroupViewPortSize()) ? 'block' : 'none' }" class="button-link-double-module background-color-white">
             <div class="row">
                 <div class="small-12 columns">
                     <div class="row collapse">
@@ -1440,15 +1569,18 @@ ko.components.register('seo-link-module', {
     viewModel: class TextLinkModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
+            this.params = params;
             this.seo1 = params.data.seo1;
             this.seo1Sections = params.data.seo1.sections;
             this.seo2 = params.data.seo2;
             this.seo2Sections = params.data.seo2.sections;
-            this.displayGroupViewPortSize = 'small';
+            this.displayGroupViewPortSize = ko.observable('small');
+
+            //this.displayGroupViewPortSize = 'small';
         }
     },
     template: `
-        <section data-bind="resizeView: 'TL_SEO', if: displayOn(displayGroupViewPortSize), attr: { class: 'seoLinks text-link-module background-color-off-white' } ">
+        <section data-bind="if: displayOn(displayGroupViewPortSize()), resizeView: 'TL_SEO'" class="seoLinks text-link-module background-color-off-white">
             <!-- ko if: viewPortSize() === 'small' -->
                 <div class"row">
                     <div class="small-12 small-centered columns container">
@@ -1456,7 +1588,7 @@ ko.components.register('seo-link-module', {
                             <div class="row">
                                 <div class="small-12 text-center columns">
                                     <h2>
-                                        <a class="a-secondary" data-bind="html: seo1.section.text, attr: { href: addUgDomain(seo1.section.link), 'data-type': 'Section', 'data-description': seo1.section.description }"></a>
+                                        <a class="a-secondary" data-bind="html: seo1.section.text, attr: { href: addUgDomain(seo1.section.link), 'data-type': 'Section', 'data-description': seo1.section.description, 'data-sectionDescription': seo1.section.description  }"></a>
                                     </h2>
                                 </div>
                             </div>
@@ -1465,7 +1597,7 @@ ko.components.register('seo-link-module', {
                             <!-- ko foreach: seo1Sections -->
                                 <div class="small-6 columns">
                                     <div class="text-link-container">
-                                        <div class="content"><h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></h4></div>
+                                        <div class="content"><h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': $parent.seo1.section.description }"></a></h4></div>
                                     </div>
                                 </div>
                             <!-- /ko -->
@@ -1473,37 +1605,35 @@ ko.components.register('seo-link-module', {
                     </div>
                 </div>
 
-                <div data-bind="if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="seoLinks2 image-link-double-module background-color-off-white">
-                    <!-- ko if: viewPortSize() === 'small' -->
-                        <div class="row container">
-                            <div class="small-12 small-centered columns">
-                                <!-- ko if: seo2.section.text -->
-                                    <div class="row">
-                                        <div class="small-12 xlarge-10 text-center xlarge-centered columns">
-                                            <h2>
-                                                <a class="a-secondary" data-bind="html: seo2.section.text, attr: { href: addUgDomain(seo2.section.link), 'data-type': 'Section', 'data-description': seo2.section.description }"></a>
-                                            </h2>
-                                        </div>
+                <div class="seoLinks2 image-link-double-module background-color-off-white">
+                    <div class="row container">
+                        <div class="small-12 small-centered columns">
+                            <!-- ko if: seo2.section.text -->
+                                <div class="row">
+                                    <div class="small-12 xlarge-10 text-center xlarge-centered columns">
+                                        <h2>
+                                            <a class="a-secondary" data-bind="html: seo2.section.text, attr: { href: addUgDomain(seo2.section.link), 'data-type': 'Section', 'data-description': seo2.section.description, 'data-sectionDescription': seo2.section.description }"></a>
+                                        </h2>
                                     </div>
-                                <!-- /ko -->
-                            </div>
-
-                            <div class="small-11 small-centered columns">
-                                <ul data-bind="attr: { class: classNameBlockGrid(seo2Sections) }">
-                                    <!-- ko foreach: seo2Sections -->
-                                        <li class="text-center content">
-                                            <div class="responsively-lazy preventReflow">
-                                                <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
-                                                    <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
-                                                </a>
-                                            </div>
-                                            <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></h4>
-                                        </li>
-                                    <!-- /ko -->
-                                </ul>
-                            </div>
+                                </div>
+                            <!-- /ko -->
                         </div>
-                    <!-- /ko -->
+
+                        <div class="small-11 small-centered columns">
+                            <ul data-bind="attr: { class: classNameBlockGrid(seo2Sections) }">
+                                <!-- ko foreach: seo2Sections -->
+                                    <li class="text-center content">
+                                        <div class="responsively-lazy preventReflow">
+                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.seo2.section.description}">
+                                                <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
+                                            </a>
+                                        </div>
+                                        <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.seo2.section.description }"></a></h4>
+                                    </li>
+                                <!-- /ko -->
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             <!-- /ko -->
 
@@ -1527,7 +1657,7 @@ ko.components.register('seo-link-module', {
                                         <span data-bind="html: seo1.section.text"></span>
                                         <div class="displayInline">
                                             <!-- ko foreach: seo1Sections -->
-                                                <a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }" class="body-small-crumbs"></a>
+                                                <a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': $parent.seo1.section.description }" class="body-small-crumbs"></a>
                                             <!-- /ko -->
                                         </div>
                                     </div>
@@ -1536,7 +1666,7 @@ ko.components.register('seo-link-module', {
                                         <span data-bind="html: seo2.section.text"></span>
                                         <div class="displayInline">
                                             <!-- ko foreach: seo2Sections -->
-                                                <a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }" class="body-small-crumbs"></a>
+                                                <a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': $parent.seo2.section.description }" class="body-small-crumbs"></a>
                                             <!-- /ko -->
                                         </div>
                                     </div>
@@ -1575,7 +1705,7 @@ ko.components.register('homePage-container', {
     },
     template: `
         <!--ko foreach: { data: Object.keys(mappingOrder) } -->
-            <!-- ko component: {name: Object.keys(mappingOrder[$data])[0], params:{data:mappingOrder[$data][Object.keys(mappingOrder[$data])], parent:$parent}} --><!-- /ko -->
+            <!-- ko component: {name: Object.keys(mappingOrder[$data])[0], params:{data:mappingOrder[$data][Object.keys(mappingOrder[$data])], parent:$parent }} --><!-- /ko -->
         <!-- /ko -->`, synchronous: true
 });
 
