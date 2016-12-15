@@ -380,6 +380,9 @@ body:before {
 		.waterColor {
 			background: none;
 		}
+		&.seoLinks2 {
+			padding: 1rem 0 0 0;
+		}
 	}
 	.button-link-double-module {
 		h2 {
@@ -691,11 +694,6 @@ body:before {
 			left: 50%;
   			transform: translateX(-50%);
 		}
-	}
-	.seoLinks2 {
-		padding-left: 0;
-		padding-right: 0;
-		padding-bottom: 0;
 	}
 }
 //large screen

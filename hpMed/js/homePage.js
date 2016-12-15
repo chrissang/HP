@@ -12,9 +12,6 @@ class Dependents {
         this.modulePosition = params.data.index + 1;
         this.displayGroupViewPortSize = params.data.displayGroupOn;
         this.viewPortSize = ko.observable(breakpointValue());
-        this.isSmall = function(){
-            return this.viewPortSize() === 'small' ? true : false;
-        }
         this.displayOn = function(viewPortSize) {
             return {
                 'small': this.viewPortSize() === 'small' || this.viewPortSize() === 'medium' || this.viewPortSize() === 'large' || this.viewPortSize() === 'xlarge' ? true : false,
@@ -125,16 +122,28 @@ class Dependents {
                 $(window).resize(function () {
                     var breakpoint = breakpointValue();
                     viewModel.viewPortSize(breakpoint);
+
+                    // if (breakpoint === 'small') {
+                    //     console.log('small ',element.getElementsByTagName("a"));
+                    // } else if(breakpoint === 'medium') {
+                    //     console.log('medium ',element.getElementsByTagName("a"));
+                    // } else if(breakpoint === 'large') {
+                    //     console.log('large ',element.getElementsByTagName("a"));
+                    // } else {
+                    //     console.log('xlarge ',element.getElementsByTagName("a"));
+                    // }
+
                 });
 
                 var section = allBindings().resizeView;
-                var display = allBindings().style.display;
+                // var display = allBindings().style.display;
+                var display = allBindings().if;
                 var totalModules = bindingContext.$parents[1].totalModules;
                 var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
                 moduleOrderStatic.push(section);
 
-                if (display === 'block') {
+                if (display) {
                     moduleOrder.push(section);
 
                 } else {
@@ -142,167 +151,110 @@ class Dependents {
                 }
                 moduleOrder = moduleOrder.filter(Boolean);
 
-                $(document).ready(function () {
-
+                $(document).ready(function() {
                     var breakpoint = breakpointValue();
                     viewModel.viewPortSize(breakpoint);
 
-                    elementsArray.push($(element)[0]);
+                    // moduleOrderStatic.push(section);
+                    // console.log(allBindings());
+                    // if (display === 'block') {
+                    //     moduleOrder.push(section);
+                    //
+                    // } else {
+                    //    moduleOrder.push('');
+                    // }
 
-                    if (viewModel.modulePosition+1 === totalModules+1 && breakpoint === 'small') {
-                        var moduleOrderRefresh = moduleOrder;
-                        var elementsArrayRefresh = [];
-                        console.log(elementsArray)
-                        moduleOrderRefresh = moduleOrderRefresh.filter(Boolean);
-
-                        moduleOrderRefresh[moduleOrderRefresh.length - 1] === 'BD' ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : document.getElementsByClassName("prefooterLine")[0].style.display='block';
-
-                        moduleOrder.forEach((module,index) => {
-                            if (module != '') {
-                                elementsArrayRefresh.push(elementsArray[index]);
-                            }
-                        })
-                        //Removes duplicate anchor tags created by swiper plugin only needed if loop is true
-                        moduleOrderRefresh.forEach((module,index) => {
-                            var alphaChar = alpha.charAt(index);
-                            var elements = elementsArrayRefresh[index].querySelectorAll('a');
-                            var filitered = Array.from(elements);
-                            var i = filitered.length;
-                            while (i--) {
-                                if (filitered[i].parentElement.classList.contains("swiper-slide-duplicate")) {
-                                    filitered.splice(i, 1);
-                                }
-                            }
-
-                            //Adds tracking to all anchor tags
-                            filitered.forEach((el,i) => {
-                                var linkNumber = i+1;
-                                var dataType = el.getAttribute("data-type");
-                                var dataDescription = el.getAttribute('data-description').split(' ').join('_');
-                                if(dataDescription != '') {
-                                    dataDescription = '_'+dataDescription;
-                                }
-                                var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module + dataDescription;
-                                var trackingLink = el.getAttribute("href");
-
-                                var ctaText = el.getAttribute("data-cta");
-                                var itemNumber = el.getAttribute("data-itemNumber");
-                                var sectionDescription = el.getAttribute("data-sectionDescription");
-
-                                var id = alphaChar + linkNumber + '_' + module;
-                                var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
-                                var creative = itemNumber ? itemNumber : 'NA';
-                                var pos = sectionDescription ? sectionDescription : 'NA';
-                                // console.log(trackingCode);
-                                trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
-
-                                if (trackingLink !== '') {
-                                    if (trackingLink.includes("//blog.uncommongoods.com")) {
-                                        trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
-                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
-                                    } else {
-                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
-                                    }
-                                } else {
-                                    $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
-                                    $('a[href=""]').click(function (event) { // where href are blank
-                                        event.preventDefault();
-                                    })
-                                }
-                            })
-                        })
-                    }
-                    if (viewModel.modulePosition === totalModules && breakpoint != 'small') {
-
-                        var moduleOrderRefresh = moduleOrder;
-                        var elementsArrayRefresh = [];
-
-                        moduleOrderRefresh = moduleOrderRefresh.filter(Boolean);
-
-                        moduleOrderRefresh[moduleOrderRefresh.length - 1] === 'BD' ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : document.getElementsByClassName("prefooterLine")[0].style.display='block';
-
-                        moduleOrder.forEach((module,index) => {
-                            if (module != '') {
-                                elementsArrayRefresh.push(elementsArray[index]);
-                            }
-                        })
-                        //Removes duplicate anchor tags created by swiper plugin only needed if loop is true
-                        moduleOrderRefresh.forEach((module,index) => {
-                            var alphaChar = alpha.charAt(index);
-                            var elements = elementsArrayRefresh[index].querySelectorAll('a');
-                            var filitered = Array.from(elements);
-                            var i = filitered.length;
-                            while (i--) {
-                                if (filitered[i].parentElement.classList.contains("swiper-slide-duplicate")) {
-                                    filitered.splice(i, 1);
-                                }
-                            }
-
-                            //Adds tracking to all anchor tags
-                            filitered.forEach((el,i) => {
-                                var linkNumber = i+1;
-                                var dataType = el.getAttribute("data-type");
-                                var dataDescription = el.getAttribute('data-description').split(' ').join('_');
-                                if(dataDescription != '') {
-                                    dataDescription = '_'+dataDescription;
-                                }
-                                var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module + dataDescription;
-                                var trackingLink = el.getAttribute("href");
-
-                                var ctaText = el.getAttribute("data-cta");
-                                var itemNumber = el.getAttribute("data-itemNumber");
-                                var sectionDescription = el.getAttribute("data-sectionDescription");
-
-                                var id = alphaChar + linkNumber + '_' + module;
-                                var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
-                                var creative = itemNumber ? itemNumber : 'NA';
-                                var pos = sectionDescription ? sectionDescription : 'NA';
-                                // console.log(trackingCode);
-                                trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
-
-                                if (trackingLink !== '') {
-                                    if (trackingLink.includes("//blog.uncommongoods.com")) {
-                                        trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
-                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
-                                    } else {
-                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
-                                    }
-                                } else {
-                                    $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
-                                    $('a[href=""]').click(function (event) { // where href are blank
-                                        event.preventDefault();
-                                    })
-                                }
-                            })
-                        })
-                    }
+                    // moduleOrder = moduleOrder.filter(Boolean);
+                    // elementsArray.push($(element)[0]);
+                    //
+                    // if (viewModel.modulePosition === totalModules) {
+                    //     var moduleOrderRefresh = moduleOrder;
+                    //     var elementsArrayRefresh = [];
+                    //
+                    //
+                    //     moduleOrderRefresh = moduleOrderRefresh.filter(Boolean);
+                    //     console.log('init ',moduleOrderRefresh);
+                    //
+                    //     moduleOrderRefresh[moduleOrderRefresh.length - 1] === 'BD' ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : document.getElementsByClassName("prefooterLine")[0].style.display='block';
+                    //
+                    //     moduleOrder.forEach((module,index) => {
+                    //         if (module != '') {
+                    //             elementsArrayRefresh.push(elementsArray[index]);
+                    //         }
+                    //     })
+                    //     //Removes duplicate anchor tags created by swiper plugin only needed if loop is true
+                    //     moduleOrderRefresh.forEach((module,index) => {
+                    //         var alphaChar = alpha.charAt(index);
+                    //         var elements = elementsArrayRefresh[index].querySelectorAll('a');
+                    //         var filitered = Array.from(elements);
+                    //         var i = filitered.length;
+                    //         while (i--) {
+                    //             if (filitered[i].parentElement.classList.contains("swiper-slide-duplicate")) {
+                    //                 filitered.splice(i, 1);
+                    //             }
+                    //         }
+                    //
+                    //         //Adds tracking to all anchor tags
+                    //         filitered.forEach((el,i) => {
+                    //             var linkNumber = i+1;
+                    //             var dataType = el.getAttribute("data-type");
+                    //             var dataDescription = el.getAttribute('data-description').split(' ').join('_');
+                    //             if(dataDescription != '') {
+                    //                 dataDescription = '_'+dataDescription;
+                    //             }
+                    //             var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module + dataDescription;
+                    //             var trackingLink = el.getAttribute("href");
+                    //
+                    //             var ctaText = el.getAttribute("data-cta");
+                    //             var itemNumber = el.getAttribute("data-itemNumber");
+                    //             var sectionDescription = el.getAttribute("data-sectionDescription");
+                    //
+                    //             var id = alphaChar + linkNumber + '_' + module;
+                    //             var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
+                    //             var creative = itemNumber ? itemNumber : 'NA';
+                    //             var pos = sectionDescription ? sectionDescription : 'NA';
+                    //             // console.log(trackingCode);
+                    //             trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
+                    //
+                    //             if (trackingLink !== '') {
+                    //                 if (trackingLink.includes("//blog.uncommongoods.com")) {
+                    //                     trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
+                    //                     $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
+                    //                 } else {
+                    //                     $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
+                    //                 }
+                    //             } else {
+                    //                 $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'});onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`);
+                    //                 $('a[href=""]').click(function (event) { // where href are blank
+                    //                     event.preventDefault();
+                    //                 })
+                    //             }
+                    //         })
+                    //     })
+                    // }
                 });
             },
             update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-                var display = allBindings().style.display;
+                // var display = allBindings().style.display;
+                var display = allBindings().if;
                 var index = viewModel.modulePosition - 1;
                 var totalModules = bindingContext.$parents[1].totalModules;
                 var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 
+                $(document).ready(function() {
+                    if (display) {
+                        moduleOrder[index] = moduleOrderStatic[index];
+                    } else {
+                        moduleOrder[index] = '';
+                    }
 
-                if (display === 'block') {
-                    moduleOrder[index] = moduleOrderStatic[index];
-                }
-                if (display === 'none') {
-                    moduleOrder[index] = '';
-                }
-
-                elementsArray.push($(element)[0]);
+                    elementsArray.push($(element)[0]);
 
 
-                $(document).ready(function () {
-                    if (viewModel.modulePosition === totalModules) {
+                    if(viewModel.modulePosition === moduleOrder.length) {
                         var moduleOrderRefresh = moduleOrder.filter(Boolean);
                         var elementsArrayRefresh = [];
-
-
-
 
                         moduleOrderRefresh[moduleOrderRefresh.length - 1] === 'BD' ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : document.getElementsByClassName("prefooterLine")[0].style.display='block';
                         //Gets section elements
@@ -311,60 +263,143 @@ class Dependents {
                                 elementsArrayRefresh.push(elementsArray[index]);
                             }
                         })
+
                         //Removes duplicate anchor tags created by swiper plugin only needed if loop is true
                         moduleOrderRefresh.forEach((module,index) => {
-                            var alphaChar = alpha.charAt(index);
-                            var elements = elementsArrayRefresh[index].querySelectorAll('a');
-                            var filitered = Array.from(elements);
-                            var i = filitered.length;
-                            while (i--) {
-                                if (filitered[i].parentElement.classList.contains("swiper-slide-duplicate")) {
-                                    filitered.splice(i, 1);
-                                }
-                            }
+                            // var alphaChar = alpha.charAt(index);
+                            // var elements = elementsArrayRefresh[index].querySelectorAll('a');
+                            // var filitered = Array.from(elements);
+                            // var i = filitered.length;
+                            //
+                            // while (i--) {
+                            //     if (filitered[i].parentElement.classList.contains("swiper-slide-duplicate")) {
+                            //         filitered.splice(i, 1);
+                            //     }
+                            // }
+
+                            // console.log( ko.virtualElements.firstChild(elementsArrayRefresh[index]));
+                            //console.log( ko.virtualElements.firstChild(elementsArrayRefresh[index]).nextElementSibling );
+                            //console.log(document.getElementsByTagName("a"))
+
                             //Adds tracking to all anchor tags
-                            filitered.forEach((el,i) => {
-                                var linkNumber = i+1;
-                                var dataType = el.getAttribute("data-type");
-                                var dataDescription =el.getAttribute('data-description').split(' ').join('_');
-                                if(dataDescription != '') {
-                                    dataDescription = '_'+dataDescription;
-                                }
-                                var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module + dataDescription;
-                                var trackingLink = el.getAttribute("href");
-
-                                var ctaText = el.getAttribute("data-cta");
-                                var itemNumber = el.getAttribute("data-itemNumber");
-                                var sectionDescription = el.getAttribute("data-sectionDescription");
-
-                                var id = alphaChar + linkNumber + '_' + module;
-                                var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
-                                var creative = itemNumber ? itemNumber : 'NA';
-                                var pos = sectionDescription ? sectionDescription : 'NA';
-
-                                //console.log(trackingCode);
-
-                                trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
-
-                                if (trackingLink !== '') {
-                                    if (trackingLink.includes("//blog.uncommongoods.com")) {
-                                        trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
-                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
-                                    } else {
-                                        $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
-                                    }
-                                } else {
-                                    $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
-                                    $('a[href=""]').click(function (event) { // where href are blank
-                                        event.preventDefault();
-                                    })
-                                }
-                            })
+                            // filitered.forEach((el,i) => {
+                            //     var linkNumber = i+1;
+                            //     var dataType = el.getAttribute("data-type");
+                            //     var dataDescription =el.getAttribute('data-description').split(' ').join('_');
+                            //     if(dataDescription != '') {
+                            //         dataDescription = '_'+dataDescription;
+                            //     }
+                            //     var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module + dataDescription;
+                            //     var trackingLink = el.getAttribute("href");
+                            //
+                            //     var ctaText = el.getAttribute("data-cta");
+                            //     var itemNumber = el.getAttribute("data-itemNumber");
+                            //     var sectionDescription = el.getAttribute("data-sectionDescription");
+                            //
+                            //     var id = alphaChar + linkNumber + '_' + module;
+                            //     var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
+                            //     var creative = itemNumber ? itemNumber : 'NA';
+                            //     var pos = sectionDescription ? sectionDescription : 'NA';
+                            //
+                            //     //console.log(trackingCode);
+                            //
+                            //     trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
+                            //
+                            //     if (trackingLink !== '') {
+                            //         if (trackingLink.includes("//blog.uncommongoods.com")) {
+                            //             trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
+                            //             $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                            //         } else {
+                            //             $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                            //         }
+                            //     } else {
+                            //         $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                            //         $('a[href=""]').click(function (event) { // where href are blank
+                            //             event.preventDefault();
+                            //         })
+                            //     }
+                            //})
                         })
+
+
+
+
+
                     }
+                    // if (viewModel.modulePosition === totalModules) {
+                    //
+                    //     var moduleOrderRefresh = moduleOrder.filter(Boolean);
+                    //     var elementsArrayRefresh = [];
+                    //
+                        // moduleOrderRefresh[moduleOrderRefresh.length - 1] === 'BD' ? document.getElementsByClassName("prefooterLine")[0].style.display='none' : document.getElementsByClassName("prefooterLine")[0].style.display='block';
+                        // //Gets section elements
+                        // moduleOrder.forEach((module,index) => {
+                        //     if (module != '') {
+                        //         elementsArrayRefresh.push(elementsArray[index]);
+                        //     }
+                        // })
+                    //
+                    //
+                    //     //Removes duplicate anchor tags created by swiper plugin only needed if loop is true
+                    //     moduleOrderRefresh.forEach((module,index) => {
+                    //         var alphaChar = alpha.charAt(index);
+                    //         var elements = elementsArrayRefresh[index].querySelectorAll('a');
+                    //         var filitered = Array.from(elements);
+                    //         var i = filitered.length;
+                    //
+                    //         while (i--) {
+                    //             if (filitered[i].parentElement.classList.contains("swiper-slide-duplicate")) {
+                    //                 filitered.splice(i, 1);
+                    //             }
+                    //         }
+                    //
+                    //         //console.log(elements);
+                    //         //console.log(document.getElementsByTagName("a"))
+                    //
+                    //         //Adds tracking to all anchor tags
+                    //         filitered.forEach((el,i) => {
+                    //             var linkNumber = i+1;
+                    //             var dataType = el.getAttribute("data-type");
+                    //             var dataDescription =el.getAttribute('data-description').split(' ').join('_');
+                    //             if(dataDescription != '') {
+                    //                 dataDescription = '_'+dataDescription;
+                    //             }
+                    //             var trackingCode = 'hp_module_' + alphaChar + linkNumber +'_'+ dataType +'_'+ module + dataDescription;
+                    //             var trackingLink = el.getAttribute("href");
+                    //
+                    //             var ctaText = el.getAttribute("data-cta");
+                    //             var itemNumber = el.getAttribute("data-itemNumber");
+                    //             var sectionDescription = el.getAttribute("data-sectionDescription");
+                    //
+                    //             var id = alphaChar + linkNumber + '_' + module;
+                    //             var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
+                    //             var creative = itemNumber ? itemNumber : 'NA';
+                    //             var pos = sectionDescription ? sectionDescription : 'NA';
+                    //
+                    //             //console.log(trackingCode);
+                    //
+                    //             trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
+                    //
+                    //             if (trackingLink !== '') {
+                    //                 if (trackingLink.includes("//blog.uncommongoods.com")) {
+                    //                     trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
+                    //                     $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                    //                 } else {
+                    //                     $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                    //                 }
+                    //             } else {
+                    //                 $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                    //                 $('a[href=""]').click(function (event) { // where href are blank
+                    //                     event.preventDefault();
+                    //                 })
+                    //             }
+                    //         })
+                    //     })
+                    // }
                 })
             }
         };
+        ko.virtualElements.allowedBindings.resizeView = true;
     }
 };
 
@@ -406,7 +441,7 @@ ko.components.register('large-feature-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'LF', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="large-feature-module background-color-off-white">
+        <section data-bind="resizeView: 'LF', if: displayOn(displayGroupViewPortSize)" class="large-feature-module background-color-off-white">
             <!-- ko foreach: largeFeatureModulesSections -->
                 <!-- ko if: $parent.displayOn(displayModuleOn) -->
                     <div class="row fullwidth">
@@ -418,13 +453,13 @@ ko.components.register('large-feature-module', {
                                         <source data-bind="attr: { media: '(max-width: 40em)', srcset: image.customImage.small ? image.customImage.small : productImgPath(item,360) }">
                                     <!--[if IE 9]></video><![endif]-->
 
-                                    <!-- ko if: $parent.isSmall() -->
+                                    <!-- ko if: $parent.viewPortSize() === 'small' -->
                                         <div class="responsively-lazy preventReflow">
                                             <img data-bind="attr: { src: image.customImage.small ? image.customImage.small : productImgPath(item,360), alt: cta.text }">
                                         </div>
                                     <!-- /ko -->
 
-                                    <!-- ko if: !$parent.isSmall() -->
+                                    <!-- ko if: $parent.viewPortSize() != 'small' -->
                                         <!-- ko if: $parent.isVideo(image.customImage.large) -->
                                             <video loop muted autoplay data-bind="attr: { poster: $parent.posterImage(image.customImage.large) }">
                                                 <source data-bind="attr: { src: image.customImage.large }" type="video/mp4">
@@ -465,7 +500,7 @@ ko.components.register('small-feature-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'SF', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="small-feature-module background-color-white">
+        <section data-bind="resizeView: 'SF', if: displayOn(displayGroupViewPortSize)" class="small-feature-module background-color-white">
             <!-- ko if: viewPortSize() === 'small' || viewPortSize() === 'medium' -->
                 <!-- ko foreach: smModulesSections -->
                     <!-- ko if: $parent.displayOn(displayModuleOn) -->
@@ -564,7 +599,7 @@ ko.components.register('basic-story-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'BS', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="basic-story-module background-color-off-white">
+        <section data-bind="resizeView: 'BS', if: displayOn(displayGroupViewPortSize)" class="basic-story-module background-color-off-white">
             <!-- ko if: viewPortSize() === 'small' -->
                 <!-- ko foreach: basicStoryModulesSections -->
                     <!-- ko if: $parent.displayOn(displayModuleOn) -->
@@ -694,7 +729,7 @@ ko.components.register('extended-story-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'ES', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="extended-story-module background-color-off-white">
+        <section data-bind="resizeView: 'ES', if: displayOn(displayGroupViewPortSize)" class="extended-story-module background-color-off-white">
             <!-- ko if: viewPortSize() === 'small' -->
                 <!-- ko foreach: extendedStoryModulesSections -->
                     <!-- ko if: $parent.displayOn(displayModuleOn) -->
@@ -822,7 +857,7 @@ ko.components.register('collection-grid-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'CG', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="collection-grid-module background-color-off-white">
+        <section data-bind="resizeView: 'CG', if: displayOn(displayGroupViewPortSize)" class="collection-grid-module background-color-off-white">
             <div class="row fullwidth">
                 <div class="small-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
                     <div class="row container">
@@ -965,7 +1000,7 @@ ko.components.register('carousel-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'CL', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="carousel-module background-color-off-white">
+        <section data-bind="resizeView: 'CL', if: displayOn(displayGroupViewPortSize)" class="carousel-module background-color-off-white">
             <div class="row fullwidth">
                 <!-- ko if: viewPortSize() === 'small' -->
                     <!-- ko if: section.text -->
@@ -1096,7 +1131,7 @@ ko.components.register('text-link-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'TL', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="text-link-module background-color-off-white">
+        <section data-bind="resizeView: 'TL', if: displayOn(displayGroupViewPortSize)" class="text-link-module background-color-off-white">
             <div class="row fullwidth waterColor">
                 <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns">
                     <div class="container">
@@ -1168,42 +1203,44 @@ ko.components.register('image-link-double-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'LD', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="image-link-double-module background-color-off-white">
-            <div class="row fullwidth waterColor">
-                <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns">
-                    <div class="container">
-                        <!-- ko if: section.text -->
-                            <div class="row">
-                                <div class="small-12 xlarge-10 xxlarge-8 text-center xlarge-centered columns">
-                                    <h2>
-                                        <a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }"></a>
-                                    </h2>
+        <!-- ko resizeView: 'LD', if: displayOn(displayGroupViewPortSize) -->
+            <section class="image-link-double-module background-color-off-white">
+                <div class="row fullwidth waterColor">
+                    <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns">
+                        <div class="container">
+                            <!-- ko if: section.text -->
+                                <div class="row">
+                                    <div class="small-12 xlarge-10 xxlarge-8 text-center xlarge-centered columns">
+                                        <h2>
+                                            <a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }"></a>
+                                        </h2>
+                                    </div>
                                 </div>
-                            </div>
-                        <!-- /ko -->
+                            <!-- /ko -->
 
-                        <div class="row">
-                            <div class="small-11 medium-12 small-centered columns">
-                                <ul data-bind="attr: { class: classNameBlockGrid(imageLinkDoubleModuleSections) }">
-                                    <!-- ko foreach: imageLinkDoubleModuleSections -->
-                                        <!-- ko if: $parent.displayOn(displayModuleOn) -->
-                                            <li class="text-center content">
-                                                <div class="responsively-lazy preventReflow">
-                                                    <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
-                                                        <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
-                                                    </a>
-                                                </div>
-                                                <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }"></a></h4>
-                                            </li>
+                            <div class="row">
+                                <div class="small-11 medium-12 small-centered columns">
+                                    <ul data-bind="attr: { class: classNameBlockGrid(imageLinkDoubleModuleSections) }">
+                                        <!-- ko foreach: imageLinkDoubleModuleSections -->
+                                            <!-- ko if: $parent.displayOn(displayModuleOn) -->
+                                                <li class="text-center content">
+                                                    <div class="responsively-lazy preventReflow">
+                                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
+                                                            <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
+                                                        </a>
+                                                    </div>
+                                                    <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }"></a></h4>
+                                                </li>
+                                            <!-- /ko -->
                                         <!-- /ko -->
-                                    <!-- /ko -->
-                                </ul>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>`, synchronous: true
+            </section>
+        <!-- /ko -->`, synchronous: true
 });
 
 ko.components.register('button-link-double-module', {
@@ -1237,7 +1274,7 @@ ko.components.register('button-link-double-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'BD', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="button-link-double-module background-color-white">
+        <section data-bind="resizeView: 'BD', if: displayOn(displayGroupViewPortSize)" class="button-link-double-module background-color-white">
             <div class="row">
                 <div class="small-12 columns">
                     <div class="row collapse">
@@ -1411,7 +1448,7 @@ ko.components.register('seo-link-module', {
         }
     },
     template: `
-        <section data-bind="resizeView: 'TL_SEO', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }, attr: { class: 'seoLinks text-link-module background-color-off-white' } ">
+        <section data-bind="resizeView: 'TL_SEO', if: displayOn(displayGroupViewPortSize), attr: { class: 'seoLinks text-link-module background-color-off-white' } ">
             <!-- ko if: viewPortSize() === 'small' -->
                 <div class"row">
                     <div class="small-12 small-centered columns container">
@@ -1434,6 +1471,39 @@ ko.components.register('seo-link-module', {
                             <!-- /ko -->
                         </div>
                     </div>
+                </div>
+
+                <div data-bind="if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="seoLinks2 image-link-double-module background-color-off-white">
+                    <!-- ko if: viewPortSize() === 'small' -->
+                        <div class="row container">
+                            <div class="small-12 small-centered columns">
+                                <!-- ko if: seo2.section.text -->
+                                    <div class="row">
+                                        <div class="small-12 xlarge-10 text-center xlarge-centered columns">
+                                            <h2>
+                                                <a class="a-secondary" data-bind="html: seo2.section.text, attr: { href: addUgDomain(seo2.section.link), 'data-type': 'Section', 'data-description': seo2.section.description }"></a>
+                                            </h2>
+                                        </div>
+                                    </div>
+                                <!-- /ko -->
+                            </div>
+
+                            <div class="small-11 small-centered columns">
+                                <ul data-bind="attr: { class: classNameBlockGrid(seo2Sections) }">
+                                    <!-- ko foreach: seo2Sections -->
+                                        <li class="text-center content">
+                                            <div class="responsively-lazy preventReflow">
+                                                <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
+                                                    <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
+                                                </a>
+                                            </div>
+                                            <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></h4>
+                                        </li>
+                                    <!-- /ko -->
+                                </ul>
+                            </div>
+                        </div>
+                    <!-- /ko -->
                 </div>
             <!-- /ko -->
 
@@ -1486,43 +1556,7 @@ ko.components.register('seo-link-module', {
                     </div>
                 </div>
             <!-- /ko -->
-        </section>
-
-        <!-- ko if: viewPortSize() === 'small' -->
-
-            <section data-bind="resizeView: 'LD_SEO', if: displayOn(displayGroupViewPortSize), style: { display: displayOn(displayGroupViewPortSize) ? 'block' : 'none' }" class="seoLinks2 image-link-double-module background-color-off-white">
-                <!-- ko if: viewPortSize() === 'small' -->
-                    <div class="row container">
-                        <div class="small-12 small-centered columns">
-                            <!-- ko if: seo2.section.text -->
-                                <div class="row">
-                                    <div class="small-12 xlarge-10 text-center xlarge-centered columns">
-                                        <h2>
-                                            <a class="a-secondary" data-bind="html: seo2.section.text, attr: { href: addUgDomain(seo2.section.link), 'data-type': 'Section', 'data-description': seo2.section.description }"></a>
-                                        </h2>
-                                    </div>
-                                </div>
-                            <!-- /ko -->
-                        </div>
-
-                        <div class="small-11 small-centered columns">
-                            <ul data-bind="attr: { class: classNameBlockGrid(seo2Sections) }">
-                                <!-- ko foreach: seo2Sections -->
-                                    <li class="text-center content">
-                                        <div class="responsively-lazy preventReflow">
-                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description }">
-                                                <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
-                                            </a>
-                                        </div>
-                                        <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description }"></a></h4>
-                                    </li>
-                                <!-- /ko -->
-                            </ul>
-                        </div>
-                    </div>
-                <!-- /ko -->
-            </section>
-        <!-- /ko -->`, synchronous: true
+        </section>`, synchronous: true
 });
 
 ko.components.register('homePage-container', {
