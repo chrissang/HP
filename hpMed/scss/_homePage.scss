@@ -589,8 +589,11 @@ body:before {
 		.waterColor {
     		padding: 1.5rem;
 		}
-		& + .large-feature-module, & + .small-feature-module, & + .basic-story-module, & + .extended-story-module, & + .collection-grid-module, & + .carousel-module, & + .text-link-module, & + .image-link-double-module, & + .button-link-double-module {
+		& + .large-feature-module, & + .small-feature-module, & + .basic-story-module, & + .extended-story-module, & + .collection-grid-module, & + .carousel-module, & + .text-link-module, & + .image-link-double-module ,& + .button-link-double-module {
 			padding-top: 0;
+			.waterColor {
+				padding-top: 0;
+			}
 		}
 	}
 	.collection-grid-module {
@@ -675,6 +678,9 @@ body:before {
 		}
 		& + .large-feature-module, & + .small-feature-module, & + .basic-story-module, & + .extended-story-module, & + .collection-grid-module, & + .carousel-module, & + .text-link-module, & + .image-link-double-module, & + .button-link-double-module {
 			padding-top: 0;
+			.waterColor {
+				padding-top: 0;
+			}
 		}
 	}
 	.button-link-double-module {
@@ -811,7 +817,7 @@ body:before {
 			padding: 0;
 		}
 		.waterColor {
-    		padding: 2rem;
+    		padding: 2rem 0;
 		}
 		.seo1LinksContainer {
 			padding: 2rem 0;
