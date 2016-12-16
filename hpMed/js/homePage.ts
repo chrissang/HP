@@ -1003,59 +1003,57 @@ ko.components.register('text-link-module', {
         <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'TL' -->
             <section data-bind="" class="text-link-module background-color-off-white">
                 <div class="row fullwidth waterColor">
-                    <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns">
-                        <div class="container">
-                            <!-- ko if: section.text -->
-                                <div class="row">
-                                    <div class="small-12 text-center columns">
-                                        <a class="a-secondary" data-bind="attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }">
-                                            <h2 data-bind="html: section.text"></h2>
-                                        </a>
-                                    </div>
+                    <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns container">
+                        <!-- ko if: section.text -->
+                            <div class="row">
+                                <div class="small-12 text-center columns">
+                                    <a class="a-secondary" data-bind="attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }">
+                                        <h2 data-bind="html: section.text"></h2>
+                                    </a>
                                 </div>
-                            <!-- /ko -->
+                            </div>
+                        <!-- /ko -->
 
-                            <!-- ko if: viewPortSize() === 'small' -->
-                                <div class="row">
-                                    <!-- ko foreach: textLinkModuleSections -->
-                                        <!-- ko if: $parent.displayOn(displayModuleOn) -->
-                                            <div class="small-6 columns">
-                                                <div class="text-link-container">
-                                                    <div class="content">
-                                                        <a class="a-secondary" data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
-                                                            <h4 data-bind="html: cta.text">/h4>
-                                                        </a><
-                                                    </div>
+                        <!-- ko if: viewPortSize() === 'small' -->
+                            <div class="row">
+                                <!-- ko foreach: textLinkModuleSections -->
+                                    <!-- ko if: $parent.displayOn(displayModuleOn) -->
+                                        <div class="small-6 columns">
+                                            <div class="text-link-container">
+                                                <div class="content">
+                                                    <a class="a-secondary" data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
+                                                        <h4 data-bind="html: cta.text">/h4>
+                                                    </a><
                                                 </div>
                                             </div>
-                                        <!-- /ko -->
+                                        </div>
                                     <!-- /ko -->
-                                </div>
-                            <!-- /ko -->
+                                <!-- /ko -->
+                            </div>
+                        <!-- /ko -->
 
-                            <!-- ko if: viewPortSize() != 'small' -->
-                                <div class="row">
-                                    <div class="medium-12 columns">
-                                        <ul data-bind="attr: { class: classNameBlockGrid(textLinkModuleSections) }">
-                                            <!-- ko foreach: textLinkModuleSections -->
-                                                <!-- ko if: $parent.displayOn(displayModuleOn) -->
-                                                    <li class="text-center content">
-                                                        <div class="responsively-lazy preventReflow">
-                                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
-                                                                <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
-                                                            </a>
-                                                        </div>
-                                                        <a class="a-secondary" data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
-                                                            <h4 data-bind="html: cta.text"></h4>
+                        <!-- ko if: viewPortSize() != 'small' -->
+                            <div class="row">
+                                <div class="medium-12 columns">
+                                    <ul data-bind="attr: { class: classNameBlockGrid(textLinkModuleSections) }">
+                                        <!-- ko foreach: textLinkModuleSections -->
+                                            <!-- ko if: $parent.displayOn(displayModuleOn) -->
+                                                <li class="text-center content">
+                                                    <div class="responsively-lazy preventReflow">
+                                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
+                                                            <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
                                                         </a>
-                                                    </li>
-                                                <!-- /ko -->
+                                                    </div>
+                                                    <a class="a-secondary" data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
+                                                        <h4 data-bind="html: cta.text"></h4>
+                                                    </a>
+                                                </li>
                                             <!-- /ko -->
-                                        </ul>
-                                    </div>
+                                        <!-- /ko -->
+                                    </ul>
                                 </div>
-                            <!-- /ko -->
-                        </div>
+                            </div>
+                        <!-- /ko -->
                     </div>
                 </div>
             </section>
@@ -1078,35 +1076,33 @@ ko.components.register('image-link-double-module', {
         <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'LD' -->
             <section data-bind="" class="image-link-double-module background-color-off-white">
                 <div class="row fullwidth waterColor">
-                    <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns">
-                        <div class="container">
-                            <!-- ko if: section.text -->
-                                <div class="row">
-                                    <div class="small-12 xlarge-10 xxlarge-8 text-center xlarge-centered columns">
-                                        <h2>
-                                            <a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }"></a>
-                                        </h2>
-                                    </div>
-                                </div>
-                            <!-- /ko -->
-
+                    <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns container">
+                        <!-- ko if: section.text -->
                             <div class="row">
-                                <div class="small-11 medium-12 small-centered columns">
-                                    <ul data-bind="attr: { class: classNameBlockGrid(imageLinkDoubleModuleSections) }">
-                                        <!-- ko foreach: imageLinkDoubleModuleSections -->
-                                            <!-- ko if: $parent.displayOn(displayModuleOn) -->
-                                                <li class="text-center content">
-                                                    <div class="responsively-lazy preventReflow">
-                                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
-                                                            <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
-                                                        </a>
-                                                    </div>
-                                                    <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }"></a></h4>
-                                                </li>
-                                            <!-- /ko -->
-                                        <!-- /ko -->
-                                    </ul>
+                                <div class="small-12 xlarge-10 xxlarge-8 text-center xlarge-centered columns">
+                                    <h2>
+                                        <a class="a-secondary" data-bind="html: section.text, attr: { href: addUgDomain(section.link), 'data-type': 'Section', 'data-description': section.description, 'data-sectionDescription': section.description }"></a>
+                                    </h2>
                                 </div>
+                            </div>
+                        <!-- /ko -->
+
+                        <div class="row">
+                            <div class="small-11 medium-12 small-centered columns">
+                                <ul data-bind="attr: { class: classNameBlockGrid(imageLinkDoubleModuleSections) }">
+                                    <!-- ko foreach: imageLinkDoubleModuleSections -->
+                                        <!-- ko if: $parent.displayOn(displayModuleOn) -->
+                                            <li class="text-center content">
+                                                <div class="responsively-lazy preventReflow">
+                                                    <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
+                                                        <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
+                                                    </a>
+                                                </div>
+                                                <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }"></a></h4>
+                                            </li>
+                                        <!-- /ko -->
+                                    <!-- /ko -->
+                                </ul>
                             </div>
                         </div>
                     </div>
