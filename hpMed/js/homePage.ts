@@ -4,8 +4,8 @@ var moduleOrder = [];
 var alphaOrder = [];
 var counter = 0;
 
-const imageDir = 'https://www.uncommongoods.com/images';
-const ugWeb = 'https://www.uncommongoods.com';
+const imageDir = '//www.uncommongoods.com/images';
+const ugWeb = '//www.uncommongoods.com';
 
 class Dependents {
     constructor(params) {
@@ -191,29 +191,30 @@ class Dependents {
                             var sectionDescription = el.getAttribute("data-sectionDescription") ? el.getAttribute("data-sectionDescription") : 'NA';
 
                             var id = alphaChar + linkNumber + '_' + moduleType;
-                            var name = ctaText+'_'+trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
+                            var name = ctaText+'_'+trackingLink.replace(/\/\/www.uncommongoods.com/g, '').replace("//blog.uncommongoods.com","/blog");
                             var creative = itemNumber;
                             var pos = sectionDescription;
 
-                            trackingLink = trackingLink.replace(/https:\/\/www.uncommongoods.com/g, '');
+                            trackingLink = trackingLink.replace(/\/\/www.uncommongoods.com/g, '');
 
                             //console.log(trackingCode);
                             //console.log(trackingLink);
                             //onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)`
-                            if (trackingLink !== '') {
+                            if (trackingLink !== '' && moduleType != 'TL_SEO') {
                                 if (trackingLink.includes("//blog.uncommongoods.com")) {
                                     trackingLink = trackingLink.replace("//blog.uncommongoods.com","/blog");
-                                    $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                                    $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView, onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)'})`);
                                 } else {
-                                    $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                                    $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView, onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)'})`);
                                 }
+                            } else if (trackingLink !== '' && moduleType === 'TL_SEO') {
+                                $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalSEOLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackSEOLinkPageView, onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)'})`);
                             } else {
-                                $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView'})`);
+                                $(el).attr("onclick", `javascript: pageTracker._trackPageview('/internal`+trackingLink+`?source=`+trackingCode+`');dataLayer.push({'internalHPModuleLinkUrl':'/internal`+trackingLink+`?source=`+trackingCode+`'},{'event':'fireGTMTrackHPModulePageView, onPromoClick(`+id+`, `+name+`, `+creative+`, `+pos+`)'})`);
                                 $('a[href=""]').click(function (event) { // where href are blank
                                     event.preventDefault();
                                 })
                             }
-
                         })
                     }
 
