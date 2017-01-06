@@ -26,3 +26,9 @@ var port = process.env.HTTP_PORT || 9000;
 app.listen(port, function() {
   console.log('listening for DEV: on port %s', port);
 });
+
+// function start() {
+//     app.listen(cfg.services.restApiPort);
+//     logger.info("sku service", cfg.services.restApiPort)
+// }
+// module.exports = start;

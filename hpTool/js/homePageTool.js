@@ -71,19 +71,47 @@ class Dependents {
             var uniqueIdReordered = this.uniqueIdModified();
             // console.log('uniqueIdReordered ',uniqueIdReordered)
             // console.log('selectedModules before ',this.selectedModules());
-            function reorderAlpha(obj, curr, updated) {
-                var jsonString = JSON.stringify(obj);
-                jsonString = jsonString.replace(curr, updated);
-                var jsonObj = JSON.parse(jsonString);
-                return jsonObj;
-            };
+            // function reorderAlpha(obj, curr, updated) {
+            //     var jsonString = JSON.stringify(obj);
+            //     jsonString = jsonString.replace(curr, updated);
+            //     var jsonObj = JSON.parse(jsonString);
+            //     return jsonObj;
+            // };
             uniqueIdReordered.forEach((el,index) => {
                 var alphaChar = this.alpha.charAt(index);
-                if (Object.keys(this.mappingOrder[el]) != alphaChar) {
-                    var curr = Object.keys(this.mappingOrder[el])[0];
-                    this.mappingOrder[el] = reorderAlpha(this.mappingOrder[el],curr, alphaChar);
+                // if (Object.keys(this.mappingOrder[el]) != alphaChar) {
+                //     var curr = Object.keys(this.mappingOrder[el])[0];
+                //     this.mappingOrder[el] = reorderAlpha(this.mappingOrder[el],curr, alphaChar);
+                // }
+
+                if (Object.keys(this.mappingOrder[el])[0] != index) {
+                    var jsonString = JSON.stringify(this.mappingOrder[el]);
+                    var replaceVal = Object.keys(this.mappingOrder[el])[0];
+                    jsonString = jsonString.replace(RegExp(replaceVal), index);
+                    this.mappingOrder[el] = JSON.parse(jsonString);
                 }
             });
+
+            var mappingOrderCopy = this.mappingOrder;
+            var removedUniqueIdJson = {};
+            var tempArry = [];
+
+            Object.keys(mappingOrderCopy).forEach(function(key) {
+                Object.assign(removedUniqueIdJson, mappingOrderCopy[key]);
+            })
+            Object.keys(removedUniqueIdJson).forEach(function(key,index) {
+                tempArry.push(Object.keys(removedUniqueIdJson[key])[0])
+            });
+
+            //this.selectedModules(tempArry);
+
+            // tempArry.forEach((ordered, index) => {
+            //     if (this.selectedModules()[index] != ordered) {
+            //         this.selectedModules()[index] = ordered;
+            //     }
+            // })
+
+            //console.log('after selectedModules ',this.selectedModules());
 
         }
         this.removeModule = function(e) {
@@ -395,14 +423,27 @@ class Dependents {
                         var order = sortable.toArray();
                         ko.dataFor(evt.item).params.data.uniqueIdModified(order);
                         ko.dataFor(evt.item).params.data.sortMappingOrder();
+
+                        var elements = el.querySelectorAll("li");
+                        elements.forEach((el, index) => {
+                            if (el.getAttribute("data-type") != viewModel.params.data.selectedModules()[index]) {
+                                // console.log('reordered ',el.getAttribute("data-type"));
+                                // console.log('viewModel ',viewModel.params.data.selectedModules()[index]);
+
+                                viewModel.params.data.selectedModules()[index] = el.getAttribute("data-type");
+                            }
+                        })
+                        console.log('viewModel ',viewModel.params.data.selectedModules());
+
                     }
                 });
 
                 var uniqueId = viewModel.uniqueId;
                 // var alphaChar = viewModel.alpha.charAt(viewModel.accordionIndex());
-                var accordionIndex = viewModel.accordionIndex();
+                var alphaChar = el.children.length;
+                var accordionIndex = viewModel.accordionIndex;
                 var moduleType = bindingContext.$parent;
-                viewModel.moduleType(bindingContext.$parent);
+
 
                 viewModel.params.data.mappingOrder[uniqueId] = {};
                 viewModel.params.data.mappingOrder[uniqueId][accordionIndex] = {};
@@ -765,26 +806,58 @@ class Dependents {
                 //console.log('mapping ',viewModel.params.data.mappingOrder);
             }
         };
+
+        ko.bindingHandlers.sortableList = {
+            init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+                //return { 'controlsDescendantBindings': true };
+            },
+            update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+                // console.log('sortableList ',element);
+                // console.log('sortableList ',viewModel.selectedModules()[0]);
+                if (viewModel.selectedModules().length > 0) {
+                    // console.log('sortableList ',viewModel.selectedModules()[viewModel.selectedModules().length - 1]);
+                    //$(element).html('<hello></hello>');
+
+                    // var componentName = viewModel.selectedModules()[viewModel.selectedModules().length - 1];
+                    // $(element).html('<ug-component></ug-component>');
+                    //
+                    //
+                    // $(element).append($("<hello></hello>"));
+                    // console.log($(element))
+                }
+
+
+
+            }
+        }
     }
 }
+ko.components.register('hello', {
+    viewModel: class HelloComponentModel extends Dependents {
+        constructor(params) {
+          super(params);
+          this.params = params;
+        }
+    },
+    template: `HELLO`, synchronous: true
+});
 
 ko.components.register('large-feature-module', {
     viewModel: class LargeFeatureModuleComponentModel extends Dependents {
         constructor(params) {
           super(params);
           this.params = params;
-          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
         }
     },
     template: `
-        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'large-feature-module' }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Large Feature Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Large Feature Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -853,7 +926,7 @@ ko.components.register('large-feature-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div
-        </div>`, synchronous: true
+        </li>`, synchronous: true
 });
 
 ko.components.register('small-feature-module', {
@@ -861,18 +934,17 @@ ko.components.register('small-feature-module', {
         constructor(params) {
           super(params);
           this.params = params;
-          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
         }
     },
     template: `
-        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'small-feature-module' }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Small Feature Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Small Feature Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -956,7 +1028,7 @@ ko.components.register('small-feature-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </div>`, synchronous: true
+        </li>`, synchronous: true
 });
 
 ko.components.register('basic-story-module', {
@@ -964,18 +1036,17 @@ ko.components.register('basic-story-module', {
         constructor(params) {
           super(params);
           this.params = params;
-          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
         }
     },
     template: `
-        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'basic-story-module' }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Basic Story Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Basic Story Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1059,7 +1130,7 @@ ko.components.register('basic-story-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div
-        </div>`, synchronous: true
+        </li>`, synchronous: true
 });
 
 ko.components.register('extended-story-module', {
@@ -1067,18 +1138,17 @@ ko.components.register('extended-story-module', {
         constructor(params) {
           super(params);
           this.params = params;
-          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
         }
     },
     template: `
-        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'extended-story-module' }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Extended Story Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Extended Story Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1177,7 +1247,7 @@ ko.components.register('extended-story-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </div>`, synchronous: true
+        </li>`, synchronous: true
 });
 
 ko.components.register('collection-grid-module', {
@@ -1185,18 +1255,17 @@ ko.components.register('collection-grid-module', {
         constructor(params) {
           super(params);
           this.params = params;
-          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
         }
     },
     template: `
-        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'collection-grid-module' }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Collection Grid Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Collection Grid Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1280,7 +1349,7 @@ ko.components.register('collection-grid-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </div>`, synchronous: true
+        </li>`, synchronous: true
 });
 
 ko.components.register('carousel-module', {
@@ -1288,18 +1357,17 @@ ko.components.register('carousel-module', {
         constructor(params) {
           super(params);
           this.params = params;
-          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
         }
     },
     template: `
-        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'carousel-module' }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Carousel Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Carousel Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1383,7 +1451,7 @@ ko.components.register('carousel-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </div>`, synchronous: true
+        </li>`, synchronous: true
 });
 
 ko.components.register('text-link-module', {
@@ -1391,18 +1459,17 @@ ko.components.register('text-link-module', {
         constructor(params) {
           super(params);
           this.params = params;
-          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
         }
     },
     template: `
-        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'text-link-module' }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Text Link Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Text Link Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1471,7 +1538,7 @@ ko.components.register('text-link-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </div>`, synchronous: true
+        </li>`, synchronous: true
 });
 
 ko.components.register('image-link-double-module', {
@@ -1479,18 +1546,17 @@ ko.components.register('image-link-double-module', {
         constructor(params) {
           super(params);
           this.params = params;
-          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
         }
     },
     template: `
-        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'image-link-double-module' }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Image Link Double Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Image Link Double Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1559,7 +1625,7 @@ ko.components.register('image-link-double-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </div>`, synchronous: true
+        </li>`, synchronous: true
 });
 
 ko.components.register('button-link-double-module', {
@@ -1567,18 +1633,17 @@ ko.components.register('button-link-double-module', {
         constructor(params) {
           super(params);
           this.params = params;
-          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
         }
     },
     template: `
-        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'button-link-double-module' }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Button Link Double Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'Button Link Double Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1647,7 +1712,7 @@ ko.components.register('button-link-double-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </div>`, synchronous: true
+        </li>`, synchronous: true
 });
 
 ko.components.register('seo-link-module', {
@@ -1655,18 +1720,17 @@ ko.components.register('seo-link-module', {
         constructor(params) {
           super(params);
           this.params = params;
-          this.accordionIndex = ko.observable(params.data.selectedModules().length-1);
         }
     },
     template: `
-        <div class="row module" data-bind="attr: { 'data-id': uniqueId, id: uniqueId }">
+        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'seo-link-module' }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'SEO Links Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }" class="draggable"></a>
+                            <a data-bind="text: 'SEO Links Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="sortable: uniqueId, attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 columns">
                                         <h3>TL SEO 1</h3>
@@ -1773,7 +1837,7 @@ ko.components.register('seo-link-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </div>`, synchronous: true
+        </li>`, synchronous: true
 });
 
 ko.components.register('ug-component', {
@@ -1851,15 +1915,13 @@ ko.components.register('homePageTool', {
                   };
               }
           }
-
-          this.addToView = ko.observable();
           this.createModule = function (e) {
               load = false;
               this.selectedModules.push(this.selection());
-            //   if (this.selection()) {
-            //       this.selectedModules.push(this.selection());
-            //       console.log('selectedModules after ',this.selectedModules());
-            //   }
+              console.log('createModule ',this.selectedModules());
+
+
+
           }
           this.previewHomepage = function(e) {
               //console.log('preview click ',this.mappingOrder);
@@ -1897,7 +1959,6 @@ ko.components.register('homePageTool', {
               duplicateObjects = duplicateObjects.filter(function(n){ return n != '' });
               this.jsonOrder(duplicateObjects);
           }
-          // TODO: Need to compare global and local mappingOrder before reRender runs
           this.reRender = function renderLoadedJson() {
               this.selectedModules.removeAll();
               counter = 0;
@@ -2015,7 +2076,7 @@ ko.components.register('homePageTool', {
                     })
                 })
             }
-        }
+          }
       }
     },
     template: `
@@ -2050,9 +2111,8 @@ ko.components.register('homePageTool', {
             </div>
         </div>
 
+        <ul data-bind="sortableList" id="sortableContainer">
 
-        <div data-bind="foreach: selectedModules()" id="sortableContainer">
-            <!-- ko component: {name: $data, params: { data: $parent }} --><!-- /ko -->
-        </div>`, synchronous: true
+        </ul>`, synchronous: true
 });
 ko.applyBindings();
