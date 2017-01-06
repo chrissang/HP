@@ -4,7 +4,7 @@ var moduleOrder = [];
 var alphaOrder = [];
 var counter = 0;
 
-const imageDir = '//www.uncommongoods.com/images';
+const imageDir = '/images';
 const ugWeb = '//www.uncommongoods.com';
 
 class Dependents {
@@ -36,36 +36,12 @@ class Dependents {
             }
         }
         this.responsiveImage = function(itemId, largeImage, smallImage) {
-
             var responsiveValue;
-
-            // console.log('largeImage ',largeImage.includes("640px"));
-            // console.log('smallImage ',smallImage.includes("180px"));
-
-            if (largeImage.includes("640px")) {
-                responsiveValue = largeImage + ' 640w, ';
-            }
-            if (largeImage.includes("1680px")) {
-                responsiveValue = largeImage + ' 640w, ';
-            }
-            if (smallImage.includes("180px")) {
-                responsiveValue = responsiveValue + smallImage + ' 180w,';
-            }
-            if (smallImage.includes("360px")) {
-                responsiveValue = responsiveValue + smallImage + ' 360w,';
-            }
-
-            //console.log('responsiveValue ',responsiveValue);
-            // var responsiveLarge = function() {
-            //     return largeImage ? largeImage + ' 1024w, ' + largeImage + ' 640w, ' : productImgPath(itemId,640) + ' 1024w, ' +  productImgPath(itemId,640) + ' 640w, ';
-            // }
-            // var responsiveSmall = function() {
-            //     return smallImage ? smallImage + ' 320w, ' : productImgPath(itemId,360) + ' 320w';
-            // }
-            // return responsiveLarge()+responsiveSmall();
-
+            var largeImageSize = largeImage.split('_').pop().split('.')[0].slice(0, -2);
+            var smallImageSize = smallImage.split('_').pop().split('.')[0].slice(0, -2);
+            responsiveValue = smallImageSize ? smallImage + ' ' + smallImageSize + 'w, ' : productImgPath(itemId,360) + ' 360w, ';
+            responsiveValue += largeImageSize ? largeImage + ' ' + largeImageSize + 'w' : productImgPath(itemId,640) + ' 640w';
             return responsiveValue;
-
         }
         this.isVideo = function(video) {
             return video.split('.').pop() === 'mp4' ? true : false;
@@ -79,7 +55,7 @@ class Dependents {
         this.classNameBlockGrid = function(sectionData) {
             this.nonHiddenModuleSections = [];
             if (this.viewPortSize() === 'small') {
-                return 'small-block-grid-2';
+                return 'small-6 columns';
             } else if(this.viewPortSize() === 'medium') {
                 sectionData.forEach((module,index) => {
                     if (module.displayModuleOn === 'small' || module.displayModuleOn === 'medium') {
@@ -87,8 +63,8 @@ class Dependents {
                     }
                 })
                 return {
-                    '4': 'medium-block-grid-4',
-                    '6': 'medium-block-grid-3'
+                    '4': 'medium-3 columns',
+                    '6': 'medium-2 columns'
                 }[this.nonHiddenModuleSections.length];
 
             } else if(this.viewPortSize() === 'large') {
@@ -98,8 +74,8 @@ class Dependents {
                     }
                 })
                 return {
-                    '4': 'large-block-grid-4',
-                    '6': 'large-block-grid-6'
+                    '4': 'large-3 columns',
+                    '6': 'large-2 columns'
                 }[this.nonHiddenModuleSections.length];
             } else {
                 sectionData.forEach((module,index) => {
@@ -108,8 +84,8 @@ class Dependents {
                     }
                 })
                 return {
-                    '4': 'medium-block-grid-4',
-                    '6': 'medium-block-grid-6'
+                    '4': 'medium-3 columns',
+                    '6': 'medium-2 columns'
                 }[this.nonHiddenModuleSections.length];
             }
 
@@ -1039,22 +1015,20 @@ ko.components.register('text-link-module', {
                         <!-- ko if: viewPortSize() != 'small' -->
                             <div class="row">
                                 <div class="medium-12 columns">
-                                    <ul data-bind="attr: { class: classNameBlockGrid(textLinkModuleSections) }">
-                                        <!-- ko foreach: textLinkModuleSections -->
-                                            <!-- ko if: $parent.displayOn(displayModuleOn) -->
-                                                <li class="text-center content">
-                                                    <div class="responsively-lazy preventReflow">
-                                                        <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
-                                                            <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
-                                                        </a>
-                                                    </div>
-                                                    <a class="a-secondary" data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
-                                                        <h4 data-bind="html: cta.text"></h4>
+                                    <!-- ko foreach: textLinkModuleSections -->
+                                        <!-- ko if: $parent.displayOn(displayModuleOn) -->
+                                            <div data-bind="attr: { class: $parent.classNameBlockGrid($parent.textLinkModuleSections) + ' productContainer text-center content' }">
+                                                <div class="responsively-lazy preventReflow">
+                                                    <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
+                                                        <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
                                                     </a>
-                                                </li>
-                                            <!-- /ko -->
+                                                </div>
+                                                <a class="a-secondary" data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
+                                                    <h4 data-bind="html: cta.text"></h4>
+                                                </a>
+                                            </div>
                                         <!-- /ko -->
-                                    </ul>
+                                    <!-- /ko -->
                                 </div>
                             </div>
                         <!-- /ko -->
@@ -1090,23 +1064,20 @@ ko.components.register('image-link-double-module', {
                                 </div>
                             </div>
                         <!-- /ko -->
-
                         <div class="row">
                             <div class="small-11 medium-12 small-centered columns">
-                                <ul data-bind="attr: { class: classNameBlockGrid(imageLinkDoubleModuleSections) }">
-                                    <!-- ko foreach: imageLinkDoubleModuleSections -->
-                                        <!-- ko if: $parent.displayOn(displayModuleOn) -->
-                                            <li class="text-center content">
-                                                <div class="responsively-lazy preventReflow">
-                                                    <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
-                                                        <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
-                                                    </a>
-                                                </div>
-                                                <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }"></a></h4>
-                                            </li>
-                                        <!-- /ko -->
+                                <!-- ko foreach: imageLinkDoubleModuleSections -->
+                                    <!-- ko if: $parent.displayOn(displayModuleOn) -->
+                                        <div data-bind="attr: { class: $parent.classNameBlockGrid($parent.imageLinkDoubleModuleSections) + ' productContainer text-center' }">
+                                            <div class="responsively-lazy preventReflow">
+                                                <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
+                                                    <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
+                                                </a>
+                                            </div>
+                                            <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }"></a></h4>
+                                        </div>
                                     <!-- /ko -->
-                                </ul>
+                                <!-- /ko -->
                             </div>
                         </div>
                     </div>
@@ -1169,34 +1140,31 @@ ko.components.register('button-link-double-module', {
                 <!-- ko if: !shouldStack() -->
                     <div class="row fullwidth">
                         <div class="small-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
-                            <!--<ul data-bind="attr: { class: classNameBlockGrid(buttonLinkDoubleModuleSections) }">-->
-                            <ul data-bind="attr: { class: classNameBlockGrid(buttonLinkDoubleModuleSections) }">
-                                <!-- ko foreach: buttonLinkDoubleModuleSections -->
-                                    <!-- ko if: $parent.displayOn(displayModuleOn) -->
-                                        <li class="text-center">
-                                            <div class="responsively-lazy preventReflow">
-                                                <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
-                                                    <img data-bind="attr: { src: image.customImage.large ? image.customImage.large : productImgPath(item,640), 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small),  alt: cta.text }"/>
-                                                </a>
-                                                <!-- ko if: $parent.showBtnContainerInside() -->
-                                                    <div class="btnContainerInside">
-                                                        <a data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
-                                                            <button class="btn-secondary expand" data-bind="html: cta.text"></button>
-                                                        </a>
-                                                    </div>
-                                                <!-- /ko -->
-                                            </div>
-                                            <!-- ko if: $parent.showBtnContainerHanging() -->
-                                                <div class="btnContainerHanging">
+                            <!-- ko foreach: buttonLinkDoubleModuleSections -->
+                                <!-- ko if: $parent.displayOn(displayModuleOn) -->
+                                    <div data-bind="attr: { class: $parent.classNameBlockGrid($parent.buttonLinkDoubleModuleSections) + ' productContainer' }">
+                                        <div class="responsively-lazy preventReflow">
+                                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
+                                                <img data-bind="attr: { src: image.customImage.large ? image.customImage.large : productImgPath(item,640), 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small),  alt: cta.text }"/>
+                                            </a>
+                                            <!-- ko if: $parent.showBtnContainerInside() -->
+                                                <div class="btnContainerInside">
                                                     <a data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
                                                         <button class="btn-secondary expand" data-bind="html: cta.text"></button>
                                                     </a>
                                                 </div>
                                             <!-- /ko -->
-                                        </li>
-                                    <!-- /ko -->
+                                        </div>
+                                        <!-- ko if: $parent.showBtnContainerHanging() -->
+                                            <div class="btnContainerHanging">
+                                                <a data-bind="attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.section.description }">
+                                                    <button class="btn-secondary expand" data-bind="html: cta.text"></button>
+                                                </a>
+                                            </div>
+                                        <!-- /ko -->
+                                    </div>
                                 <!-- /ko -->
-                            </ul>
+                            <!-- /ko -->
                         </div>
                     </div>
                 <!-- /ko -->
@@ -1363,18 +1331,18 @@ ko.components.register('seo-link-module', {
                             </div>
 
                             <div class="small-11 small-centered columns">
-                                <ul data-bind="attr: { class: classNameBlockGrid(seo2Sections) }">
+                                <div class="row">
                                     <!-- ko foreach: seo2Sections -->
-                                        <li class="text-center content">
+                                        <div data-bind="attr: { class: $parent.classNameBlockGrid($parent.seo2Sections) + ' productContainer text-center content' }">
                                             <div class="responsively-lazy preventReflow">
                                                 <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.seo2.section.description}">
                                                     <img data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,640), alt: cta.text }"/>
                                                 </a>
                                             </div>
                                             <h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.seo2.section.description }"></a></h4>
-                                        </li>
+                                        </div>
                                     <!-- /ko -->
-                                </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
