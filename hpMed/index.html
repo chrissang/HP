@@ -1094,71 +1094,50 @@
             }
         };
         if(currentDate >= new Date('2017-01-09').toISOString().slice(0,10)){
-            mappingOrder = {"A": {
-                "large-feature-module": {
-                   "sections": [
-                       {
-                           "item": 42160,
-                           "displayModuleOn": "large",
+            mappingOrder = {
+               "A": {
+                  "large-feature-module": {
+                     "sections": [
+                        {
+                           "item": 42172,
+                           "displayModuleOn": "small",
                            "image": {
                               "customImage": {
-                                  "small": "//www.uncommongoods.com/images/items/42100/42160_3_640px.jpg",
-                                  "large": "/images/hp/B/video.mp4"
+                                 "small": "/images/hp/mobile/A1_LF_20170109_800px.jpg",
+                                 "large": "/images/hp/B/A1_LF_20170109_1680px.jpg"
                               },
-                              "link": "/this-just-in",
-                              "description": "Aurora Lights description"
+                              "link": "/fun/by-interest",
+                              "description": "ski_resort_blueprints"
                            },
                            "headline": {
-                              "text": "Toast to the Road Less Traveled",
-                              "link": "/kitchen-bar?view=all",
-                              "description": "Aurora headline description"
+                              "text": "A cure for the common cold",
+                              "link": "",
+                              "description": "common_cold"
                            },
                            "cta": {
-                              "text": "shop kitchen & bar",
-                              "link": "/kitchen-bar?view=all",
-                              "description": "Aurora cta description"
-                          }
-                      },
-                      {
-                          "item": 42160,
-                          "displayModuleOn": "small",
-                          "image": {
-                             "customImage": {
-                                 "small": "//www.uncommongoods.com/images/items/42100/42160_3_640px.jpg",
-                                 "large": "/images/hp/B/a1_20160919.jpg"
-                             },
-                             "link": "/this-just-in",
-                             "description": "City Map Cups description"
-                          },
-                          "headline": {
-                             "text": "Toast to the Road Less Traveled",
-                             "link": "/kitchen-bar?view=all",
-                             "description": "City Map Cups headline description"
-                          },
-                          "cta": {
-                             "text": "shop kitchen & bar",
-                             "link": "/kitchen-bar?view=all",
-                             "description": "City Map Cups cta description"
-                         }
-                     }
-                   ]
-                }
-            }
-        }
+                              "text": "fun for all seasons",
+                              "link": "/fun/by-interest",
+                              "description": "fun_seasons"
+                           }
+                        }
+                     ]
+                  }
+               },
+    
+
+         }
     };
     </script>
     <script src="/js/jquery-1.9.1.js"></script>
     <script src="/node_modules/swiper/dist/js/swiper.min.js"></script>
     <script src="/node_modules/underscore/underscore-min.js"></script>
     <script src="/node_modules/knockout/build/output/knockout-latest.debug.js"></script>
-    <script src="/js/knockout-fast-foreach.min.js"></script>
-    <script src="/js/knockout-repeat.js"></script>
-
-
 </head>
 <body>
     <div class="homePage-container" style="display: none;" data-bind="visible: true">
-    	<div data-bind="component: { name: 'homePage-container', params: { data: mappingOrder } }"></div>
+        <div id="hp_modules"></div>
+
+    	<!--<div data-bind="component: { name: 'homePage-container', params: { data: mappingOrder } }"></div>-->
 	</div>
 
     <div class="small-12 columns prefooterLine">
@@ -1168,6 +1147,21 @@
 			</div>
 		</div>
 	</div>
+
+    <script>
+        var totalModules = Object.keys(mappingOrder).length;
+        var alphaArry = Object.keys(mappingOrder);
+        var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var moduleArray = [];
+        alphaArry.forEach((alpha, index) => {
+            //this.moduleArray.push(Object.keys(mappingOrder[this.alpha.charAt(index)])[0]);
+            var module = Object.keys(mappingOrder[this.alpha.charAt(index)])[0];
+
+            $('#hp_modules').html('<'+module+' params=position: '+index+'></'+module+'>')
+        })
+
+    </script>
+
     <script src="/js/homePage.js"></script>
     <script>
         function onPromoClick(id, name, creative, pos) {
@@ -1186,6 +1180,6 @@
             });
         };
     </script>
-    <script async src="/js/responsivelyLazy.min.js"></script>
+
 </body>
 </html>

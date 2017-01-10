@@ -1,4 +1,16 @@
 
+
+var responsivelyLazy=function(){var t=!1,n=null,q=null,m="undefined"!==typeof IntersectionObserver,u=function(c){if(null===n)return!1;var f=c.getBoundingClientRect();c=f.top;var a=f.left,b=f.width,f=f.height;return c<q&&0<c+f&&a<n&&0<a+b},r=function(c,f){var a=f.getAttribute("data-srcset");if(null!==a)if(a=a.trim(),0<a.length){for(var a=a.split(","),b=[],h=a.length,e=0;e<h;e++){var d=a[e].trim();if(0!==d.length){var g=d.lastIndexOf(" ");if(-1===g)var k=d,d=999998;else k=d.substr(0,g),d=parseInt(d.substr(g+
+1,d.length-g-2),10);g=!1;-1!==k.indexOf(".webp",k.length-5)?t&&(g=!0):g=!0;g&&b.push([k,d])}}b.sort(function(a,c){if(a[1]<c[1])return-1;if(a[1]>c[1])return 1;if(a[1]===c[1]){if(-1!==c[0].indexOf(".webp",c[0].length-5))return 1;if(-1!==a[0].indexOf(".webp",a[0].length-5))return-1}return 0});a=b}else a=[];else a=[];k=c.offsetWidth*window.devicePixelRatio;b=null;h=a.length;for(e=0;e<h;e++)if(d=a[e],d[1]>=k){b=d;break}null===b&&(b=[f.getAttribute("src"),999999]);"undefined"===typeof c.lastSetOption&&
+(c.lastSetOption=["",0]);if(c.lastSetOption[1]<b[1]){var w=0===c.lastSetOption[1],v=b[0],a=new Image;a.addEventListener("load",function(){f.setAttribute("srcset",v);if(w){var a=c.getAttribute("data-onlazyload");null!==a&&(new Function(a)).bind(c)()}},!1);a.addEventListener("error",function(){c.lastSetOption=["",0]},!1);a.src=v;c.lastSetOption=b}},l=function(){var c=function(c,a){for(var b=c.length,h=0;h<b;h++){var e=c[h],d=a?e:e.parentNode;u(d)&&r(d,e)}};c(document.querySelectorAll(".responsively-lazy > img"),
+!1);c(document.querySelectorAll("img.responsively-lazy"),!0)};if("srcset"in document.createElement("img")&&"undefined"!==typeof window.devicePixelRatio&&"undefined"!==typeof window.addEventListener&&"undefined"!==typeof document.querySelectorAll){var n=window.innerWidth,q=window.innerHeight,p=new Image;p.src="data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoCAAEADMDOJaQAA3AA/uuuAAA=";p.onload=p.onerror=function(){t=2===p.width;if(m){var c=function(){for(var a=document.querySelectorAll(".responsively-lazy"),
+c=a.length,b=0;b<c;b++){var d=a[b];"undefined"===typeof d.responsivelyLazyObserverAttached&&(d.responsivelyLazyObserverAttached=!0,f.observe(d))}},f=new IntersectionObserver(function(a){for(var c in a){var b=a[c];if(0<b.intersectionRatio)if(b=b.target,"img"!==b.tagName.toLowerCase()){var d=b.querySelector("img");null!==d&&r(b,d)}else r(b,b)}});l()}else{var a=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||function(a){window.setTimeout(a,1E3/60)},
+b=!0,h=function(){b&&(b=!1,l());a.call(null,h)},e=function(){b=!0},d=function(){for(var a=document.querySelectorAll(".responsively-lazy"),c=a.length,b=0;b<c;b++)for(var d=a[b].parentNode;d&&"html"!==d.tagName.toLowerCase();)"undefined"===typeof d.responsivelyLazyScrollAttached&&(d.responsivelyLazyScrollAttached=!0,d.addEventListener("scroll",e)),d=d.parentNode};h()}var g=function(){if(m)var a=null;window.addEventListener("resize",function(){n=window.innerWidth;q=window.innerHeight;m?(window.clearTimeout(a),
+a=window.setTimeout(function(){l()},300)):b=!0});m?(window.addEventListener("load",l),c()):(window.addEventListener("scroll",e),window.addEventListener("load",e),d());"undefined"!==typeof MutationObserver&&(new MutationObserver(function(){m?(c(),l()):(d(),b=!0)})).observe(document.querySelector("body"),{childList:!0,subtree:!0})};"loading"===document.readyState?document.addEventListener("DOMContentLoaded",g):g()}}return{run:l,isVisible:u}}();
+
+
+!function(e,t){"function"==typeof define&&define.amd?define(["knockout"],t):"object"==typeof exports?module.exports=t(require("knockout")):e.KnockoutFastForeach=t(e.ko)}(this,function(e){"use strict";function t(e){return!!e&&"object"==typeof e&&e.constructor===Object}function n(e){return 8===e.nodeType&&h.test(u?e.text:e.nodeValue)}function s(t){var n,s=document.createElement("div");return t.content?n=t.content:"SCRIPT"===t.tagName?(n=document.createElement("div"),n.innerHTML=t.text):n=t,e.utils.arrayForEach(e.virtualElements.childNodes(n),function(e){e&&s.insertBefore(e.cloneNode(!0),null)}),s}function i(e,t){return{status:"added",value:e,index:t}}function o(e){return"function"==typeof Symbol?Symbol(e):e}function r(t){this.element=t.element,this.container=n(this.element)?this.element.parentNode:this.element,this.$context=t.$context,this.data=t.data,this.as=t.as,this.noContext=t.noContext,this.noIndex=t.noIndex,this.afterAdd=t.afterAdd,this.beforeRemove=t.beforeRemove,this.templateNode=s(t.templateNode||(t.name?document.getElementById(t.name).cloneNode(!0):t.element)),this.afterQueueFlush=t.afterQueueFlush,this.beforeQueueFlush=t.beforeQueueFlush,this.changeQueue=[],this.firstLastNodesList=[],this.indexesToDelete=[],this.rendering_queued=!1,this.pendingDeletes=[],e.virtualElements.emptyNode(this.element);var o=e.unwrap(this.data);o.map&&this.onArrayChange(o.map(i),!0),e.isObservable(this.data)&&(this.data.indexOf||(this.data=this.data.extend({trackArrayChanges:!0})),this.changeSubs=this.data.subscribe(this.onArrayChange,this,"arrayChange"))}function a(t){t.$index=e.observable()}var d=9007199254740991,u=document&&"<!--test-->"===document.createComment("test").text,h=u?/^<!--\s*ko(?:\s+([\s\S]+))?\s*-->$/:/^\s*ko(?:\s+([\s\S]+))?\s*$/,l=document&&"function"==typeof document.createDocumentFragment,c=o("_ko_ffe_pending_delete_index");r.PENDING_DELETE_INDEX_KEY=c,r.animateFrame=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.msRequestAnimationFrame||function(e){return window.setTimeout(e,1e3/60)},r.prototype.dispose=function(){this.changeSubs&&this.changeSubs.dispose(),this.flushPendingDeletes()},r.prototype.onArrayChange=function(e,t){for(var n=this,s={added:[],deleted:[]},i=0,o=e.length;i<o;i++){if(s.added.length&&"added"==e[i].status){var a=s.added[s.added.length-1],d=a.isBatch?a.index+a.values.length-1:a.index;if(d+1==e[i].index){a.isBatch||(a={isBatch:!0,status:"added",index:a.index,values:[a.value]},s.added.splice(s.added.length-1,1,a)),a.values.push(e[i].value);continue}}s[e[i].status].push(e[i])}s.deleted.length>0&&(this.changeQueue.push.apply(this.changeQueue,s.deleted),this.changeQueue.push({status:"clearDeletedIndexes"})),this.changeQueue.push.apply(this.changeQueue,s.added),this.changeQueue.length>0&&!this.rendering_queued&&(this.rendering_queued=!0,t?n.processQueue():r.animateFrame.call(window,function(){n.processQueue()}))},r.prototype.processQueue=function(){var t=this,n=d;"function"==typeof this.beforeQueueFlush&&this.beforeQueueFlush(this.changeQueue),e.utils.arrayForEach(this.changeQueue,function(e){"number"==typeof e.index&&(n=Math.min(n,e.index)),t[e.status](e)}),this.flushPendingDeletes(),this.rendering_queued=!1,this.noIndex||this.updateIndexes(n),"function"==typeof this.afterQueueFlush&&this.afterQueueFlush(this.changeQueue),this.changeQueue=[]},r.prototype.added=function(t){for(var n=t.index,s=t.isBatch?t.values:[t.value],i=this.getLastNodeBeforeIndex(n),o=[],r=0,d=s.length;r<d;++r){var u,h=this.getPendingDeleteFor(s[r]);if(h&&h.nodesets.length)u=h.nodesets.pop();else{var l,c=this.templateNode.cloneNode(!0);l=this.noContext?this.$context.extend({$item:s[r],$index:this.noIndex?void 0:e.observable()}):this.$context.createChildContext(s[r],this.as||null,this.noIndex?void 0:a),e.applyBindingsToDescendants(l,c),u=e.virtualElements.childNodes(c)}o.push.apply(o,Array.prototype.slice.call(u)),this.firstLastNodesList.splice(n+r,0,{first:u[0],last:u[u.length-1]})}"function"==typeof this.afterAdd?this.afterAdd({nodeOrArrayInserted:this.insertAllAfter(o,i),foreachInstance:this}):this.insertAllAfter(o,i)},r.prototype.getNodesForIndex=function(e){var t=[],n=this.firstLastNodesList[e].first,s=this.firstLastNodesList[e].last;for(t.push(n);n&&n!==s;)n=n.nextSibling,t.push(n);return t},r.prototype.getLastNodeBeforeIndex=function(e){return e<1||e-1>=this.firstLastNodesList.length?null:this.firstLastNodesList[e-1].last},r.prototype.insertAllAfter=function(t,n){var s,i,o,r=this.element;if(void 0===t.nodeType&&void 0===t.length)throw new Error("Expected a single node or a node array");if(void 0!==t.nodeType)return e.virtualElements.insertAfter(r,t,n),[t];if(1===t.length)e.virtualElements.insertAfter(r,t[0],n);else if(l){for(s=document.createDocumentFragment(),o=0,i=t.length;o!==i;++o)s.appendChild(t[o]);e.virtualElements.insertAfter(r,s,n)}else for(o=t.length-1;o>=0;--o){var a=t[o];if(!a)break;e.virtualElements.insertAfter(r,a,n)}return t},r.prototype.shouldDelayDeletion=function(e){return e&&("object"==typeof e||"function"==typeof e)},r.prototype.getPendingDeleteFor=function(e){var t=e&&e[c];return void 0===t?null:this.pendingDeletes[t]},r.prototype.getOrCreatePendingDeleteFor=function(e){var t=this.getPendingDeleteFor(e);return t?t:(t={data:e,nodesets:[]},e[c]=this.pendingDeletes.length,this.pendingDeletes.push(t),t)},r.prototype.deleted=function(e){if(this.shouldDelayDeletion(e.value)){var t=this.getOrCreatePendingDeleteFor(e.value);t.nodesets.push(this.getNodesForIndex(e.index))}else this.removeNodes(this.getNodesForIndex(e.index));this.indexesToDelete.push(e.index)},r.prototype.removeNodes=function(t){if(t.length){var n=function(){for(var n=t[0].parentNode,s=t.length-1;s>=0;--s)e.cleanNode(t[s]),n.removeChild(t[s])};if(this.beforeRemove){var s=this.beforeRemove({nodesToRemove:t,foreachInstance:this})||{};"function"==typeof s.then&&s.then(n,e.onError?e.onError:void 0)}else n()}},r.prototype.flushPendingDeletes=function(){for(var e=0,t=this.pendingDeletes.length;e!=t;++e){for(var n=this.pendingDeletes[e];n.nodesets.length;)this.removeNodes(n.nodesets.pop());n.data&&void 0!==n.data[c]&&delete n.data[c]}this.pendingDeletes=[]},r.prototype.clearDeletedIndexes=function(){for(var e=this.indexesToDelete.length-1;e>=0;--e)this.firstLastNodesList.splice(this.indexesToDelete[e],1);this.indexesToDelete=[]},r.prototype.getContextStartingFrom=function(t){for(var n;t;){if(n=e.contextFor(t))return n;t=t.nextSibling}},r.prototype.updateIndexes=function(e){for(var t,n=e,s=this.firstLastNodesList.length;n<s;++n)t=this.getContextStartingFrom(this.firstLastNodesList[n].first),t&&t.$index(n)},e.bindingHandlers.fastForEach={init:function(n,s,i,o,a){var d,u=s();return t(u)?(u.element=u.element||n,u.$context=a,d=new r(u)):d=new r({element:n,data:e.unwrap(a.$rawData)===u?a.$rawData:u,$context:a}),e.utils.domNodeDisposal.addDisposeCallback(n,function(){d.dispose()}),{controlsDescendantBindings:!0}},FastForEach:r},e.virtualElements.allowedBindings.fastForEach=!0});
+
 var moduleOrderStatic = [];
 var moduleOrder = [];
 var alphaOrder = [];
@@ -9,6 +21,7 @@ const ugWeb = '//www.uncommongoods.com';
 class Dependents {
     constructor(params) {
         // this.modulePosition = params.data.index + 1;
+        this.alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         this.modulePosition = params.position + 1;
         this.viewPortSize = ko.observable(breakpointValue());
         this.displayOn = function(viewPortSize) {
@@ -137,7 +150,8 @@ class Dependents {
                 var display = allBindings().if;
                 var index = viewModel.modulePosition - 1;
                 // var totalModules = bindingContext.$parents[0].totalModules;
-                var totalModules = bindingContext.$parents[0].totalModules;
+                // var totalModules = bindingContext.$parents[0].totalModules;
+                //var totalModules = Object.keys(mappingOrder).length;
                 var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
                 $(document).ready(function() {
@@ -252,16 +266,15 @@ ko.components.register('large-feature-module', {
     viewModel: class LargeFeatureModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            // this.params = params;
-            //this.alpha = params.alpha;
+            console.log(this)
+            this.alpha = this.alpha.charAt(params.position);
             this.isVideo = function(video) {
                 return video.split('.').pop() === 'mp4' ? true : false;
             }
             this.posterImage = function(videoFile) {
                 return videoFile.split('.').shift() + '.jpg';
             }
-            //this.largeFeatureModulesSections = params.data.sections;
-            this.largeFeatureModulesSections = mappingOrder['A']['large-feature-module']['sections'];
+            this.largeFeatureModulesSections = mappingOrder[this.alpha]['large-feature-module']['sections'];
             this.displayGroupViewPortSize = this.displayGroup(this.largeFeatureModulesSections);
         }
     },
@@ -322,9 +335,8 @@ ko.components.register('small-feature-module', {
     viewModel: class SmallFeatureModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.params = params;
-            this.smModulesSections = params.data.sections;
-            //this.displayGroupViewPortSize = ko.observable();
+            this.alpha = this.alpha.charAt(params.position);
+            this.smModulesSections = mappingOrder[this.alpha]['small-feature-module']['sections'];
             this.displayGroupViewPortSize = this.displayGroup(this.smModulesSections);
         }
     },
@@ -425,9 +437,8 @@ ko.components.register('basic-story-module', {
     viewModel: class BasicStoryModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.params = params;
-            this.basicStoryModulesSections = params.data.sections;
-            //this.displayGroupViewPortSize = ko.observable();
+            this.alpha = this.alpha.charAt(params.position);
+            this.basicStoryModulesSections = mappingOrder[this.alpha]['basic-story-module']['sections'];
             this.displayGroupViewPortSize = this.displayGroup(this.basicStoryModulesSections);
         }
     },
@@ -559,9 +570,8 @@ ko.components.register('extended-story-module', {
     viewModel: class ExtendedStoryModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.params = params;
-            this.extendedStoryModulesSections = params.data.sections;
-            //this.displayGroupViewPortSize = ko.observable();
+            this.alpha = this.alpha.charAt(params.position);
+            this.extendedStoryModulesSections = mappingOrder[this.alpha]['extended-story-module']['sections'];
             this.displayGroupViewPortSize = this.displayGroup(this.extendedStoryModulesSections);
         }
     },
@@ -682,19 +692,18 @@ ko.components.register('collection-grid-module', {
     viewModel: class CollectionGridModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.params = params;
-            this.section = params.data.section;
-            this.headline = params.data.headline;
-            this.cta = params.data.cta;
-            this.collectionGridModulesSections = params.data.sections;
+            this.alpha = this.alpha.charAt(params.position);
+            this.section = mappingOrder[this.alpha]['collection-grid-module']['section'];
+            this.headline = mappingOrder[this.alpha]['collection-grid-module']['headline'];
+            this.cta = mappingOrder[this.alpha]['collection-grid-module']['cta'];
+            this.collectionGridModulesSections = mappingOrder[this.alpha]['collection-grid-module']['sections'];
             this.arrayContent1 = this.collectionGridModulesSections[0];
             this.arrayContent2 = this.collectionGridModulesSections[1];
             this.arrayContent3 = this.collectionGridModulesSections[2];
             this.arrayContent4 = this.collectionGridModulesSections[3];
             this.arrayContent5 = this.collectionGridModulesSections[4];
             this.arrayContent6 = this.collectionGridModulesSections[5];
-            //this.displayGroupViewPortSize = ko.observable();
-            this.displayGroupViewPortSize = params.data.displayModuleOn;
+            this.displayGroupViewPortSize = mappingOrder[this.alpha]['collection-grid-module']['displayModuleOn'];
         }
     },
     template: `
@@ -799,19 +808,18 @@ ko.components.register('carousel-module', {
     viewModel: class CarouselModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.params = params;
-            this.section = params.data.section;
-            this.headline = params.data.headline;
-            this.cta = params.data.cta;
-            this.carouselModulesSections = params.data.sections;
+            this.alpha = this.alpha.charAt(params.position);
+            this.section = mappingOrder[this.alpha]['carousel-module']['section'];
+            this.headline = mappingOrder[this.alpha]['carousel-module']['headline'];
+            this.cta = mappingOrder[this.alpha]['carousel-module']['cta'];
+            this.carouselModulesSections = mappingOrder[this.alpha]['carousel-module']['sections'];
             this.arrayContent1 = this.carouselModulesSections[0];
             this.arrayContent2 = this.carouselModulesSections[1];
             this.arrayContent3 = this.carouselModulesSections[2];
             this.arrayContent4 = this.carouselModulesSections[3];
             this.arrayContent5 = this.carouselModulesSections[4];
             this.arrayContent6 = this.carouselModulesSections[5];
-            //this.displayGroupViewPortSize = ko.observable();
-            this.displayGroupViewPortSize = params.data.displayModuleOn;
+            this.displayGroupViewPortSize = mappingOrder[this.alpha]['carousel-module']['displayModuleOn'];
             ko.bindingHandlers.reinit = {
                 update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                     $(function () {
@@ -971,11 +979,10 @@ ko.components.register('text-link-module', {
     viewModel: class TextLinkModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.params = params;
-            this.section = params.data.section;
-            this.textLinkModuleSections = params.data.sections;
+            this.alpha = this.alpha.charAt(params.position);
+            this.section = mappingOrder[this.alpha]['text-link-module']['section'];
+            this.textLinkModuleSections = mappingOrder[this.alpha]['text-link-module']['sections'];
             this.nonHiddenModuleSections = [];
-            //this.displayGroupViewPortSize = ko.observable();
             this.displayGroupViewPortSize = this.displayGroup(this.textLinkModuleSections);
         }
     },
@@ -1042,11 +1049,10 @@ ko.components.register('image-link-double-module', {
     viewModel: class ImageLinkDoubleModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.params = params;
-            this.section = params.data.section;
-            this.imageLinkDoubleModuleSections = params.data.sections;
+            this.alpha = this.alpha.charAt(params.position);
+            this.section = mappingOrder[this.alpha]['image-link-double-module']['section'];
+            this.imageLinkDoubleModuleSections = mappingOrder[this.alpha]['image-link-double-module']['sections'];
             this.nonHiddenModuleSections = [];
-            //this.displayGroupViewPortSize = ko.observable();
             this.displayGroupViewPortSize = this.displayGroup(this.imageLinkDoubleModuleSections);
         }
     },
@@ -1090,16 +1096,15 @@ ko.components.register('button-link-double-module', {
     viewModel: class ButtonLinkDoubleModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.params = params;
-            this.section = params.data.section;
-            this.buttonLinkDoubleModuleSections = params.data.sections;
+            this.alpha = this.alpha.charAt(params.position);
+            this.section = mappingOrder[this.alpha]['button-link-double-module']['section'];
+            this.buttonLinkDoubleModuleSections = mappingOrder[this.alpha]['button-link-double-module']['sections'];
             this.arrayContent1 = this.buttonLinkDoubleModuleSections[0];
             this.arrayContent2 = this.buttonLinkDoubleModuleSections[1];
             this.arrayContent3 = this.buttonLinkDoubleModuleSections[2];
             this.arrayContent4 = this.buttonLinkDoubleModuleSections[3];
             this.arrayContent5 = this.buttonLinkDoubleModuleSections[4];
             this.arrayContent6 = this.buttonLinkDoubleModuleSections[5];
-            //this.displayGroupViewPortSize = ko.observable();
             this.displayGroupViewPortSize = this.displayGroup(this.buttonLinkDoubleModuleSections);
             this.nonHiddenModuleSections = [];
             this.shouldStack = function() {
@@ -1281,12 +1286,13 @@ ko.components.register('seo-link-module', {
     viewModel: class SeoLinkModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.params = params;
-            this.seo1 = params.data.seo1;
-            this.seo1Sections = params.data.seo1.sections;
-            this.seo2 = params.data.seo2;
-            this.seo2Sections = params.data.seo2.sections;
+            this.alpha = this.alpha.charAt(params.position);
+            this.seo1 = mappingOrder[this.alpha]['seo-link-module']['seo1'];
+            this.seo1Sections = mappingOrder[this.alpha]['seo-link-module']['seo1']['sections'];
+            this.seo2 = mappingOrder[this.alpha]['seo-link-module']['seo2'];
+            this.seo2Sections = mappingOrder[this.alpha]['seo-link-module']['seo2']['sections'];
             this.displayGroupViewPortSize = 'small';
+
         }
     },
     template: `
@@ -1410,19 +1416,17 @@ ko.components.register('homePage-container', {
             this.alphaArry = Object.keys(mappingOrder);
             this.alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             this.moduleArray = [];
-            this.content = [];
-
             this.alphaArry.forEach((alpha, index) => {
                 this.moduleArray.push(Object.keys(mappingOrder[this.alpha.charAt(index)])[0]);
-                this.content.push(mappingOrder[this.alpha.charAt(index)][this.moduleArray[index]]);
             })
+            //document.getElementById("hp_modules");
+            //  $('#hp_modules').html('<large-feature-module params=position: 1></large-feature-module>');
+            // console.log('asasd ',$('#hp_modules'))
         }
     },
     template: `
 
-        <!-- ko fastForEach: { data: alphaArry } -->
-            <!-- ko component: {name: ''+$parent.moduleArray[$index()]+'', params:{ position:$index() }} --><!-- /ko -->
-        <!-- /ko -->`, synchronous: true
+    `, synchronous: true
 });
 
 (function () {
