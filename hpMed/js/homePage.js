@@ -4,7 +4,6 @@ var moduleOrder = [];
 var alphaOrder = [];
 var counter = 0;
 
-const imageDir = '/images';
 const ugWeb = '//www.uncommongoods.com';
 
 class Dependents {
@@ -232,7 +231,7 @@ function breakpointValue() {
 };
 //Returns default image path
 function productImgPath(itemId,size) {
-    var itemDir = imageDir+'/items/';
+    var itemDir = '/images/items/';
     var itemIdTrim = itemId.toString().slice(0, -2);
 
     if (size === 640) {
@@ -268,7 +267,7 @@ ko.components.register('large-feature-module', {
     template: `
         <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'LF' -->
             <section data-bind="" class="large-feature-module background-color-off-white">
-                <!-- ko foreach: largeFeatureModulesSections -->
+                <!-- ko fastForEach: largeFeatureModulesSections -->
                     <!-- ko if: $parent.displayOn(displayModuleOn) -->
                         <div class="row fullwidth">
                             <div class="small-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
@@ -332,13 +331,13 @@ ko.components.register('small-feature-module', {
         <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'SF' -->
             <section data-bind="" class="small-feature-module background-color-white">
                 <!-- ko if: viewPortSize() === 'small' || viewPortSize() === 'medium' -->
-                    <!-- ko foreach: smModulesSections -->
+                    <!-- ko fastForEach: smModulesSections -->
                         <!-- ko if: $parent.displayOn(displayModuleOn) -->
                             <!-- ko if: $parent.isEven($index()) -->
                                 <div class="row fullwidth">
                                     <div class="container">
                                         <div class="small-6 medium-7 columns">
-                                            <div data-bind="style: { margin: $parent.viewPortSize() === 'medium' ? '-1.5rem 0 0 -1.5rem' : '0' }">
+                                            <div data-bind="attr: { class: $parent.viewPortSize() === 'medium' ? 'offsetLeft' : ''}">
                                                 <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                                     <div class="responsively-lazy preventReflow">
                                                         <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
@@ -372,7 +371,7 @@ ko.components.register('small-feature-module', {
                                             </div>
                                         </div>
                                         <div class="small-6 medium-7 columns">
-                                            <div data-bind="style: { margin: $parent.viewPortSize() === 'medium' ? '-1.5rem -1.5rem 0 0' : '0' }">
+                                            <div data-bind="attr: { class: $parent.viewPortSize() === 'medium' ? 'offsetRight' : ''}">
                                                 <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description}">
                                                     <div class="responsively-lazy preventReflow">
                                                         <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
@@ -391,7 +390,7 @@ ko.components.register('small-feature-module', {
                     <div class="row fullwidth">
                         <div class="large-11 xlarge-10 xxlarge-8 large-centered columns">
                             <div class="row fullwidth">
-                                <!-- ko foreach: smModulesSections -->
+                                <!-- ko fastForEach: smModulesSections -->
                                     <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                         <div data-bind="attr: { class: $parent.className($parent.smModulesSections) }">
                                             <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
@@ -435,7 +434,7 @@ ko.components.register('basic-story-module', {
         <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'BS' -->
             <section data-bind="" class="basic-story-module background-color-off-white">
                 <!-- ko if: viewPortSize() === 'small' -->
-                    <!-- ko foreach: basicStoryModulesSections -->
+                    <!-- ko fastForEach: basicStoryModulesSections -->
                         <!-- ko if: $parent.displayOn(displayModuleOn) -->
                             <div class="row container">
                                 <!-- ko if: section.text -->
@@ -465,13 +464,13 @@ ko.components.register('basic-story-module', {
                 <!-- /ko -->
 
                 <!-- ko if: viewPortSize() === 'medium' -->
-                    <!-- ko foreach: basicStoryModulesSections -->
+                    <!-- ko fastForEach: basicStoryModulesSections -->
                         <!-- ko if: $parent.displayOn(displayModuleOn) -->
                             <!-- ko if: $parent.isEven($index()) -->
                                 <div class="row fullwidth">
                                     <div class="container">
                                         <div class="medium-7 columns">
-                                            <div style="margin-top: -1.5rem; margin-left: -1.5rem;">
+                                            <div class="offsetLeft">
                                                 <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                                     <div class="responsively-lazy preventReflow">
                                                         <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
@@ -506,7 +505,7 @@ ko.components.register('basic-story-module', {
                                             </div>
                                         </div>
                                         <div class="medium-7 columns">
-                                            <div style="margin-top: -1.5rem; margin-right: -1.5rem;">
+                                            <div class="offsetRight">
                                                 <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                                     <div class="responsively-lazy preventReflow">
                                                         <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
@@ -525,7 +524,7 @@ ko.components.register('basic-story-module', {
                     <div class="row fullwidth">
                         <div class="large-11 xlarge-10 xxlarge-8 large-centered columns">
                             <div class="row">
-                                <!-- ko foreach: basicStoryModulesSections -->
+                                <!-- ko fastForEach: basicStoryModulesSections -->
                                     <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                         <div data-bind="attr: { class: $parent.className($parent.basicStoryModulesSections) }">
                                             <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
@@ -569,7 +568,7 @@ ko.components.register('extended-story-module', {
         <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'ES' -->
             <section data-bind="" class="extended-story-module background-color-off-white">
                 <!-- ko if: viewPortSize() === 'small' -->
-                    <!-- ko foreach: extendedStoryModulesSections -->
+                    <!-- ko fastForEach: extendedStoryModulesSections -->
                         <!-- ko if: $parent.displayOn(displayModuleOn) -->
                             <div class="row container">
                                 <div class="small-12 text-center columns">
@@ -605,7 +604,7 @@ ko.components.register('extended-story-module', {
                 <!-- /ko -->
 
                 <!-- ko if: viewPortSize() === 'medium' || viewPortSize() === 'large' || viewPortSize() === 'xlarge'-->
-                    <!-- ko foreach: extendedStoryModulesSections -->
+                    <!-- ko fastForEach: extendedStoryModulesSections -->
                         <!-- ko if: $parent.displayOn(displayModuleOn) -->
                             <!-- ko if: $parent.isEven($index()) -->
                                 <div class="row fullwidth">
@@ -613,7 +612,7 @@ ko.components.register('extended-story-module', {
                                         <div class="row">
                                             <div class="container">
                                                 <div class="medium-7 large-8 columns">
-                                                    <div style="margin: -1.5rem 0 0 -1.5rem;">
+                                                    <div class="offsetLeft">
                                                         <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                                             <div class="responsively-lazy preventReflow">
                                                                 <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
@@ -658,7 +657,7 @@ ko.components.register('extended-story-module', {
                                                     </div>
                                                 </div>
                                                 <div class="medium-7 large-8 columns">
-                                                    <div style="margin: -1.5rem -1.5rem 0 0;">
+                                                    <div class="offsetRight">
                                                         <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': section.description }">
                                                             <div class="responsively-lazy preventReflow">
                                                                 <img class="right" data-bind="attr: { 'data-srcset': $parent.responsiveImage(item, image.customImage.large, image.customImage.small), src: image.customImage.large ? image.customImage.large : productImgPath(item,360), alt: cta.text }"/>
@@ -864,7 +863,7 @@ ko.components.register('carousel-module', {
                         <div class="small-12 columns carouselPadding">
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
-                                    <!-- ko foreach: carouselModulesSections -->
+                                    <!-- ko fastForEach: carouselModulesSections -->
                                         <div class="swiper-slide">
                                             <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': $parent.cta.text, 'data-sectionDescription': $parent.section.description }">
                                                 <div class="responsively-lazy preventReflow">
@@ -996,7 +995,7 @@ ko.components.register('text-link-module', {
 
                         <!-- ko if: viewPortSize() === 'small' -->
                             <div class="row">
-                                <!-- ko foreach: textLinkModuleSections -->
+                                <!-- ko fastForEach: textLinkModuleSections -->
                                     <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                         <div class="small-6 columns">
                                             <div class="text-link-container">
@@ -1015,7 +1014,7 @@ ko.components.register('text-link-module', {
                         <!-- ko if: viewPortSize() != 'small' -->
                             <div class="row">
                                 <div class="medium-12 columns">
-                                    <!-- ko foreach: textLinkModuleSections -->
+                                    <!-- ko fastForEach: textLinkModuleSections -->
                                         <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                             <div data-bind="attr: { class: $parent.classNameBlockGrid($parent.textLinkModuleSections) + ' productContainer text-center content' }">
                                                 <div class="responsively-lazy preventReflow">
@@ -1066,7 +1065,7 @@ ko.components.register('image-link-double-module', {
                         <!-- /ko -->
                         <div class="row">
                             <div class="small-11 medium-12 small-centered columns">
-                                <!-- ko foreach: imageLinkDoubleModuleSections -->
+                                <!-- ko fastForEach: imageLinkDoubleModuleSections -->
                                     <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                         <div data-bind="attr: { class: $parent.classNameBlockGrid($parent.imageLinkDoubleModuleSections) + ' productContainer text-center' }">
                                             <div class="responsively-lazy preventReflow">
@@ -1140,7 +1139,7 @@ ko.components.register('button-link-double-module', {
                 <!-- ko if: !shouldStack() -->
                     <div class="row fullwidth">
                         <div class="small-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
-                            <!-- ko foreach: buttonLinkDoubleModuleSections -->
+                            <!-- ko fastForEach: buttonLinkDoubleModuleSections -->
                                 <!-- ko if: $parent.displayOn(displayModuleOn) -->
                                     <div data-bind="attr: { class: $parent.classNameBlockGrid($parent.buttonLinkDoubleModuleSections) + ' productContainer' }">
                                         <div class="responsively-lazy preventReflow">
@@ -1305,7 +1304,7 @@ ko.components.register('seo-link-module', {
                                 </div>
                             <!-- /ko -->
                             <div class="row">
-                                <!-- ko foreach: seo1Sections -->
+                                <!-- ko fastForEach: seo1Sections -->
                                     <div class="small-6 columns">
                                         <div class="text-link-container">
                                             <div class="content"><h4><a class="a-secondary" data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': $parent.seo1.section.description }"></a></h4></div>
@@ -1332,7 +1331,7 @@ ko.components.register('seo-link-module', {
 
                             <div class="small-11 small-centered columns">
                                 <div class="row">
-                                    <!-- ko foreach: seo2Sections -->
+                                    <!-- ko fastForEach: seo2Sections -->
                                         <div data-bind="attr: { class: $parent.classNameBlockGrid($parent.seo2Sections) + ' productContainer text-center content' }">
                                             <div class="responsively-lazy preventReflow">
                                                 <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text, 'data-sectionDescription': $parent.seo2.section.description}">
@@ -1367,7 +1366,7 @@ ko.components.register('seo-link-module', {
                                         <div class="topCatContent">
                                             <span data-bind="html: seo1.section.text"></span>
                                             <div class="displayInline">
-                                                <!-- ko foreach: seo1Sections -->
+                                                <!-- ko fastForEach: seo1Sections -->
                                                     <a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': $parent.seo1.section.description }" class="body-small-crumbs"></a>
                                                 <!-- /ko -->
                                             </div>
@@ -1376,7 +1375,7 @@ ko.components.register('seo-link-module', {
                                         <div>
                                             <span data-bind="html: seo2.section.text"></span>
                                             <div class="displayInline">
-                                                <!-- ko foreach: seo2Sections -->
+                                                <!-- ko fastForEach: seo2Sections -->
                                                     <a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-cta': cta.text, 'data-sectionDescription': $parent.seo2.section.description }" class="body-small-crumbs"></a>
                                                 <!-- /ko -->
                                             </div>
@@ -1408,17 +1407,106 @@ ko.components.register('homePage-container', {
             super(params);
             this.seoLinks = params.seoLinks;
             this.totalModules = Object.keys(mappingOrder).length;
-            Object.keys(mappingOrder).forEach((letter, i) => {
-                Object.keys(mappingOrder[letter]).forEach((module, index) => {
-                    mappingOrder[letter][module]['index'] = i;
-                })
-            });
+            // Object.keys(mappingOrder).forEach((letter, i) => {
+            //     Object.keys(mappingOrder[letter]).forEach((module, index) => {
+            //         mappingOrder[letter][module]['index'] = i;
+            //     })
+            // });
+            this.alphaArry = Object.keys(mappingOrder);
+            this.content = [];
+            this.alphaArry.forEach((alpha, index) => {
+                this.content.push(mappingOrder[alpha]);
+                console.log(mappingOrder[alpha])
+            })
+
         }
     },
     template: `
-        <!--ko foreach: { data: Object.keys(mappingOrder) } -->
-            <!-- ko component: {name: Object.keys(mappingOrder[$data])[0], params:{data:mappingOrder[$data][Object.keys(mappingOrder[$data])], parent:$parent }} --><!-- /ko -->
+        <!-- ko fastForEach: { data: Object.keys(mappingOrder) } -->
+            <!-- ko component: {name: Object.keys(mappingOrder[$data])[0], params:{data:mappingOrder[$data][Object.keys(mappingOrder[$data])] }} --><!-- /ko -->
         <!-- /ko -->`, synchronous: true
 });
 
+// (function () {
+//
+//    var report = [];
+//    var lastReport = 0;
+//    var debounceWait = 500;
+//
+//    var viewReport = _.debounce(function () {
+//       if (report.length) {
+//          report = _.sortBy(report, "totalDuration").reverse();
+//
+//          _.each(report, function(r) {
+//             r.entries = _.sortBy(r.entries, "duration").reverse();
+//          });
+//
+//          var worst = _.max(report, function (r) {
+//             return r.totalDuration;
+//          });
+//          var total = _.reduce(report, function (memo, r) {
+//             return memo + r.totalDuration;
+//          }, 0);
+//
+//          var levels = [
+//             { min: 0, max: 50, style: "background-color: green; color: white;" },
+//             { min: 51, max: 150, style: "background-color: orange; color: white;" },
+//             { min: 151, max: 99999, style: "background-color: red; color: white;" }
+//          ];
+//
+//          var getLevel = function (v) {
+//             return _.find(levels, function (def) {
+//                return v >= def.min && v <= def.max;
+//             }).style;
+//          };
+//
+//          console.log("%cKnockout Binding Report", "background-color: yellow; font-size: 2em;");
+//          console.log("Report Date:", new Date().toISOString(), "(+" + (new Date().getTime() - debounceWait - lastReport) + "ms)");
+//          console.log("%cTotal: " + total + "ms", getLevel(total));
+//          console.log("%cTop: " + worst.handler + " (" + worst.totalDuration + "ms)", getLevel(worst.totalDuration));
+//
+//          console.table(report);
+//
+//          report = [];
+//          lastReport = new Date().getTime();
+//       }
+//    }, debounceWait);
+//
+//    var getWrapper = function (bindingName) {
+//       return function(fn, element, valueAccessor, allBindings, viewModel, bindingContext) {
+//          var st = new Date().getTime();
+//
+//          var result = fn(element, valueAccessor, allBindings, viewModel, bindingContext);
+//
+//          var duration = new Date().getTime() - st;
+//          var handlerReport = _.findWhere(report, { handler: bindingName });
+//
+//          if (!handlerReport) {
+//             handlerReport = {
+//                handler: bindingName,
+//                totalDuration: 0,
+//                entries: []
+//             };
+//             report.push(handlerReport);
+//          }
+//
+//          handlerReport.totalDuration += duration;
+//          handlerReport.entries.push({
+//             element: element,
+//             binding: (element.attributes && element.attributes["data-bind"]) || element.nodeValue || "",
+//             duration: duration
+//          });
+//
+//          viewReport();
+//
+//          return result;
+//       };
+//    };
+//
+//    _.each(ko.bindingHandlers, function (binding, name) {
+//       if (binding.init) binding.init = _.wrap(binding.init, getWrapper(name + ".init"));
+//       if (binding.update) binding.update = _.wrap(binding.update, getWrapper(name + ".update"));
+//    });
+//
+// })();
 ko.applyBindings();

@@ -434,6 +434,12 @@ body:before {
 			padding: 1.5rem 0 0 0;
 			background-color: $white;
 		}
+		.offsetLeft {
+			margin: -1.5rem 0 0 -1.5rem;
+		}
+		.offsetRight {
+			margin: -1.5rem -1.5rem 0 0;
+		}
 	}
 	.large-feature-module {
 		.preventReflow {
@@ -939,9 +945,6 @@ body:before {
 		}
 		.xlarge-10 {
 			margin-bottom: 2rem;
-			.productContainer {
-				margin-bottom: 0;
-			}
 		}
 	}
 }
