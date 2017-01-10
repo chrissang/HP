@@ -8,8 +8,8 @@ const ugWeb = '//www.uncommongoods.com';
 
 class Dependents {
     constructor(params) {
-        this.modulePosition = params.data.index + 1;
-        this.displayGroupViewPortSize = params.data.displayGroupOn;
+        // this.modulePosition = params.data.index + 1;
+        this.modulePosition = params.position + 1;
         this.viewPortSize = ko.observable(breakpointValue());
         this.displayOn = function(viewPortSize) {
             return {
@@ -41,12 +41,6 @@ class Dependents {
             responsiveValue = smallImageSize ? smallImage + ' ' + smallImageSize + 'w, ' : productImgPath(itemId,360) + ' 360w, ';
             responsiveValue += largeImageSize ? largeImage + ' ' + largeImageSize + 'w' : productImgPath(itemId,640) + ' 640w';
             return responsiveValue;
-        }
-        this.isVideo = function(video) {
-            return video.split('.').pop() === 'mp4' ? true : false;
-        }
-        this.posterImage = function(videoFile) {
-            return videoFile.split('.').shift() + '.jpg';
         }
         this.isEven = function(index) {
             return index % 2 === 0 ? true : false
@@ -115,7 +109,6 @@ class Dependents {
                 }[nonHiddenModuleSections.length];
             }
         }
-
         ko.bindingHandlers.resizeView = {
             init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 $(window).resize(function () {
@@ -143,7 +136,8 @@ class Dependents {
             update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 var display = allBindings().if;
                 var index = viewModel.modulePosition - 1;
-                var totalModules = bindingContext.$parents[1].totalModules;
+                // var totalModules = bindingContext.$parents[0].totalModules;
+                var totalModules = bindingContext.$parents[0].totalModules;
                 var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
                 $(document).ready(function() {
@@ -258,63 +252,70 @@ ko.components.register('large-feature-module', {
     viewModel: class LargeFeatureModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.params = params;
-            this.largeFeatureModulesSections = params.data.sections;
-            this.displayGroupViewPortSize = ko.observable();
-            this.displayGroupViewPortSize(this.displayGroup(this.largeFeatureModulesSections));
+            // this.params = params;
+            //this.alpha = params.alpha;
+            this.isVideo = function(video) {
+                return video.split('.').pop() === 'mp4' ? true : false;
+            }
+            this.posterImage = function(videoFile) {
+                return videoFile.split('.').shift() + '.jpg';
+            }
+            //this.largeFeatureModulesSections = params.data.sections;
+            this.largeFeatureModulesSections = mappingOrder['A']['large-feature-module']['sections'];
+            this.displayGroupViewPortSize = this.displayGroup(this.largeFeatureModulesSections);
         }
     },
     template: `
-        <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'LF' -->
-            <section data-bind="" class="large-feature-module background-color-off-white">
-                <!-- ko fastForEach: largeFeatureModulesSections -->
-                    <!-- ko if: $parent.displayOn(displayModuleOn) -->
-                        <div class="row fullwidth">
-                            <div class="small-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
-                                <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text }">
-                                    <picture>
-                                        <!--[if IE 9]><video style="display: none;"><![endif]-->
-                                            <source data-bind="attr: { media: '(min-width: 40.063em)', srcset: image.customImage.large ? image.customImage.large : productImgPath(item,640) }">
-                                            <source data-bind="attr: { media: '(max-width: 40em)', srcset: image.customImage.small ? image.customImage.small : productImgPath(item,360) }">
-                                        <!--[if IE 9]></video><![endif]-->
+    <!-- ko if: displayOn(displayGroupViewPortSize), resizeView: 'LF' -->
+        <section data-bind="" class="large-feature-module background-color-off-white">
+            <!-- ko fastForEach: largeFeatureModulesSections -->
+                <!-- ko if: $parent.displayOn(displayModuleOn) -->
+                    <div class="row fullwidth">
+                        <div class="small-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
+                            <a data-bind="attr: { href: addUgDomain(image.link), 'data-type': 'Image', 'data-description': image.description, 'data-itemNumber': item, 'data-cta': cta.text }">
+                                <picture>
+                                    <!--[if IE 9]><video style="display: none;"><![endif]-->
+                                        <source data-bind="attr: { media: '(min-width: 40.063em)', srcset: image.customImage.large ? image.customImage.large : productImgPath(item,640) }">
+                                        <source data-bind="attr: { media: '(max-width: 40em)', srcset: image.customImage.small ? image.customImage.small : productImgPath(item,360) }">
+                                    <!--[if IE 9]></video><![endif]-->
 
-                                        <!-- ko if: $parent.viewPortSize() === 'small' -->
+                                    <!-- ko if: $parent.viewPortSize() === 'small' -->
+                                        <div class="responsively-lazy preventReflow">
+                                            <img data-bind="attr: { src: image.customImage.small ? image.customImage.small : productImgPath(item,360), alt: cta.text }">
+                                        </div>
+                                    <!-- /ko -->
+
+                                    <!-- ko if: $parent.viewPortSize() != 'small' -->
+                                        <!-- ko if: $parent.isVideo(image.customImage.large) -->
+                                            <video loop muted autoplay data-bind="attr: { poster: $parent.posterImage(image.customImage.large) }">
+                                                <source data-bind="attr: { src: image.customImage.large }" type="video/mp4">
+                                                <source data-bind="attr: { src: image.customImage.large }" type="video/webm">
+                                            </video>
+                                        <!-- /ko -->
+                                        <!-- ko if: !$parent.isVideo(image.customImage.large) -->
                                             <div class="responsively-lazy preventReflow">
-                                                <img data-bind="attr: { src: image.customImage.small ? image.customImage.small : productImgPath(item,360), alt: cta.text }">
+                                                <div data-bind="style: { backgroundImage: 'url( '+ image.customImage.large  +' )'}" class="LF_backgroundImage"></div>
                                             </div>
                                         <!-- /ko -->
-
-                                        <!-- ko if: $parent.viewPortSize() != 'small' -->
-                                            <!-- ko if: $parent.isVideo(image.customImage.large) -->
-                                                <video loop muted autoplay data-bind="attr: { poster: $parent.posterImage(image.customImage.large) }">
-                                                    <source data-bind="attr: { src: image.customImage.large }" type="video/mp4">
-                                                    <source data-bind="attr: { src: image.customImage.large }" type="video/webm">
-                                                </video>
-                                            <!-- /ko -->
-                                            <!-- ko if: !$parent.isVideo(image.customImage.large) -->
-                                                <div class="responsively-lazy preventReflow">
-                                                    <div data-bind="style: { backgroundImage: 'url( '+ image.customImage.large  +' )'}" class="LF_backgroundImage"></div>
-                                                </div>
-                                            <!-- /ko -->
-                                        <!-- /ko -->
-                                    </picture>
+                                    <!-- /ko -->
+                                </picture>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row fullwidth">
+                        <div class="small-12 medium-8 large-6 small-centered columns">
+                            <div class="white-box-container text-center">
+                                <a class="a-secondary" data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text }">
+                                    <h1 data-bind="html: headline.text"></h1>
                                 </a>
+                                <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text }"></a></p>
                             </div>
                         </div>
-                        <div class="row fullwidth">
-                            <div class="small-12 medium-8 large-6 small-centered columns">
-                                <div class="white-box-container text-center">
-                                    <a class="a-secondary" data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text }">
-                                        <h1 data-bind="html: headline.text"></h1>
-                                    </a>
-                                    <p class="body-small-override"><a data-bind="html: cta.text, attr: { href: addUgDomain(cta.link), 'data-type': 'CTA', 'data-description': cta.description, 'data-itemNumber': item, 'data-cta': cta.text }"></a></p>
-                                </div>
-                            </div>
-                        </div>
-                    <!-- /ko -->
+                    </div>
                 <!-- /ko -->
-            </section>
-        <!-- /ko -->`, synchronous: true
+            <!-- /ko -->
+        </section>
+    <!-- /ko -->`, synchronous: true
 });
 
 ko.components.register('small-feature-module', {
@@ -323,12 +324,12 @@ ko.components.register('small-feature-module', {
             super(params);
             this.params = params;
             this.smModulesSections = params.data.sections;
-            this.displayGroupViewPortSize = ko.observable();
-            this.displayGroupViewPortSize(this.displayGroup(this.smModulesSections));
+            //this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize = this.displayGroup(this.smModulesSections);
         }
     },
     template: `
-        <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'SF' -->
+        <!-- ko if: displayOn(displayGroupViewPortSize), resizeView: 'SF' -->
             <section data-bind="" class="small-feature-module background-color-white">
                 <!-- ko if: viewPortSize() === 'small' || viewPortSize() === 'medium' -->
                     <!-- ko fastForEach: smModulesSections -->
@@ -426,12 +427,12 @@ ko.components.register('basic-story-module', {
             super(params);
             this.params = params;
             this.basicStoryModulesSections = params.data.sections;
-            this.displayGroupViewPortSize = ko.observable();
-            this.displayGroupViewPortSize(this.displayGroup(this.basicStoryModulesSections));
+            //this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize = this.displayGroup(this.basicStoryModulesSections);
         }
     },
     template: `
-        <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'BS' -->
+        <!-- ko if: displayOn(displayGroupViewPortSize), resizeView: 'BS' -->
             <section data-bind="" class="basic-story-module background-color-off-white">
                 <!-- ko if: viewPortSize() === 'small' -->
                     <!-- ko fastForEach: basicStoryModulesSections -->
@@ -560,12 +561,12 @@ ko.components.register('extended-story-module', {
             super(params);
             this.params = params;
             this.extendedStoryModulesSections = params.data.sections;
-            this.displayGroupViewPortSize = ko.observable();
-            this.displayGroupViewPortSize(this.displayGroup(this.extendedStoryModulesSections));
+            //this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize = this.displayGroup(this.extendedStoryModulesSections);
         }
     },
     template: `
-        <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'ES' -->
+        <!-- ko if: displayOn(displayGroupViewPortSize), resizeView: 'ES' -->
             <section data-bind="" class="extended-story-module background-color-off-white">
                 <!-- ko if: viewPortSize() === 'small' -->
                     <!-- ko fastForEach: extendedStoryModulesSections -->
@@ -692,12 +693,12 @@ ko.components.register('collection-grid-module', {
             this.arrayContent4 = this.collectionGridModulesSections[3];
             this.arrayContent5 = this.collectionGridModulesSections[4];
             this.arrayContent6 = this.collectionGridModulesSections[5];
-            this.displayGroupViewPortSize = ko.observable();
-            this.displayGroupViewPortSize(params.data.displayModuleOn);
+            //this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize = params.data.displayModuleOn;
         }
     },
     template: `
-        <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'CG' -->
+        <!-- ko if: displayOn(displayGroupViewPortSize), resizeView: 'CG' -->
             <section data-bind="" class="collection-grid-module background-color-off-white">
                 <div class="row fullwidth">
                     <div class="small-12 large-11 xlarge-10 xxlarge-8 large-centered columns">
@@ -809,8 +810,8 @@ ko.components.register('carousel-module', {
             this.arrayContent4 = this.carouselModulesSections[3];
             this.arrayContent5 = this.carouselModulesSections[4];
             this.arrayContent6 = this.carouselModulesSections[5];
-            this.displayGroupViewPortSize = ko.observable();
-            this.displayGroupViewPortSize(params.data.displayModuleOn);
+            //this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize = params.data.displayModuleOn;
             ko.bindingHandlers.reinit = {
                 update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                     $(function () {
@@ -844,7 +845,7 @@ ko.components.register('carousel-module', {
         }
     },
     template: `
-        <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'CL' -->
+        <!-- ko if: displayOn(displayGroupViewPortSize), resizeView: 'CL' -->
             <section data-bind="" class="carousel-module background-color-off-white">
                 <div class="row fullwidth">
                     <!-- ko if: viewPortSize() === 'small' -->
@@ -974,12 +975,12 @@ ko.components.register('text-link-module', {
             this.section = params.data.section;
             this.textLinkModuleSections = params.data.sections;
             this.nonHiddenModuleSections = [];
-            this.displayGroupViewPortSize = ko.observable();
-            this.displayGroupViewPortSize(this.displayGroup(this.textLinkModuleSections));
+            //this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize = this.displayGroup(this.textLinkModuleSections);
         }
     },
     template: `
-        <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'TL' -->
+        <!-- ko if: displayOn(displayGroupViewPortSize), resizeView: 'TL' -->
             <section data-bind="" class="text-link-module background-color-off-white">
                 <div class="row fullwidth waterColor">
                     <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns container">
@@ -1045,12 +1046,12 @@ ko.components.register('image-link-double-module', {
             this.section = params.data.section;
             this.imageLinkDoubleModuleSections = params.data.sections;
             this.nonHiddenModuleSections = [];
-            this.displayGroupViewPortSize = ko.observable();
-            this.displayGroupViewPortSize(this.displayGroup(this.imageLinkDoubleModuleSections));
+            //this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize = this.displayGroup(this.imageLinkDoubleModuleSections);
         }
     },
     template: `
-        <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'LD' -->
+        <!-- ko if: displayOn(displayGroupViewPortSize), resizeView: 'LD' -->
             <section data-bind="" class="image-link-double-module background-color-off-white">
                 <div class="row fullwidth waterColor">
                     <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns container">
@@ -1098,8 +1099,8 @@ ko.components.register('button-link-double-module', {
             this.arrayContent4 = this.buttonLinkDoubleModuleSections[3];
             this.arrayContent5 = this.buttonLinkDoubleModuleSections[4];
             this.arrayContent6 = this.buttonLinkDoubleModuleSections[5];
-            this.displayGroupViewPortSize = ko.observable();
-            this.displayGroupViewPortSize(this.displayGroup(this.buttonLinkDoubleModuleSections));
+            //this.displayGroupViewPortSize = ko.observable();
+            this.displayGroupViewPortSize = this.displayGroup(this.buttonLinkDoubleModuleSections);
             this.nonHiddenModuleSections = [];
             this.shouldStack = function() {
                 return this.viewPortSize() === 'xlarge' && this.buttonLinkDoubleModuleSections.length === 6 ? true : false;
@@ -1113,7 +1114,7 @@ ko.components.register('button-link-double-module', {
         }
     },
     template: `
-        <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'BD' -->
+        <!-- ko if: displayOn(displayGroupViewPortSize), resizeView: 'BD' -->
             <section data-bind="" class="button-link-double-module background-color-white">
 
                 <div class="row">
@@ -1285,11 +1286,11 @@ ko.components.register('seo-link-module', {
             this.seo1Sections = params.data.seo1.sections;
             this.seo2 = params.data.seo2;
             this.seo2Sections = params.data.seo2.sections;
-            this.displayGroupViewPortSize = ko.observable('small');
+            this.displayGroupViewPortSize = 'small';
         }
     },
     template: `
-        <!-- ko if: displayOn(displayGroupViewPortSize()), resizeView: 'TL_SEO' -->
+        <!-- ko if: displayOn(displayGroupViewPortSize), resizeView: 'TL_SEO' -->
             <section data-bind="" class="seoLinks text-link-module background-color-off-white">
                 <!-- ko if: viewPortSize() === 'small' -->
                     <div class"row">
@@ -1405,108 +1406,105 @@ ko.components.register('homePage-container', {
     viewModel: class HomePageContainerComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.seoLinks = params.seoLinks;
             this.totalModules = Object.keys(mappingOrder).length;
-            // Object.keys(mappingOrder).forEach((letter, i) => {
-            //     Object.keys(mappingOrder[letter]).forEach((module, index) => {
-            //         mappingOrder[letter][module]['index'] = i;
-            //     })
-            // });
             this.alphaArry = Object.keys(mappingOrder);
+            this.alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            this.moduleArray = [];
             this.content = [];
-            this.alphaArry.forEach((alpha, index) => {
-                this.content.push(mappingOrder[alpha]);
-                console.log(mappingOrder[alpha])
-            })
 
+            this.alphaArry.forEach((alpha, index) => {
+                this.moduleArray.push(Object.keys(mappingOrder[this.alpha.charAt(index)])[0]);
+                this.content.push(mappingOrder[this.alpha.charAt(index)][this.moduleArray[index]]);
+            })
         }
     },
     template: `
-        <!-- ko fastForEach: { data: Object.keys(mappingOrder) } -->
-            <!-- ko component: {name: Object.keys(mappingOrder[$data])[0], params:{data:mappingOrder[$data][Object.keys(mappingOrder[$data])] }} --><!-- /ko -->
+
+        <!-- ko fastForEach: { data: alphaArry } -->
+            <!-- ko component: {name: ''+$parent.moduleArray[$index()]+'', params:{ position:$index() }} --><!-- /ko -->
         <!-- /ko -->`, synchronous: true
 });
 
-// (function () {
-//
-//    var report = [];
-//    var lastReport = 0;
-//    var debounceWait = 500;
-//
-//    var viewReport = _.debounce(function () {
-//       if (report.length) {
-//          report = _.sortBy(report, "totalDuration").reverse();
-//
-//          _.each(report, function(r) {
-//             r.entries = _.sortBy(r.entries, "duration").reverse();
-//          });
-//
-//          var worst = _.max(report, function (r) {
-//             return r.totalDuration;
-//          });
-//          var total = _.reduce(report, function (memo, r) {
-//             return memo + r.totalDuration;
-//          }, 0);
-//
-//          var levels = [
-//             { min: 0, max: 50, style: "background-color: green; color: white;" },
-//             { min: 51, max: 150, style: "background-color: orange; color: white;" },
-//             { min: 151, max: 99999, style: "background-color: red; color: white;" }
-//          ];
-//
-//          var getLevel = function (v) {
-//             return _.find(levels, function (def) {
-//                return v >= def.min && v <= def.max;
-//             }).style;
-//          };
-//
-//          console.log("%cKnockout Binding Report", "background-color: yellow; font-size: 2em;");
-//          console.log("Report Date:", new Date().toISOString(), "(+" + (new Date().getTime() - debounceWait - lastReport) + "ms)");
-//          console.log("%cTotal: " + total + "ms", getLevel(total));
-//          console.log("%cTop: " + worst.handler + " (" + worst.totalDuration + "ms)", getLevel(worst.totalDuration));
-//
-//          console.table(report);
-//
-//          report = [];
-//          lastReport = new Date().getTime();
-//       }
-//    }, debounceWait);
-//
-//    var getWrapper = function (bindingName) {
-//       return function(fn, element, valueAccessor, allBindings, viewModel, bindingContext) {
-//          var st = new Date().getTime();
-//
-//          var result = fn(element, valueAccessor, allBindings, viewModel, bindingContext);
-//
-//          var duration = new Date().getTime() - st;
-//          var handlerReport = _.findWhere(report, { handler: bindingName });
-//
-//          if (!handlerReport) {
-//             handlerReport = {
-//                handler: bindingName,
-//                totalDuration: 0,
-//                entries: []
-//             };
-//             report.push(handlerReport);
-//          }
-//
-//          handlerReport.totalDuration += duration;
-//          handlerReport.entries.push({
-//             element: element,
-//             binding: (element.attributes && element.attributes["data-bind"]) || element.nodeValue || "",
-//             duration: duration
-//          });
-//
-//          viewReport();
-//
-//          return result;
-//       };
-//    };
-//
-//    _.each(ko.bindingHandlers, function (binding, name) {
-//       if (binding.init) binding.init = _.wrap(binding.init, getWrapper(name + ".init"));
-//       if (binding.update) binding.update = _.wrap(binding.update, getWrapper(name + ".update"));
-//    });
-//
-// })();
+(function () {
+
+   var report = [];
+   var lastReport = 0;
+   var debounceWait = 500;
+
+   var viewReport = _.debounce(function () {
+      if (report.length) {
+         report = _.sortBy(report, "totalDuration").reverse();
+
+         _.each(report, function(r) {
+            r.entries = _.sortBy(r.entries, "duration").reverse();
+         });
+
+         var worst = _.max(report, function (r) {
+            return r.totalDuration;
+         });
+         var total = _.reduce(report, function (memo, r) {
+            return memo + r.totalDuration;
+         }, 0);
+
+         var levels = [
+            { min: 0, max: 50, style: "background-color: green; color: white;" },
+            { min: 51, max: 150, style: "background-color: orange; color: white;" },
+            { min: 151, max: 99999, style: "background-color: red; color: white;" }
+         ];
+
+         var getLevel = function (v) {
+            return _.find(levels, function (def) {
+               return v >= def.min && v <= def.max;
+            }).style;
+         };
+
+         console.log("%cKnockout Binding Report", "background-color: yellow; font-size: 2em;");
+         console.log("Report Date:", new Date().toISOString(), "(+" + (new Date().getTime() - debounceWait - lastReport) + "ms)");
+         console.log("%cTotal: " + total + "ms", getLevel(total));
+         console.log("%cTop: " + worst.handler + " (" + worst.totalDuration + "ms)", getLevel(worst.totalDuration));
+
+         console.table(report);
+
+         report = [];
+         lastReport = new Date().getTime();
+      }
+   }, debounceWait);
+
+   var getWrapper = function (bindingName) {
+      return function(fn, element, valueAccessor, allBindings, viewModel, bindingContext) {
+         var st = new Date().getTime();
+
+         var result = fn(element, valueAccessor, allBindings, viewModel, bindingContext);
+
+         var duration = new Date().getTime() - st;
+         var handlerReport = _.findWhere(report, { handler: bindingName });
+
+         if (!handlerReport) {
+            handlerReport = {
+               handler: bindingName,
+               totalDuration: 0,
+               entries: []
+            };
+            report.push(handlerReport);
+         }
+
+         handlerReport.totalDuration += duration;
+         handlerReport.entries.push({
+            element: element,
+            binding: (element.attributes && element.attributes["data-bind"]) || element.nodeValue || "",
+            duration: duration
+         });
+
+         viewReport();
+
+         return result;
+      };
+   };
+
+   _.each(ko.bindingHandlers, function (binding, name) {
+      if (binding.init) binding.init = _.wrap(binding.init, getWrapper(name + ".init"));
+      if (binding.update) binding.update = _.wrap(binding.update, getWrapper(name + ".update"));
+   });
+
+})();
 ko.applyBindings();
