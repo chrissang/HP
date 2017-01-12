@@ -1123,7 +1123,152 @@
                      ]
                   }
                },
-    
+               "B": {
+                  "seo-link-module": {
+                     "seo1": {
+                        "section": {
+                           "text": "Shop by Recipient",
+                           "link": "/gifts/by-recipient",
+                           "description": "by_recipient"
+                        },
+                        "sections": [
+                           {
+                              "cta": {
+                                 "text": "for him",
+                                 "link": "/for-him",
+                                 "description": "him"
+                              }
+                           },
+                           {
+                              "cta": {
+                                 "text": " for her",
+                                 "link": "/for-her",
+                                 "description": "her"
+                              }
+                           },
+                           {
+                              "cta": {
+                                 "text": " kids",
+                                 "link": "/gifts/by-recipient/gifts-for-kids",
+                                 "description": "kids"
+                              }
+                           },
+                           {
+                              "cta": {
+                                 "text": " teens",
+                                 "link": "/gifts/by-recipient/gifts-for-teens-15-and-up)",
+                                 "description": "teens"
+                              }
+                           }
+                        ]
+                     },
+                     "seo2": {
+                        "section": {
+                           "text": "Top Categories",
+                           "link": "",
+                           "description": ""
+                        },
+                        "sections": [
+                           {
+                              "item": 40014,
+                              "image": {
+                                 "customImage": {
+                                    "small": "/images/items/40000/40014_1_180px.jpg",
+                                    "large": "/images/items/40000/40014_1_640px.jpg"
+                                 },
+                                 "link": "/gifts/by-price/gifts-under-25",
+                                 "description": "crackling_candles"
+                              },
+                              "cta": {
+                                 "text": "$25 and under",
+                                 "link": "/gifts/by-price/gifts-under-25",
+                                 "description": "$25_and_under"
+                              }
+                           },
+                           {
+                              "item": 43300,
+                              "image": {
+                                 "customImage": {
+                                    "small": "/images/items/43300/43300_1_180px.jpg",
+                                    "large": "/images/items/43300/43300_1_640px.jpg"
+                                 },
+                                 "link": "/gifts/by-price/gifts-under-50",
+                                 "description": "ballerina_slippers"
+                              },
+                              "cta": {
+                                 "text": "$50 and under",
+                                 "link": "/gifts/by-price/gifts-under-50",
+                                 "description": "$50_and_under"
+                              }
+                           },
+                           {
+                              "item": 40642,
+                              "image": {
+                                 "customImage": {
+                                    "small": "/images/items/40600/40640_1_180px.jpg",
+                                    "large": "/images/items/40600/40642_1_640px.jpg"
+                                 },
+                                 "link": "/sets/top-rated-gifts",
+                                 "description": "hockey_snow_brush"
+                              },
+                              "cta": {
+                                 "text": "top rated",
+                                 "link": "/sets/top-rated-gifts",
+                                 "description": "top_rated"
+                              }
+                           },
+                           {
+                              "item": 42544,
+                              "image": {
+                                 "customImage": {
+                                    "small": "/images/items/42500/42544_1_180px.jpg",
+                                    "large": "/images/items/42500/42544_1_640px.jpg"
+                                 },
+                                 "link": "/home-garden/home-decor?view=all",
+                                 "description": "through_woods_tealight"
+                              },
+                              "cta": {
+                                 "text": "home decor",
+                                 "link": "/home-garden/home-decor?view=all",
+                                 "description": "home_decor"
+                              }
+                           },
+                           {
+                              "item": 43808,
+                              "image": {
+                                 "customImage": {
+                                    "small": "/images/items/43800/43808_1_180px.jpg",
+                                    "large": "/images/items/43800/43808_1_640px.jpg"
+                                 },
+                                 "link": "/this-just-in",
+                                 "description": "twig_marshmallow"
+                              },
+                              "cta": {
+                                 "text": "this just in",
+                                 "link": "/this-just-in",
+                                 "description": "this_just_in"
+                              }
+                           },
+                           {
+                              "item": 40329,
+                              "image": {
+                                 "customImage": {
+                                    "small": "/images/items/40300/40329_1_180px.jpg",
+                                    "large": "/images/items/40300/40329_1_640px.jpg"
+                                 },
+                                 "link": "/sale",
+                                 "description": "shibori_table_runner"
+                              },
+                              "cta": {
+                                 "text": "sale",
+                                 "link": "/sale",
+                                 "description": "sale"
+                              }
+                           }
+                        ]
+                     }
+                  }
+               }
 
          }
     };
@@ -1153,11 +1298,18 @@
         var alphaArry = Object.keys(mappingOrder);
         var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         var moduleArray = [];
+
+        var container = document.getElementById('currentStore').appendChild(toAdd);
+
         alphaArry.forEach((alpha, index) => {
             //this.moduleArray.push(Object.keys(mappingOrder[this.alpha.charAt(index)])[0]);
             var module = Object.keys(mappingOrder[this.alpha.charAt(index)])[0];
+            console.log('index ',index)
+            // $('#hp_modules').html('<'+module+' params=position: '+index+'></'+module+'>')
+            var newLi = document.createElement('h1');
+            newLi.innerHTML = 'Product '+index;
+            document.getElementById("hp_modules").appendChild = '<h1>'+index+'</h1>';
 
-            $('#hp_modules').html('<'+module+' params=position: '+index+'></'+module+'>')
         })
 
     </script>

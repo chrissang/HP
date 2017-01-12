@@ -266,7 +266,6 @@ ko.components.register('large-feature-module', {
     viewModel: class LargeFeatureModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            console.log(this)
             this.alpha = this.alpha.charAt(params.position);
             this.isVideo = function(video) {
                 return video.split('.').pop() === 'mp4' ? true : false;
@@ -1286,6 +1285,7 @@ ko.components.register('seo-link-module', {
     viewModel: class SeoLinkModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
+            console.log(this)
             this.alpha = this.alpha.charAt(params.position);
             this.seo1 = mappingOrder[this.alpha]['seo-link-module']['seo1'];
             this.seo1Sections = mappingOrder[this.alpha]['seo-link-module']['seo1']['sections'];
