@@ -266,7 +266,7 @@ ko.components.register('large-feature-module', {
     viewModel: class LargeFeatureModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.alpha = this.alpha.charAt(params.position);
+            this.alpha = this.alpha.charAt(params.data);
             this.isVideo = function(video) {
                 return video.split('.').pop() === 'mp4' ? true : false;
             }
@@ -334,7 +334,7 @@ ko.components.register('small-feature-module', {
     viewModel: class SmallFeatureModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.alpha = this.alpha.charAt(params.position);
+            this.alpha = this.alpha.charAt(params.data);
             this.smModulesSections = mappingOrder[this.alpha]['small-feature-module']['sections'];
             this.displayGroupViewPortSize = this.displayGroup(this.smModulesSections);
         }
@@ -436,7 +436,7 @@ ko.components.register('basic-story-module', {
     viewModel: class BasicStoryModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.alpha = this.alpha.charAt(params.position);
+            this.alpha = this.alpha.charAt(params.data);
             this.basicStoryModulesSections = mappingOrder[this.alpha]['basic-story-module']['sections'];
             this.displayGroupViewPortSize = this.displayGroup(this.basicStoryModulesSections);
         }
@@ -569,7 +569,7 @@ ko.components.register('extended-story-module', {
     viewModel: class ExtendedStoryModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.alpha = this.alpha.charAt(params.position);
+            this.alpha = this.alpha.charAt(params.data);
             this.extendedStoryModulesSections = mappingOrder[this.alpha]['extended-story-module']['sections'];
             this.displayGroupViewPortSize = this.displayGroup(this.extendedStoryModulesSections);
         }
@@ -691,7 +691,7 @@ ko.components.register('collection-grid-module', {
     viewModel: class CollectionGridModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.alpha = this.alpha.charAt(params.position);
+            this.alpha = this.alpha.charAt(params.data);
             this.section = mappingOrder[this.alpha]['collection-grid-module']['section'];
             this.headline = mappingOrder[this.alpha]['collection-grid-module']['headline'];
             this.cta = mappingOrder[this.alpha]['collection-grid-module']['cta'];
@@ -807,7 +807,7 @@ ko.components.register('carousel-module', {
     viewModel: class CarouselModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.alpha = this.alpha.charAt(params.position);
+            this.alpha = this.alpha.charAt(params.data);
             this.section = mappingOrder[this.alpha]['carousel-module']['section'];
             this.headline = mappingOrder[this.alpha]['carousel-module']['headline'];
             this.cta = mappingOrder[this.alpha]['carousel-module']['cta'];
@@ -978,7 +978,7 @@ ko.components.register('text-link-module', {
     viewModel: class TextLinkModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.alpha = this.alpha.charAt(params.position);
+            this.alpha = this.alpha.charAt(params.data);
             this.section = mappingOrder[this.alpha]['text-link-module']['section'];
             this.textLinkModuleSections = mappingOrder[this.alpha]['text-link-module']['sections'];
             this.nonHiddenModuleSections = [];
@@ -1048,7 +1048,7 @@ ko.components.register('image-link-double-module', {
     viewModel: class ImageLinkDoubleModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.alpha = this.alpha.charAt(params.position);
+            this.alpha = this.alpha.charAt(params.data);
             this.section = mappingOrder[this.alpha]['image-link-double-module']['section'];
             this.imageLinkDoubleModuleSections = mappingOrder[this.alpha]['image-link-double-module']['sections'];
             this.nonHiddenModuleSections = [];
@@ -1095,7 +1095,7 @@ ko.components.register('button-link-double-module', {
     viewModel: class ButtonLinkDoubleModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            this.alpha = this.alpha.charAt(params.position);
+            this.alpha = this.alpha.charAt(params.data);
             this.section = mappingOrder[this.alpha]['button-link-double-module']['section'];
             this.buttonLinkDoubleModuleSections = mappingOrder[this.alpha]['button-link-double-module']['sections'];
             this.arrayContent1 = this.buttonLinkDoubleModuleSections[0];
@@ -1285,14 +1285,12 @@ ko.components.register('seo-link-module', {
     viewModel: class SeoLinkModuleComponentModel extends Dependents {
         constructor(params) {
             super(params);
-            console.log(this)
-            this.alpha = this.alpha.charAt(params.position);
+            this.alpha = this.alpha.charAt(params.data);
             this.seo1 = mappingOrder[this.alpha]['seo-link-module']['seo1'];
             this.seo1Sections = mappingOrder[this.alpha]['seo-link-module']['seo1']['sections'];
             this.seo2 = mappingOrder[this.alpha]['seo-link-module']['seo2'];
             this.seo2Sections = mappingOrder[this.alpha]['seo-link-module']['seo2']['sections'];
             this.displayGroupViewPortSize = 'small';
-
         }
     },
     template: `
@@ -1407,27 +1405,30 @@ ko.components.register('seo-link-module', {
         <!-- /ko -->`, synchronous: true
 });
 
-ko.components.register('homePage-container', {
-
-    viewModel: class HomePageContainerComponentModel extends Dependents {
-        constructor(params) {
-            super(params);
-            this.totalModules = Object.keys(mappingOrder).length;
-            this.alphaArry = Object.keys(mappingOrder);
-            this.alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            this.moduleArray = [];
-            this.alphaArry.forEach((alpha, index) => {
-                this.moduleArray.push(Object.keys(mappingOrder[this.alpha.charAt(index)])[0]);
-            })
-            //document.getElementById("hp_modules");
-            //  $('#hp_modules').html('<large-feature-module params=position: 1></large-feature-module>');
-            // console.log('asasd ',$('#hp_modules'))
-        }
-    },
-    template: `
-
-    `, synchronous: true
-});
+// ko.components.register('homePage-container', {
+//
+//     viewModel: class HomePageContainerComponentModel extends Dependents {
+//         constructor(params) {
+//             super(params);
+//             this.totalModules = Object.keys(mappingOrder).length;
+//             this.alphaArry = Object.keys(mappingOrder);
+//             this.alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+//             this.moduleArray = [];
+//             this.alphaArry.forEach((alpha, index) => {
+//                 this.moduleArray.push(Object.keys(mappingOrder[this.alpha.charAt(index)])[0]);
+//             })
+//             //document.getElementById("hp_modules");
+//             //$('#hp_modules').append('<large-feature-module params=position: 1></large-feature-module>');
+//             // console.log('asasd ',$('#hp_modules'))
+//             $('#hp_modules').append('<large-feature-module></large-feature-module>');
+//             console.log($('#hp_modules'))
+//         }
+//     },
+//     template: `
+//
+//
+//     `, synchronous: true
+// });
 
 (function () {
 
