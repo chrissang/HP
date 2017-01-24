@@ -15915,11 +15915,10 @@ body:before {
 }
 /* line 1, ../scss/hpTool.scss */
 .sortable-ghost {
-  opacity: .5;
-  background-color: #048D8A;
+  opacity: 0;
 }
 
-/* line 5, ../scss/hpTool.scss */
+/* line 4, ../scss/hpTool.scss */
 .content-shrink {
   /* Initially we don't want any height, and we want the contents to be hidden */
   max-height: 0;
@@ -15930,32 +15929,32 @@ body:before {
   transition: max-height 0.8s;
 }
 
-/* line 15, ../scss/hpTool.scss */
+/* line 14, ../scss/hpTool.scss */
 .accordion .accordion-navigation > a, .accordion dd > a {
   border-bottom: 0 !important;
 }
 
-/* line 18, ../scss/hpTool.scss */
+/* line 17, ../scss/hpTool.scss */
 .accordion .accordion-navigation > .content, .accordion dd > .content {
   padding-top: 0;
 }
 
-/* line 21, ../scss/hpTool.scss */
+/* line 20, ../scss/hpTool.scss */
 ul {
   list-style-type: none;
   margin: 0;
 }
 
-/* line 26, ../scss/hpTool.scss */
+/* line 25, ../scss/hpTool.scss */
 .flexContainer {
   display: flex;
   margin-bottom: 1rem;
 }
-/* line 29, ../scss/hpTool.scss */
+/* line 28, ../scss/hpTool.scss */
 .flexContainer .small-11 {
   padding-right: 0;
 }
-/* line 32, ../scss/hpTool.scss */
+/* line 31, ../scss/hpTool.scss */
 .flexContainer .removeModule {
   padding: 0;
   padding-top: 2rem;
@@ -15963,20 +15962,20 @@ ul {
   border-bottom: 1px solid #817B73;
 }
 
-/* line 40, ../scss/hpTool.scss */
+/* line 39, ../scss/hpTool.scss */
 .datepicker {
   left: .375rem;
   margin-top: .75rem;
 }
-/* line 43, ../scss/hpTool.scss */
+/* line 42, ../scss/hpTool.scss */
 .datepicker table:not(.noLeftLabels):not(.noLabels) tr td:first-child, .datepicker table:not(.noLeftabels):not(.noLabels) tr th:first-child {
   border-right: 0px;
 }
-/* line 46, ../scss/hpTool.scss */
+/* line 45, ../scss/hpTool.scss */
 .datepicker table:not(.noTopLabels):not(.noLabels) tr:first-child td, .datepicker table:not(.noTopLabels):not(.noLabels) tr:first-child th {
   border-bottom: 0px;
 }
-/* line 49, ../scss/hpTool.scss */
+/* line 48, ../scss/hpTool.scss */
 .datepicker td span.active, .datepicker td.active.day, .datepicker td.active.year {
   background: #048D8A;
 }

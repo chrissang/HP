@@ -1,4 +1,5 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, maximum-scale=1">
@@ -10,27 +11,25 @@
     <script src="/js/jquery-1.9.1.js"></script>
     <script src="/js/foundation.min.js"></script>
     <script src="/node_modules/foundation-datepicker/js/foundation-datepicker.min.js"></script>
-    <script src="/node_modules/sortablejs/Sortable.min.js"></script>
     <script src="/node_modules/typescript/lib/typescript.js"></script>
     <script src="/node_modules/systemjs/dist/system.js"></script>
+    <script src="/node_modules/knockout/build/output/knockout-latest.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
     <script>
         System.config({
             transpiler: 'typescript'
         });
     </script>
     <script>
-    var date = document.location.search.split("?loaded=");
-    if (date[1] != undefined) {
-        System
-            .import('/hp_config/'+date[1]+'.js')
-            .then( function(x) {
-                //console.log('x ',x);
-            });
-    }
+        var date = document.location.search.split("?loaded=");
+        if (date[1] != undefined) {
+            System
+                .import('/hp_config/'+date[1]+'.js')
+                .then( function(x) {
+                    //console.log('x ',x);
+                });
+        }
     </script>
-    <script src="/node_modules/knockout/build/output/knockout-latest.debug.js"></script>
-    <script src="/js/knockout-sortable.js"></script>
-
 </head>
 <body>
     <div data-bind="component: { name: 'homePageTool' }"></div>

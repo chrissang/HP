@@ -60,29 +60,19 @@ class Dependents {
         this.moduleType = ko.observable("");
         this.displayModuleOn = ko.observable("");
         this.screenSizes = ko.observableArray(['small', 'medium', 'large', 'xlarge']);
-        this.selectedGroupScreenSize = ko.observable('small');
         this.selectedModuleScreenSize = ko.observable('small');
 
         this.alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         this.mappingOrder = {};
         this.uniqueIdModified = ko.observable("");
         this.uniqueId = new Date().getTime();
+        this.getUniqueId = function() {
+            return new Date().getTime();
+        }
         this.sortMappingOrder = function() {
             var uniqueIdReordered = this.uniqueIdModified();
-            // console.log('uniqueIdReordered ',uniqueIdReordered)
-            // console.log('selectedModules before ',this.selectedModules());
-            // function reorderAlpha(obj, curr, updated) {
-            //     var jsonString = JSON.stringify(obj);
-            //     jsonString = jsonString.replace(curr, updated);
-            //     var jsonObj = JSON.parse(jsonString);
-            //     return jsonObj;
-            // };
             uniqueIdReordered.forEach((el,index) => {
                 var alphaChar = this.alpha.charAt(index);
-                // if (Object.keys(this.mappingOrder[el]) != alphaChar) {
-                //     var curr = Object.keys(this.mappingOrder[el])[0];
-                //     this.mappingOrder[el] = reorderAlpha(this.mappingOrder[el],curr, alphaChar);
-                // }
 
                 if (Object.keys(this.mappingOrder[el])[0] != index) {
                     var jsonString = JSON.stringify(this.mappingOrder[el]);
@@ -102,17 +92,6 @@ class Dependents {
             Object.keys(removedUniqueIdJson).forEach(function(key,index) {
                 tempArry.push(Object.keys(removedUniqueIdJson[key])[0])
             });
-
-            //this.selectedModules(tempArry);
-
-            // tempArry.forEach((ordered, index) => {
-            //     if (this.selectedModules()[index] != ordered) {
-            //         this.selectedModules()[index] = ordered;
-            //     }
-            // })
-
-            //console.log('after selectedModules ',this.selectedModules());
-
         }
         this.removeModule = function(e) {
           var container = document.getElementById(e.uniqueId);
@@ -134,324 +113,20 @@ class Dependents {
             })
         };
 
-        ko.bindingHandlers.sortable = {
-            init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-                if (Object.keys(mappingOrder).length != 0 && load === true) {
-                    viewModel.params.data.loadingModelData.push(bindingContext);
-                    if (counter === viewModel.params.data.selectedModules().length) {
-                        var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-                        //groups modules that are the same and next to each other into array
-                        var result = viewModel.params.data.loadingModelData().reduce(function(prev, curr) {
-                            if (prev.length && curr.$parent === prev[prev.length - 1][0].$parent) {
-                                if (curr.$parent === 'collection-grid-module' || curr.$parent === 'carousel-module' || curr.$parent === 'seo-link-module') {
-                                    prev.push([curr]);
-                                } else {
-                                    prev[prev.length - 1].push(curr);
-                                }
-                            }
-                            else {
-                                prev.push([curr]);
-                            }
-                            return prev;
-                        }, []);
-
-                        result.forEach((section, index) => {
-                            var alphaChar = alpha.charAt(index);
-                            var moduleType = section[0].$parent;
-                            section.forEach((binding,i) => {
-                                switch (binding.$parent) {
-                                    case 'text-link-module':
-                                        binding.$data.section(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.text : '');
-                                        binding.$data.sectionUrl(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.link : '');
-                                        binding.$data.sectionDescription(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.description : '');
-
-                                        binding.$data.itemNumber(!!mappingOrder[alphaChar][moduleType]['sections'][i].item ? mappingOrder[alphaChar][moduleType]['sections'][i].item : '');
-                                        binding.$data.itemUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.link : '');
-                                        binding.$data.selectedModuleScreenSize(!!mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn ? mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn : '');
-
-                                        binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small : '');
-                                        binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large : '');
-                                        binding.$data.imageDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.description : '');
-
-                                        binding.$data.cta(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.text : '');
-                                        binding.$data.ctaUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.link : '');
-                                        binding.$data.ctaDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.description : '');
-                                    break;
-                                    case 'image-link-double-module':
-                                        binding.$data.section(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.text : '');
-                                        binding.$data.sectionUrl(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.link : '');
-                                        binding.$data.sectionDescription(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.description : '');
-
-                                        binding.$data.itemNumber(!!mappingOrder[alphaChar][moduleType]['sections'][i].item ? mappingOrder[alphaChar][moduleType]['sections'][i].item : '');
-                                        binding.$data.itemUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.link : '');
-                                        binding.$data.selectedModuleScreenSize(!!mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn ? mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn : '');
-
-                                        binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small : '');
-                                        binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large : '');
-                                        binding.$data.imageDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.description : '');
-
-                                        binding.$data.cta(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.text : '');
-                                        binding.$data.ctaUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.link : '');
-                                        binding.$data.ctaDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.description : '');
-                                    break;
-                                    case 'button-link-double-module':
-                                        binding.$data.section(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.text : '');
-                                        binding.$data.sectionUrl(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.link : '');
-                                        binding.$data.sectionDescription(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.description : '');
-
-                                        binding.$data.itemNumber(!!mappingOrder[alphaChar][moduleType]['sections'][i].item ? mappingOrder[alphaChar][moduleType]['sections'][i].item : '');
-                                        binding.$data.itemUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.link : '');
-                                        binding.$data.selectedModuleScreenSize(!!mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn ? mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn : '');
-
-                                        binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small : '');
-                                        binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large : '');
-                                        binding.$data.imageDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.description : '');
-
-                                        binding.$data.cta(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.text : '');
-                                        binding.$data.ctaUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.link : '');
-                                        binding.$data.ctaDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.description : '');
-                                    break;
-                                    case 'collection-grid-module':
-                                        binding.$data.selectedModuleScreenSize(!!mappingOrder[alphaChar][moduleType].displayModuleOn ? mappingOrder[alphaChar][moduleType].displayModuleOn : '');
-
-                                        binding.$data.section(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.text : '');
-                                        binding.$data.sectionUrl(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.link : '');
-                                        binding.$data.sectionDescription(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.description : '');
-
-                                        binding.$data.headline(!!mappingOrder[alphaChar][moduleType].headline ? mappingOrder[alphaChar][moduleType].headline.text : '');
-                                        binding.$data.headlineUrl(!!mappingOrder[alphaChar][moduleType].headline ? mappingOrder[alphaChar][moduleType].headline.link : '');
-                                        binding.$data.headlineDescription(!!mappingOrder[alphaChar][moduleType].headline ? mappingOrder[alphaChar][moduleType].headline.description : '');
-
-                                        binding.$data.cta(!!mappingOrder[alphaChar][moduleType].cta ? mappingOrder[alphaChar][moduleType].cta.text : '');
-                                        binding.$data.ctaUrl(!!mappingOrder[alphaChar][moduleType].cta ? mappingOrder[alphaChar][moduleType].cta.link : '');
-                                        binding.$data.ctaDescription(!!mappingOrder[alphaChar][moduleType].cta ? mappingOrder[alphaChar][moduleType].cta.description : '');
-
-                                        var itemNumbers = [];
-                                        var itemUrls = [];
-                                        var smallImageUrls = [];
-                                        var largeImageUrls = [];
-                                        var imageDescriptions = [];
-
-                                        if (mappingOrder[alphaChar][moduleType]['sections'] != undefined) {
-                                            mappingOrder[alphaChar][moduleType]['sections'].forEach((item, index) => {
-                                                itemNumbers.push(item.item);
-                                                itemUrls.push(item.image.link);
-                                                smallImageUrls.push(item.image.customImage.small);
-                                                largeImageUrls.push(item.image.customImage.large);
-                                                imageDescriptions.push(item.image.description);
-                                            })
-                                            itemNumbers = itemNumbers.join("\n");
-                                            itemUrls = itemUrls.join("\n");
-                                            smallImageUrls = smallImageUrls.join("\n");
-                                            largeImageUrls = largeImageUrls.join("\n");
-                                            imageDescriptions = imageDescriptions.join("\n");
-
-                                            binding.$data.itemNumber(itemNumbers ? itemNumbers : '');
-                                            binding.$data.itemUrl(itemUrls ? itemUrls : '');
-                                            binding.$data.imageSmallUrl(smallImageUrls ? smallImageUrls : '');
-                                            binding.$data.imageLargeUrl(largeImageUrls ? largeImageUrls : '');
-                                            binding.$data.imageDescription(imageDescriptions ? imageDescriptions : '');
-                                        }
-                                    break;
-                                    case 'carousel-module':
-                                        binding.$data.selectedModuleScreenSize(!!mappingOrder[alphaChar][moduleType].displayModuleOn ? mappingOrder[alphaChar][moduleType].displayModuleOn : '');
-
-                                        binding.$data.section(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.text : '');
-                                        binding.$data.sectionUrl(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.link : '');
-                                        binding.$data.sectionDescription(!!mappingOrder[alphaChar][moduleType].section ? mappingOrder[alphaChar][moduleType].section.description : '');
-
-                                        binding.$data.headline(!!mappingOrder[alphaChar][moduleType].headline ? mappingOrder[alphaChar][moduleType].headline.text : '');
-                                        binding.$data.headlineUrl(!!mappingOrder[alphaChar][moduleType].headline ? mappingOrder[alphaChar][moduleType].headline.link : '');
-                                        binding.$data.headlineDescription(!!mappingOrder[alphaChar][moduleType].headline ? mappingOrder[alphaChar][moduleType].headline.description : '');
-
-                                        binding.$data.cta(!!mappingOrder[alphaChar][moduleType].cta ? mappingOrder[alphaChar][moduleType].cta.text : '');
-                                        binding.$data.ctaUrl(!!mappingOrder[alphaChar][moduleType].cta ? mappingOrder[alphaChar][moduleType].cta.link : '');
-                                        binding.$data.ctaDescription(!!mappingOrder[alphaChar][moduleType].cta ? mappingOrder[alphaChar][moduleType].cta.description : '');
-
-                                        var itemNumbers = [];
-                                        var itemUrls = [];
-                                        var smallImageUrls = [];
-                                        var largeImageUrls = [];
-                                        var imageDescriptions = [];
-
-                                        if (mappingOrder[alphaChar][moduleType]['sections'] != undefined) {
-                                            mappingOrder[alphaChar][moduleType]['sections'].forEach((item, index) => {
-                                                itemNumbers.push(item.item);
-                                                itemUrls.push(item.image.link);
-                                                smallImageUrls.push(item.image.customImage.small);
-                                                largeImageUrls.push(item.image.customImage.large);
-                                                imageDescriptions.push(item.image.description);
-                                            })
-                                            itemNumbers = itemNumbers.join("\n");
-                                            itemUrls = itemUrls.join("\n");
-                                            smallImageUrls = smallImageUrls.join("\n");
-                                            largeImageUrls = largeImageUrls.join("\n");
-                                            imageDescriptions = imageDescriptions.join("\n");
-
-                                            binding.$data.itemNumber(itemNumbers ? itemNumbers : '');
-                                            binding.$data.itemUrl(itemUrls ? itemUrls : '');
-                                            binding.$data.imageSmallUrl(smallImageUrls ? smallImageUrls : '');
-                                            binding.$data.imageLargeUrl(largeImageUrls ? largeImageUrls : '');
-                                            binding.$data.imageDescription(imageDescriptions ? imageDescriptions : '');
-                                        }
-                                    break;
-                                    case 'seo-link-module':
-                                        binding.$data.seo1Section(!!mappingOrder[alphaChar][moduleType]['seo1'].section ? mappingOrder[alphaChar][moduleType]['seo1'].section.text : '');
-                                        binding.$data.seo1SectionUrl(!!mappingOrder[alphaChar][moduleType]['seo1'].section ? mappingOrder[alphaChar][moduleType]['seo1'].section.link : '');
-                                        binding.$data.seo1SectionDescription(!!mappingOrder[alphaChar][moduleType]['seo1'].section ? mappingOrder[alphaChar][moduleType]['seo1'].section.description : '');
-
-                                        binding.$data.seo2Section(!!mappingOrder[alphaChar][moduleType]['seo2'].section ? mappingOrder[alphaChar][moduleType]['seo2'].section.text : '');
-                                        binding.$data.seo2SectionUrl(!!mappingOrder[alphaChar][moduleType]['seo2'].section ? mappingOrder[alphaChar][moduleType]['seo2'].section.link : '');
-                                        binding.$data.seo2SectionDescription(!!mappingOrder[alphaChar][moduleType]['seo2'].section ? mappingOrder[alphaChar][moduleType]['seo2'].section.description : '');
-
-                                        var seo1_cta_text = [];
-                                        var seo1_cta_link = [];
-                                        var seo1_cta_description = [];
-
-                                        var seo2_cta_text = [];
-                                        var seo2_cta_link = [];
-                                        var seo2_cta_description = [];
-
-                                        var seo2_items = [];
-                                        var seo2_items_urls = [];
-
-                                        var seo2_small_images = [];
-                                        var seo2_large_images = [];
-                                        var seo2_image_descriptions = [];
-
-                                        if (mappingOrder[alphaChar][moduleType]['seo1']['sections'] != undefined) {
-                                            mappingOrder[alphaChar][moduleType]['seo1']['sections'].forEach((item, index) => {
-                                                seo1_cta_text.push(item.cta.text);
-                                                seo1_cta_link.push(item.cta.link);
-                                                seo1_cta_description.push(item.cta.description);
-                                            });
-                                        }
-
-                                        if (mappingOrder[alphaChar][moduleType]['seo2']['sections'] != undefined) {
-                                            mappingOrder[alphaChar][moduleType]['seo2']['sections'].forEach((item, index) => {
-                                                seo2_cta_text.push(item.cta.text);
-                                                seo2_cta_link.push(item.cta.link);
-                                                seo2_cta_description.push(item.cta.description);
-                                                seo2_items.push(item.item);
-                                                seo2_items_urls.push(item.image.link);
-                                                seo2_small_images.push(item.image.customImage.small);
-                                                seo2_large_images.push(item.image.customImage.large);
-                                                seo2_image_descriptions.push(item.image.description);
-                                            });
-                                        }
-
-                                        seo1_cta_text = seo1_cta_text.join("\n");
-                                        seo1_cta_link = seo1_cta_link.join("\n");
-                                        seo1_cta_description = seo1_cta_description.join("\n");
-
-                                        seo2_cta_text = seo2_cta_text.join("\n");
-                                        seo2_cta_link = seo2_cta_link.join("\n");
-                                        seo2_cta_description = seo2_cta_description.join("\n");
-
-                                        seo2_items = seo2_items.join("\n");
-                                        seo2_items_urls = seo2_items_urls.join("\n");
-
-                                        seo2_small_images = seo2_small_images.join("\n");
-                                        seo2_large_images = seo2_large_images.join("\n");
-                                        seo2_image_descriptions = seo2_image_descriptions.join("\n");
-
-                                        binding.$data.seo1cta(seo1_cta_text ? seo1_cta_text : '');
-                                        binding.$data.seo1ctaUrl(seo1_cta_link ? seo1_cta_link : '');
-                                        binding.$data.seo1ctaDescription(seo1_cta_description ? seo1_cta_description : '');
-
-                                        binding.$data.seo2cta(seo2_cta_text ? seo2_cta_text : '');
-                                        binding.$data.seo2ctaUrl(seo2_cta_link ? seo2_cta_link : '');
-                                        binding.$data.seo2ctaDescription(seo2_cta_description ? seo2_cta_description : '');
-
-                                        binding.$data.seo2ItemNumber(seo2_items ? seo2_items : '');
-                                        binding.$data.seo2ItemUrl(seo2_items_urls ? seo2_items_urls : '');
-
-                                        binding.$data.seo2ImageSmallUrl(seo2_small_images ? seo2_small_images : '');
-                                        binding.$data.seo2ImageLargeUrl(seo2_large_images ? seo2_large_images : '');
-                                        binding.$data.seo2ImageDescription(seo2_image_descriptions ? seo2_image_descriptions : '');
-                                    break;
-                                    default:
-                                        binding.$data.section(!!mappingOrder[alphaChar][moduleType]['sections'][i].section ? mappingOrder[alphaChar][moduleType]['sections'][i].section.text : '');
-                                        binding.$data.sectionUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].section ? mappingOrder[alphaChar][moduleType]['sections'][i].section.link : '');
-                                        binding.$data.sectionDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].section ? mappingOrder[alphaChar][moduleType]['sections'][i].section.description : '');
-
-                                        binding.$data.itemNumber(!!mappingOrder[alphaChar][moduleType]['sections'][i].item ? mappingOrder[alphaChar][moduleType]['sections'][i].item : '');
-                                        binding.$data.itemUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.link : '');
-                                        binding.$data.selectedModuleScreenSize(!!mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn ? mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn : '');
-
-                                        binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small : '');
-                                        binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large : '');
-                                        binding.$data.imageDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.description : '');
-
-                                        binding.$data.headline(!!mappingOrder[alphaChar][moduleType]['sections'][i].headline ? mappingOrder[alphaChar][moduleType]['sections'][i].headline.text : '');
-                                        binding.$data.headlineUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].headline ? mappingOrder[alphaChar][moduleType]['sections'][i].headline.link : '');
-                                        binding.$data.headlineDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].headline ? mappingOrder[alphaChar][moduleType]['sections'][i].headline.description : '');
-
-                                        binding.$data.copy(!!mappingOrder[alphaChar][moduleType]['sections'][i].copy ? mappingOrder[alphaChar][moduleType]['sections'][i].copy.text : '');
-                                        binding.$data.copyUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].copy ? mappingOrder[alphaChar][moduleType]['sections'][i].copy.link : '');
-                                        binding.$data.copyDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].copy ? mappingOrder[alphaChar][moduleType]['sections'][i].copy.description : '');
-
-                                        binding.$data.cta(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.text : '');
-                                        binding.$data.ctaUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.link : '');
-                                        binding.$data.ctaDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.description : '');
-                                }
-                            })
-                        })
-                    }
-                }
-            },
+        ko.bindingHandlers.componentData = {
             update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-                var el = document.getElementById('sortableContainer');
-                var sortable = new Sortable(el, {
-                    // group: "name",  // or { name: "...", pull: [true, false, clone], put: [true, false, array] }
-                    sort: true,  // sorting inside list
-                    delay: 0, // time in milliseconds to define when the sorting should start
-                    animation: 150,  // ms, animation speed moving items when sorting, `0` — without animation
-                    handle: ".draggable",  // Drag handle selector within list items
-                    ghostClass: "sortable-ghost",  // Class name for the drop placeholder
-                    dataIdAttr: 'data-id',
-                    // // dragging started
-                    onStart: function (evt) {
-                        var elements = document.querySelectorAll('.active');
-                        elements.forEach((el, index) => {
-                            el.className = el.className.replace("active", "");
-                        })
-                    },
-                    // // dragging ended
-                    onEnd: function (/**Event*/evt) {
-                        var order = sortable.toArray();
-                        ko.dataFor(evt.item).params.data.uniqueIdModified(order);
-                        ko.dataFor(evt.item).params.data.sortMappingOrder();
-
-                        var elements = el.querySelectorAll("li");
-                        elements.forEach((el, index) => {
-                            if (el.getAttribute("data-type") != viewModel.params.data.selectedModules()[index]) {
-                                // console.log('reordered ',el.getAttribute("data-type"));
-                                // console.log('viewModel ',viewModel.params.data.selectedModules()[index]);
-
-                                viewModel.params.data.selectedModules()[index] = el.getAttribute("data-type");
-                            }
-                        })
-                        console.log('viewModel ',viewModel.params.data.selectedModules());
-
-                    }
-                });
-
                 var uniqueId = viewModel.uniqueId;
-                // var alphaChar = viewModel.alpha.charAt(viewModel.accordionIndex());
-                var alphaChar = el.children.length;
-                var accordionIndex = viewModel.accordionIndex;
+                var position = document.getElementById('sortableContainer').children.length;
                 var moduleType = bindingContext.$parent;
 
-
                 viewModel.params.data.mappingOrder[uniqueId] = {};
-                viewModel.params.data.mappingOrder[uniqueId][accordionIndex] = {};
-                viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType] = {};
+                viewModel.params.data.mappingOrder[uniqueId][position] = {};
+                viewModel.params.data.mappingOrder[uniqueId][position][moduleType] = {};
 
                 switch (moduleType) {
                     case 'large-feature-module':
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -477,7 +152,7 @@ class Dependents {
                         ]
                     break;
                     case 'small-feature-module':
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -508,7 +183,7 @@ class Dependents {
                         ]
                     break;
                     case 'basic-story-module':
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -539,7 +214,7 @@ class Dependents {
                         ]
                     break;
                     case 'extended-story-module':
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -581,26 +256,26 @@ class Dependents {
                         var largeImageList = viewModel.imageLargeUrl().replace(/\n/g, ',').split(',');
                         var imageDescriptionList = viewModel.imageDescription().replace(/\n/g, ',').split(',');
 
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
                             'text': viewModel.section().replace(/é/g, "&#233;"),
                             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['headline'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['headline'] = {
                             'text': viewModel.headline().replace(/é/g, "&#233;"),
                             'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.headlineDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['cta'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['cta'] = {
                             'text': viewModel.cta().replace(/é/g, "&#233;"),
                             'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.ctaDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = []
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = []
                         itemsList.forEach((item, index) => {
                             if (item != '') {
-                                viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'].push(
+                                viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'].push(
                                     {
                                         'item': item.trim(),
                                         'image': {
@@ -623,26 +298,26 @@ class Dependents {
                         var largeImageList = viewModel.imageLargeUrl().replace(/\n/g, ',').split(',');
                         var imageDescriptionList = viewModel.imageDescription().replace(/\n/g, ',').split(',');
 
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
                             'text': viewModel.section().replace(/é/g, "&#233;"),
                             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['headline'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['headline'] = {
                             'text': viewModel.headline().replace(/é/g, "&#233;"),
                             'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.headlineDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['cta'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['cta'] = {
                             'text': viewModel.cta().replace(/é/g, "&#233;"),
                             'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.ctaDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = []
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = []
                         itemsList.forEach((item, index) => {
                             if (item != '') {
-                                viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'].push(
+                                viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'].push(
                                     {
                                         'item': item.trim(),
                                         'image': {
@@ -659,12 +334,12 @@ class Dependents {
                         })
                     break;
                     case 'text-link-module':
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
                             'text': viewModel.section().replace(/é/g, "&#233;"),
                             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -685,12 +360,12 @@ class Dependents {
                         ]
                     break;
                     case 'image-link-double-module':
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
                             'text': viewModel.section().replace(/é/g, "&#233;"),
                             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -711,12 +386,12 @@ class Dependents {
                         ]
                     break;
                     case 'button-link-double-module':
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
                             'text': viewModel.section().replace(/é/g, "&#233;"),
                             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.sectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['sections'] = [
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
                             {
                                 'item': viewModel.itemNumber(),
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
@@ -750,17 +425,17 @@ class Dependents {
                         var seo2ctaUrlList = viewModel.seo2ctaUrl().replace(/\n/g, ',').split(',');
                         var seo2ctaDescriptionList = viewModel.seo2ctaDescription().replace(/\n/g, ',').split(',');
 
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo1'] = {}
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo1']['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo1'] = {}
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo1']['section'] = {
                             'text': viewModel.seo1Section().replace(/é/g, "&#233;"),
                             'link': viewModel.seo1SectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.seo1SectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo1']['sections'] = []
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo1']['sections'] = []
 
                         seo1ctaList.forEach((item, index) => {
                             if (item != '') {
-                                viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo1']['sections'].push(
+                                viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo1']['sections'].push(
                                     {
                                         'cta': {
                                             'text': item.trim(),
@@ -772,13 +447,13 @@ class Dependents {
                             }
                         })
 
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo2'] = {}
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo2']['section'] = {
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo2'] = {}
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo2']['section'] = {
                             'text': viewModel.seo2Section().replace(/é/g, "&#233;"),
                             'link': viewModel.seo2SectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                             'description': viewModel.seo2SectionDescription()
                         },
-                        viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo2']['sections'] = []
+                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo2']['sections'] = []
                         seo2ItemsList.forEach((item, index) => {
                             if (item != '') {
                                 viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo2']['sections'].push(
@@ -803,44 +478,11 @@ class Dependents {
                         })
                     break;
                 }
-                //console.log('mapping ',viewModel.params.data.mappingOrder);
+                // console.log(viewModel.params.data.mappingOrder)
             }
         };
-
-        ko.bindingHandlers.sortableList = {
-            init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-                //return { 'controlsDescendantBindings': true };
-            },
-            update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-                // console.log('sortableList ',element);
-                // console.log('sortableList ',viewModel.selectedModules()[0]);
-                if (viewModel.selectedModules().length > 0) {
-                    // console.log('sortableList ',viewModel.selectedModules()[viewModel.selectedModules().length - 1]);
-                    //$(element).html('<hello></hello>');
-
-                    // var componentName = viewModel.selectedModules()[viewModel.selectedModules().length - 1];
-                    // $(element).html('<ug-component></ug-component>');
-                    //
-                    //
-                    // $(element).append($("<hello></hello>"));
-                    // console.log($(element))
-                }
-
-
-
-            }
-        }
     }
 }
-ko.components.register('hello', {
-    viewModel: class HelloComponentModel extends Dependents {
-        constructor(params) {
-          super(params);
-          this.params = params;
-        }
-    },
-    template: `HELLO`, synchronous: true
-});
 
 ko.components.register('large-feature-module', {
     viewModel: class LargeFeatureModuleComponentModel extends Dependents {
@@ -850,14 +492,14 @@ ko.components.register('large-feature-module', {
         }
     },
     template: `
-        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'large-feature-module' }">
+        <li class="row module" data-bind="componentData">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Large Feature Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
+                            <a data-bind="text: 'Large Feature Module', attr: { href: '#accordion-'+uniqueId, id: 'accordion-heading-'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion-'+uniqueId, 'aria-labelledby': 'accordion-heading-'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -937,14 +579,14 @@ ko.components.register('small-feature-module', {
         }
     },
     template: `
-        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'small-feature-module' }">
+        <div class="row module" data-bind="componentData">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Small Feature Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
+                            <a data-bind="text: 'Small Feature Module', attr: { href: '#accordion-'+uniqueId, id: 'accordion-heading-'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion-'+uniqueId, 'aria-labelledby': 'accordion-heading-'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1028,7 +670,7 @@ ko.components.register('small-feature-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </li>`, synchronous: true
+        </div>`, synchronous: true
 });
 
 ko.components.register('basic-story-module', {
@@ -1039,14 +681,14 @@ ko.components.register('basic-story-module', {
         }
     },
     template: `
-        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'basic-story-module' }">
+        <div class="row module" data-bind="componentData">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Basic Story Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
+                            <a data-bind="text: 'Basic Story Module', attr: { href: '#accordion-'+uniqueId, id: 'accordion-heading-'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion-'+uniqueId, 'aria-labelledby': 'accordion-heading-'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1130,7 +772,7 @@ ko.components.register('basic-story-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div
-        </li>`, synchronous: true
+        </div>`, synchronous: true
 });
 
 ko.components.register('extended-story-module', {
@@ -1141,14 +783,14 @@ ko.components.register('extended-story-module', {
         }
     },
     template: `
-        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'extended-story-module' }">
+        <div class="row module" data-bind="componentData">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Extended Story Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
+                            <a data-bind="text: 'Extended Story Module', attr: { href: '#accordion-'+uniqueId, id: 'accordion-heading-'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion-'+uniqueId, 'aria-labelledby': 'accordion-heading-'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1247,7 +889,7 @@ ko.components.register('extended-story-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </li>`, synchronous: true
+        </div>`, synchronous: true
 });
 
 ko.components.register('collection-grid-module', {
@@ -1258,14 +900,14 @@ ko.components.register('collection-grid-module', {
         }
     },
     template: `
-        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'collection-grid-module' }">
+        <div class="row module" data-bind="componentData">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Collection Grid Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
+                            <a data-bind="text: 'Collection Grid Module', attr: { href: '#accordion-'+uniqueId, id: 'accordion-heading-'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion-'+uniqueId, 'aria-labelledby': 'accordion-heading-'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1349,7 +991,7 @@ ko.components.register('collection-grid-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </li>`, synchronous: true
+        </div>`, synchronous: true
 });
 
 ko.components.register('carousel-module', {
@@ -1360,14 +1002,14 @@ ko.components.register('carousel-module', {
         }
     },
     template: `
-        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'carousel-module' }">
+        <div class="row module" data-bind="componentData">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Carousel Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
+                            <a data-bind="text: 'Carousel Module', attr: { href: '#accordion-'+uniqueId, id: 'accordion-heading-'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion-'+uniqueId, 'aria-labelledby': 'accordion-heading-'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1451,7 +1093,7 @@ ko.components.register('carousel-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </li>`, synchronous: true
+        </div>`, synchronous: true
 });
 
 ko.components.register('text-link-module', {
@@ -1462,14 +1104,14 @@ ko.components.register('text-link-module', {
         }
     },
     template: `
-        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'text-link-module' }">
+        <div class="row module" data-bind="componentData">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Text Link Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
+                            <a data-bind="text: 'Text Link Module', attr: { href: '#accordion-'+uniqueId, id: 'accordion-heading-'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion-'+uniqueId, 'aria-labelledby': 'accordion-heading-'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1538,7 +1180,7 @@ ko.components.register('text-link-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </li>`, synchronous: true
+        </div>`, synchronous: true
 });
 
 ko.components.register('image-link-double-module', {
@@ -1549,14 +1191,14 @@ ko.components.register('image-link-double-module', {
         }
     },
     template: `
-        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'image-link-double-module' }">
+        <div class="row module" data-bind="componentData">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Image Link Double Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
+                            <a data-bind="text: 'Image Link Double Module', attr: { href: '#accordion-'+uniqueId, id: 'accordion-heading-'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion-'+uniqueId, 'aria-labelledby': 'accordion-heading-'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1625,7 +1267,7 @@ ko.components.register('image-link-double-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </li>`, synchronous: true
+        </div>`, synchronous: true
 });
 
 ko.components.register('button-link-double-module', {
@@ -1636,14 +1278,14 @@ ko.components.register('button-link-double-module', {
         }
     },
     template: `
-        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'button-link-double-module' }">
+        <div class="row module" data-bind="componentData">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'Button Link Double Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
+                            <a data-bind="text: 'Button Link Double Module', attr: { href: '#accordion-'+uniqueId, id: 'accordion-heading-'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion-'+uniqueId, 'aria-labelledby': 'accordion-heading-'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 medium-4 columns">
                                         <label>Item #</label>
@@ -1712,7 +1354,7 @@ ko.components.register('button-link-double-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </li>`, synchronous: true
+        </div>`, synchronous: true
 });
 
 ko.components.register('seo-link-module', {
@@ -1723,14 +1365,14 @@ ko.components.register('seo-link-module', {
         }
     },
     template: `
-        <li class="row module draggable" data-bind="sortable: uniqueId, attr: { 'data-id': uniqueId, id: uniqueId, 'data-type': 'seo-link-module' }">
+        <div class="row module" data-bind="componentData">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
                         <dd class="accordion-navigation">
-                            <a data-bind="text: 'SEO Links Module', attr: { href: '#accordion'+uniqueId, id: 'accordion-heading'+uniqueId, role: 'tab' }"></a>
+                            <a data-bind="text: 'SEO Links Module', attr: { href: '#accordion-'+uniqueId, id: 'accordion-heading-'+uniqueId, role: 'tab' }"></a>
 
-                            <div data-bind="attr: { id: 'accordion'+uniqueId, 'aria-labelledby': 'accordion-heading'+uniqueId, role: 'tabpanel' }" class="content">
+                            <div data-bind="attr: { id: 'accordion-'+uniqueId, 'aria-labelledby': 'accordion-heading-'+uniqueId, role: 'tabpanel' }" class="content">
                                 <div class="row">
                                     <div class="small-12 columns">
                                         <h3>TL SEO 1</h3>
@@ -1837,18 +1479,7 @@ ko.components.register('seo-link-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </li>`, synchronous: true
-});
-
-ko.components.register('ug-component', {
-    viewModel: function (params) {
-        this.params = params.params || {};
-        this.component = params.component || {};
-        console.log('this.params ',this.params);
-        console.log('this.component ',this.component);
-
-    },
-    template: `<!-- ko component: {name: component, params: { data: params }} --><!-- /ko -->`,synchronous: true
+        </div>`, synchronous: true
 });
 
 function reducerFilter(acc, xs) {
@@ -1916,12 +1547,8 @@ ko.components.register('homePageTool', {
               }
           }
           this.createModule = function (e) {
-              load = false;
-              this.selectedModules.push(this.selection());
-              console.log('createModule ',this.selectedModules());
-
-
-
+            load = false;
+            this.selectedModules.push(this.selection());
           }
           this.previewHomepage = function(e) {
               //console.log('preview click ',this.mappingOrder);
@@ -2077,6 +1704,20 @@ ko.components.register('homePageTool', {
                 })
             }
           }
+          ko.bindingHandlers.sortable = {
+              init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+                $( function() {
+                    $( "#sortableContainer" ).sortable({
+                        axis: "y",
+                        update: function(event, ui) {
+                            console.log(viewModel.mappingOrder);
+                        }
+                    });
+                });
+              }
+          };
+
+
       }
     },
     template: `
@@ -2111,8 +1752,8 @@ ko.components.register('homePageTool', {
             </div>
         </div>
 
-        <ul data-bind="sortableList" id="sortableContainer">
-
+        <ul data-bind="foreach: selectedModules(), sortable" id="sortableContainer">
+            <li data-bind="component: { name: $data, params: { data: $parent } }, attr: { 'data-id': $parent.getUniqueId(), id: $parent.getUniqueId(), 'data-type': $data }"></li>
         </ul>`, synchronous: true
 });
 ko.applyBindings();
