@@ -116,368 +116,392 @@ class Dependents {
 
         ko.bindingHandlers.componentData = {
             update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-                var uniqueId = viewModel.uniqueId;
+                //console.log(element.parentNode)
+                //console.log(element.parentElement.getAttribute('class'));
+                //var elementsList = document.getElementById('sortableContainer').children;
+
+                // console.log('element ',element)
+                // console.log('valueAccessor ',valueAccessor())
+                // console.log('allBindings ',allBindings())
+                // console.log('viewModel ',viewModel)
+                // console.log('bindingContext ',bindingContext)
+
+
+                //var uniqueId = viewModel.uniqueId;
                 var position = document.getElementById('sortableContainer').children.length;
                 var moduleType = bindingContext.$parent;
+                var uniqueIdArry = document.getElementById('sortableContainer').children;
 
-                viewModel.params.data.mappingOrder[uniqueId] = {};
-                viewModel.params.data.mappingOrder[uniqueId][position] = {};
-                viewModel.params.data.mappingOrder[uniqueId][position][moduleType] = {};
 
-                switch (moduleType) {
-                    case 'large-feature-module':
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
-                            {
-                                'item': viewModel.itemNumber(),
-                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
-                                'image': {
-                                    'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
-                                    },
-                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.imageDescription()
-                                },
-                                'headline': {
-                                    'text': viewModel.headline().replace(/é/g, "&#233;"),
-                                    'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.headlineDescription()
-                                },
-                                'cta': {
-                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
-                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.ctaDescription()
-                                }
-                            }
-                        ]
-                    break;
-                    case 'small-feature-module':
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
-                            {
-                                'item': viewModel.itemNumber(),
-                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
-                                'section': {
-                                    'text': viewModel.section().replace(/é/g, "&#233;"),
-                                    'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.sectionDescription()
-                                },
-                                'image': {
-                                    'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
-                                    },
-                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.imageDescription()
-                                },
-                                'headline': {
-                                    'text': viewModel.headline().replace(/é/g, "&#233;"),
-                                    'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.headlineDescription()
-                                },
-                                'cta': {
-                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
-                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.ctaDescription()
-                                }
-                            }
-                        ]
-                    break;
-                    case 'basic-story-module':
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
-                            {
-                                'item': viewModel.itemNumber(),
-                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
-                                'section': {
-                                    'text': viewModel.section().replace(/é/g, "&#233;"),
-                                    'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.sectionDescription()
-                                },
-                                'image': {
-                                    'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
-                                    },
-                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.imageDescription()
-                                },
-                                'headline': {
-                                    'text': viewModel.headline().replace(/é/g, "&#233;"),
-                                    'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.headlineDescription()
-                                },
-                                'cta': {
-                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
-                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.ctaDescription()
-                                }
-                            }
-                        ]
-                    break;
-                    case 'extended-story-module':
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
-                            {
-                                'item': viewModel.itemNumber(),
-                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
-                                'section': {
-                                    'text': viewModel.section().replace(/é/g, "&#233;"),
-                                    'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.sectionDescription()
-                                },
-                                'image': {
-                                    'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
-                                    },
-                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.imageDescription()
-                                },
-                                'headline': {
-                                    'text': viewModel.headline().replace(/é/g, "&#233;"),
-                                    'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.headlineDescription()
-                                },
-                                'copy': {
-                                    'text': viewModel.copy().replace(/é/g, "&#233;"),
-                                    'link': viewModel.copyUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.copyDescription()
-                                },
-                                'cta': {
-                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
-                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.ctaDescription()
-                                }
-                            }
-                        ]
-                    break;
-                    case 'collection-grid-module':
-                        var itemsList = viewModel.itemNumber().replace(/\n/g, ',').split(',');
-                        var itemsUrlList = viewModel.itemUrl().replace(/\n/g, ',').split(',');
-                        var smallImageList = viewModel.imageSmallUrl().replace(/\n/g, ',').split(',');
-                        var largeImageList = viewModel.imageLargeUrl().replace(/\n/g, ',').split(',');
-                        var imageDescriptionList = viewModel.imageDescription().replace(/\n/g, ',').split(',');
 
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
-                            'text': viewModel.section().replace(/é/g, "&#233;"),
-                            'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                            'description': viewModel.sectionDescription()
-                        },
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['headline'] = {
-                            'text': viewModel.headline().replace(/é/g, "&#233;"),
-                            'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                            'description': viewModel.headlineDescription()
-                        },
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['cta'] = {
-                            'text': viewModel.cta().replace(/é/g, "&#233;"),
-                            'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                            'description': viewModel.ctaDescription()
-                        },
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = []
-                        itemsList.forEach((item, index) => {
-                            if (item != '') {
-                                viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'].push(
-                                    {
-                                        'item': item.trim(),
-                                        'image': {
-                                            'customImage': {
-                                                'small': smallImageList[index] === undefined ? '' : smallImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                                'large': largeImageList[index] === undefined ? '' : largeImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim()
-                                            },
-                                            'link': itemsUrlList[index] === undefined ? '' : itemsUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                            'description': imageDescriptionList[index] === undefined ? '' : imageDescriptionList[index]
-                                        }
-                                    }
-                                )
-                            }
-                        })
-                    break;
-                    case 'carousel-module':
-                        var itemsList = viewModel.itemNumber().replace(/\n/g, ',').split(',');
-                        var itemsUrlList = viewModel.itemUrl().replace(/\n/g, ',').split(',');
-                        var smallImageList = viewModel.imageSmallUrl().replace(/\n/g, ',').split(',');
-                        var largeImageList = viewModel.imageLargeUrl().replace(/\n/g, ',').split(',');
-                        var imageDescriptionList = viewModel.imageDescription().replace(/\n/g, ',').split(',');
+                //console.log($(element)[0].parentElement.getAttribute('data-id'))
 
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
-                            'text': viewModel.section().replace(/é/g, "&#233;"),
-                            'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                            'description': viewModel.sectionDescription()
-                        },
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['headline'] = {
-                            'text': viewModel.headline().replace(/é/g, "&#233;"),
-                            'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                            'description': viewModel.headlineDescription()
-                        },
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['cta'] = {
-                            'text': viewModel.cta().replace(/é/g, "&#233;"),
-                            'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                            'description': viewModel.ctaDescription()
-                        },
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = []
-                        itemsList.forEach((item, index) => {
-                            if (item != '') {
-                                viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'].push(
-                                    {
-                                        'item': item.trim(),
-                                        'image': {
-                                            'customImage': {
-                                                'small': smallImageList[index] === undefined ? '' : smallImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                                'large': largeImageList[index] === undefined ? '' : largeImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim()
-                                            },
-                                            'link': itemsUrlList[index] === undefined ? '' : itemsUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                            'description': imageDescriptionList[index] === undefined ? '' : imageDescriptionList[index]
-                                        }
-                                    }
-                                )
-                            }
-                        })
-                    break;
-                    case 'text-link-module':
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
-                            'text': viewModel.section().replace(/é/g, "&#233;"),
-                            'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                            'description': viewModel.sectionDescription()
-                        },
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
-                            {
-                                'item': viewModel.itemNumber(),
-                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
-                                'image': {
-                                    'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
-                                    },
-                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.imageDescription()
-                                },
-                                'cta': {
-                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
-                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.ctaDescription()
-                                }
-                            }
-                        ]
-                    break;
-                    case 'image-link-double-module':
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
-                            'text': viewModel.section().replace(/é/g, "&#233;"),
-                            'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                            'description': viewModel.sectionDescription()
-                        },
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
-                            {
-                                'item': viewModel.itemNumber(),
-                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
-                                'image': {
-                                    'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
-                                    },
-                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.imageDescription()
-                                },
-                                'cta': {
-                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
-                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.ctaDescription()
-                                }
-                            }
-                        ]
-                    break;
-                    case 'button-link-double-module':
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
-                            'text': viewModel.section().replace(/é/g, "&#233;"),
-                            'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                            'description': viewModel.sectionDescription()
-                        },
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
-                            {
-                                'item': viewModel.itemNumber(),
-                                'displayModuleOn': viewModel.selectedModuleScreenSize(),
-                                'image': {
-                                    'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
-                                    },
-                                    'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.imageDescription()
-                                },
-                                'cta': {
-                                    'text': viewModel.cta().replace(/é/g, "&#233;"),
-                                    'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                    'description': viewModel.ctaDescription()
-                                }
-                            }
-                        ]
-                    break;
-                    case 'seo-link-module':
-                        var seo1ctaList = viewModel.seo1cta().replace(/\n/g, ',').split(',');
-                        var seo1ctaUrlList = viewModel.seo1ctaUrl().replace(/\n/g, ',').split(',');
-                        var seo1ctaDescriptionList = viewModel.seo1ctaDescription().replace(/\n/g, ',').split(',');
 
-                        var seo2ItemsList = viewModel.seo2ItemNumber().replace(/\n/g, ',').split(',');
-                        var seo2ItemsUrlList = viewModel.seo2ItemUrl().replace(/\n/g, ',').split(',');
-                        var seo2SmallImageList = viewModel.seo2ImageSmallUrl().replace(/\n/g, ',').split(',');
-                        var seo2LargeImageList = viewModel.seo2ImageLargeUrl().replace(/\n/g, ',').split(',');
-                        var seo2ImageDescriptionList = viewModel.seo2ImageDescription().replace(/\n/g, ',').split(',');
-                        var seo2ctaList = viewModel.seo2cta().replace(/\n/g, ',').split(',');
-                        var seo2ctaUrlList = viewModel.seo2ctaUrl().replace(/\n/g, ',').split(',');
-                        var seo2ctaDescriptionList = viewModel.seo2ctaDescription().replace(/\n/g, ',').split(',');
+                // var arry = Array.from(uniqueIdArry)
+                // arry.forEach((el, index) => {
+                //     console.log('arry el ',el.getAttribute('data-id'));
+                // })
 
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo1'] = {}
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo1']['section'] = {
-                            'text': viewModel.seo1Section().replace(/é/g, "&#233;"),
-                            'link': viewModel.seo1SectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                            'description': viewModel.seo1SectionDescription()
-                        },
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo1']['sections'] = []
 
-                        seo1ctaList.forEach((item, index) => {
-                            if (item != '') {
-                                viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo1']['sections'].push(
-                                    {
-                                        'cta': {
-                                            'text': item.trim(),
-                                            'link': seo1ctaUrlList[index] === undefined ? '' : seo1ctaUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                            'description': seo1ctaDescriptionList[index] === undefined ? '' : seo1ctaDescriptionList[index]
-                                        }
-                                    }
-                                )
-                            }
-                        })
 
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo2'] = {}
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo2']['section'] = {
-                            'text': viewModel.seo2Section().replace(/é/g, "&#233;"),
-                            'link': viewModel.seo2SectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                            'description': viewModel.seo2SectionDescription()
-                        },
-                        viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo2']['sections'] = []
-                        seo2ItemsList.forEach((item, index) => {
-                            if (item != '') {
-                                viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo2']['sections'].push(
-                                    {
-                                        'item': item.trim(),
-                                        'image': {
-                                            'customImage': {
-                                                'small': seo2SmallImageList[index] === undefined ? '' : seo2SmallImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                                'large': seo2LargeImageList[index] === undefined ? '' : seo2LargeImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim()
-                                            },
-                                            'link': seo2ItemsUrlList[index] === undefined ? '' : seo2ItemsUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                            'description': seo2ImageDescriptionList[index] === undefined ? '' : seo2ImageDescriptionList[index]
-                                        },
-                                        'cta': {
-                                            'text': seo2ctaList[index] === undefined ? '' : seo2ctaList[index].replace(/é/g, "&#233;").trim(),
-                                            'link': seo2ctaUrlList[index] === undefined ? '' : seo2ctaUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
-                                            'description': seo2ctaDescriptionList[index] === undefined ? '' : seo2ctaDescriptionList[index]
-                                        }
-                                    }
-                                )
-                            }
-                        })
-                    break;
-                }
+                // viewModel.params.data.mappingOrder[uniqueId] = {};
+                // viewModel.params.data.mappingOrder[uniqueId][position] = {};
+                // viewModel.params.data.mappingOrder[uniqueId][position][moduleType] = {};
+                //
+                // switch (moduleType) {
+                //     case 'large-feature-module':
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
+                //             {
+                //                 'item': viewModel.itemNumber(),
+                //                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                //                 'image': {
+                //                     'customImage': {
+                //                         "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                //                         "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                //                     },
+                //                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.imageDescription()
+                //                 },
+                //                 'headline': {
+                //                     'text': viewModel.headline().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.headlineDescription()
+                //                 },
+                //                 'cta': {
+                //                     'text': viewModel.cta().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.ctaDescription()
+                //                 }
+                //             }
+                //         ]
+                //     break;
+                //     case 'small-feature-module':
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
+                //             {
+                //                 'item': viewModel.itemNumber(),
+                //                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                //                 'section': {
+                //                     'text': viewModel.section().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.sectionDescription()
+                //                 },
+                //                 'image': {
+                //                     'customImage': {
+                //                         "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                //                         "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                //                     },
+                //                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.imageDescription()
+                //                 },
+                //                 'headline': {
+                //                     'text': viewModel.headline().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.headlineDescription()
+                //                 },
+                //                 'cta': {
+                //                     'text': viewModel.cta().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.ctaDescription()
+                //                 }
+                //             }
+                //         ]
+                //     break;
+                //     case 'basic-story-module':
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
+                //             {
+                //                 'item': viewModel.itemNumber(),
+                //                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                //                 'section': {
+                //                     'text': viewModel.section().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.sectionDescription()
+                //                 },
+                //                 'image': {
+                //                     'customImage': {
+                //                         "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                //                         "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                //                     },
+                //                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.imageDescription()
+                //                 },
+                //                 'headline': {
+                //                     'text': viewModel.headline().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.headlineDescription()
+                //                 },
+                //                 'cta': {
+                //                     'text': viewModel.cta().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.ctaDescription()
+                //                 }
+                //             }
+                //         ]
+                //     break;
+                //     case 'extended-story-module':
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
+                //             {
+                //                 'item': viewModel.itemNumber(),
+                //                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                //                 'section': {
+                //                     'text': viewModel.section().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.sectionDescription()
+                //                 },
+                //                 'image': {
+                //                     'customImage': {
+                //                         "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                //                         "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                //                     },
+                //                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.imageDescription()
+                //                 },
+                //                 'headline': {
+                //                     'text': viewModel.headline().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.headlineDescription()
+                //                 },
+                //                 'copy': {
+                //                     'text': viewModel.copy().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.copyUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.copyDescription()
+                //                 },
+                //                 'cta': {
+                //                     'text': viewModel.cta().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.ctaDescription()
+                //                 }
+                //             }
+                //         ]
+                //     break;
+                //     case 'collection-grid-module':
+                //         var itemsList = viewModel.itemNumber().replace(/\n/g, ',').split(',');
+                //         var itemsUrlList = viewModel.itemUrl().replace(/\n/g, ',').split(',');
+                //         var smallImageList = viewModel.imageSmallUrl().replace(/\n/g, ',').split(',');
+                //         var largeImageList = viewModel.imageLargeUrl().replace(/\n/g, ',').split(',');
+                //         var imageDescriptionList = viewModel.imageDescription().replace(/\n/g, ',').split(',');
+                //
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
+                //             'text': viewModel.section().replace(/é/g, "&#233;"),
+                //             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //             'description': viewModel.sectionDescription()
+                //         },
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['headline'] = {
+                //             'text': viewModel.headline().replace(/é/g, "&#233;"),
+                //             'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //             'description': viewModel.headlineDescription()
+                //         },
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['cta'] = {
+                //             'text': viewModel.cta().replace(/é/g, "&#233;"),
+                //             'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //             'description': viewModel.ctaDescription()
+                //         },
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = []
+                //         itemsList.forEach((item, index) => {
+                //             if (item != '') {
+                //                 viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'].push(
+                //                     {
+                //                         'item': item.trim(),
+                //                         'image': {
+                //                             'customImage': {
+                //                                 'small': smallImageList[index] === undefined ? '' : smallImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                //                                 'large': largeImageList[index] === undefined ? '' : largeImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                //                             },
+                //                             'link': itemsUrlList[index] === undefined ? '' : itemsUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                             'description': imageDescriptionList[index] === undefined ? '' : imageDescriptionList[index]
+                //                         }
+                //                     }
+                //                 )
+                //             }
+                //         })
+                //     break;
+                //     case 'carousel-module':
+                //         var itemsList = viewModel.itemNumber().replace(/\n/g, ',').split(',');
+                //         var itemsUrlList = viewModel.itemUrl().replace(/\n/g, ',').split(',');
+                //         var smallImageList = viewModel.imageSmallUrl().replace(/\n/g, ',').split(',');
+                //         var largeImageList = viewModel.imageLargeUrl().replace(/\n/g, ',').split(',');
+                //         var imageDescriptionList = viewModel.imageDescription().replace(/\n/g, ',').split(',');
+                //
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
+                //             'text': viewModel.section().replace(/é/g, "&#233;"),
+                //             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //             'description': viewModel.sectionDescription()
+                //         },
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['headline'] = {
+                //             'text': viewModel.headline().replace(/é/g, "&#233;"),
+                //             'link': viewModel.headlineUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //             'description': viewModel.headlineDescription()
+                //         },
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['cta'] = {
+                //             'text': viewModel.cta().replace(/é/g, "&#233;"),
+                //             'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //             'description': viewModel.ctaDescription()
+                //         },
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['displayModuleOn'] = viewModel.selectedModuleScreenSize(),
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = []
+                //         itemsList.forEach((item, index) => {
+                //             if (item != '') {
+                //                 viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'].push(
+                //                     {
+                //                         'item': item.trim(),
+                //                         'image': {
+                //                             'customImage': {
+                //                                 'small': smallImageList[index] === undefined ? '' : smallImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                //                                 'large': largeImageList[index] === undefined ? '' : largeImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                //                             },
+                //                             'link': itemsUrlList[index] === undefined ? '' : itemsUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                             'description': imageDescriptionList[index] === undefined ? '' : imageDescriptionList[index]
+                //                         }
+                //                     }
+                //                 )
+                //             }
+                //         })
+                //     break;
+                //     case 'text-link-module':
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
+                //             'text': viewModel.section().replace(/é/g, "&#233;"),
+                //             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //             'description': viewModel.sectionDescription()
+                //         },
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
+                //             {
+                //                 'item': viewModel.itemNumber(),
+                //                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                //                 'image': {
+                //                     'customImage': {
+                //                         "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                //                         "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                //                     },
+                //                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.imageDescription()
+                //                 },
+                //                 'cta': {
+                //                     'text': viewModel.cta().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.ctaDescription()
+                //                 }
+                //             }
+                //         ]
+                //     break;
+                //     case 'image-link-double-module':
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
+                //             'text': viewModel.section().replace(/é/g, "&#233;"),
+                //             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //             'description': viewModel.sectionDescription()
+                //         },
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
+                //             {
+                //                 'item': viewModel.itemNumber(),
+                //                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                //                 'image': {
+                //                     'customImage': {
+                //                         "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                //                         "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                //                     },
+                //                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.imageDescription()
+                //                 },
+                //                 'cta': {
+                //                     'text': viewModel.cta().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.ctaDescription()
+                //                 }
+                //             }
+                //         ]
+                //     break;
+                //     case 'button-link-double-module':
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['section'] = {
+                //             'text': viewModel.section().replace(/é/g, "&#233;"),
+                //             'link': viewModel.sectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //             'description': viewModel.sectionDescription()
+                //         },
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['sections'] = [
+                //             {
+                //                 'item': viewModel.itemNumber(),
+                //                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
+                //                 'image': {
+                //                     'customImage': {
+                //                         "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                //                         "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                //                     },
+                //                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.imageDescription()
+                //                 },
+                //                 'cta': {
+                //                     'text': viewModel.cta().replace(/é/g, "&#233;"),
+                //                     'link': viewModel.ctaUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                     'description': viewModel.ctaDescription()
+                //                 }
+                //             }
+                //         ]
+                //     break;
+                //     case 'seo-link-module':
+                //         var seo1ctaList = viewModel.seo1cta().replace(/\n/g, ',').split(',');
+                //         var seo1ctaUrlList = viewModel.seo1ctaUrl().replace(/\n/g, ',').split(',');
+                //         var seo1ctaDescriptionList = viewModel.seo1ctaDescription().replace(/\n/g, ',').split(',');
+                //
+                //         var seo2ItemsList = viewModel.seo2ItemNumber().replace(/\n/g, ',').split(',');
+                //         var seo2ItemsUrlList = viewModel.seo2ItemUrl().replace(/\n/g, ',').split(',');
+                //         var seo2SmallImageList = viewModel.seo2ImageSmallUrl().replace(/\n/g, ',').split(',');
+                //         var seo2LargeImageList = viewModel.seo2ImageLargeUrl().replace(/\n/g, ',').split(',');
+                //         var seo2ImageDescriptionList = viewModel.seo2ImageDescription().replace(/\n/g, ',').split(',');
+                //         var seo2ctaList = viewModel.seo2cta().replace(/\n/g, ',').split(',');
+                //         var seo2ctaUrlList = viewModel.seo2ctaUrl().replace(/\n/g, ',').split(',');
+                //         var seo2ctaDescriptionList = viewModel.seo2ctaDescription().replace(/\n/g, ',').split(',');
+                //
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo1'] = {}
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo1']['section'] = {
+                //             'text': viewModel.seo1Section().replace(/é/g, "&#233;"),
+                //             'link': viewModel.seo1SectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //             'description': viewModel.seo1SectionDescription()
+                //         },
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo1']['sections'] = []
+                //
+                //         seo1ctaList.forEach((item, index) => {
+                //             if (item != '') {
+                //                 viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo1']['sections'].push(
+                //                     {
+                //                         'cta': {
+                //                             'text': item.trim(),
+                //                             'link': seo1ctaUrlList[index] === undefined ? '' : seo1ctaUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                             'description': seo1ctaDescriptionList[index] === undefined ? '' : seo1ctaDescriptionList[index]
+                //                         }
+                //                     }
+                //                 )
+                //             }
+                //         })
+                //
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo2'] = {}
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo2']['section'] = {
+                //             'text': viewModel.seo2Section().replace(/é/g, "&#233;"),
+                //             'link': viewModel.seo2SectionUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //             'description': viewModel.seo2SectionDescription()
+                //         },
+                //         viewModel.params.data.mappingOrder[uniqueId][position][moduleType]['seo2']['sections'] = []
+                //         seo2ItemsList.forEach((item, index) => {
+                //             if (item != '') {
+                //                 viewModel.params.data.mappingOrder[uniqueId][accordionIndex][moduleType]['seo2']['sections'].push(
+                //                     {
+                //                         'item': item.trim(),
+                //                         'image': {
+                //                             'customImage': {
+                //                                 'small': seo2SmallImageList[index] === undefined ? '' : seo2SmallImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                //                                 'large': seo2LargeImageList[index] === undefined ? '' : seo2LargeImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                //                             },
+                //                             'link': seo2ItemsUrlList[index] === undefined ? '' : seo2ItemsUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                             'description': seo2ImageDescriptionList[index] === undefined ? '' : seo2ImageDescriptionList[index]
+                //                         },
+                //                         'cta': {
+                //                             'text': seo2ctaList[index] === undefined ? '' : seo2ctaList[index].replace(/é/g, "&#233;").trim(),
+                //                             'link': seo2ctaUrlList[index] === undefined ? '' : seo2ctaUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
+                //                             'description': seo2ctaDescriptionList[index] === undefined ? '' : seo2ctaDescriptionList[index]
+                //                         }
+                //                     }
+                //                 )
+                //             }
+                //         })
+                //     break;
+                // }
                 // console.log(viewModel.params.data.mappingOrder)
             }
         };
@@ -492,7 +516,7 @@ ko.components.register('large-feature-module', {
         }
     },
     template: `
-        <li class="row module" data-bind="componentData">
+        <li class="row module" data-bind="componentData, attr: {'data-id': 'uniqueId-'+getUniqueId(), 'id': 'uniqueId-'+getUniqueId(),  'data-type': 'large-feature-module' }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
@@ -579,7 +603,7 @@ ko.components.register('small-feature-module', {
         }
     },
     template: `
-        <div class="row module" data-bind="componentData">
+        <li class="row module" data-bind="componentData, attr: {'data-id': 'uniqueId-'+getUniqueId(), 'id': 'uniqueId-'+getUniqueId(),  'data-type': 'small-feature-module' }">
             <div class="flexContainer">
                 <div class="small-11 columns">
                     <dl class="accordion" data-accordion="" role="tablist">
@@ -670,7 +694,7 @@ ko.components.register('small-feature-module', {
                     <i class="fa fa-times fa-3" aria-hidden="true" data-bind="event:{ click: removeModule }"></i>
                 </div>
             </div>
-        </div>`, synchronous: true
+        </li>`, synchronous: true
 });
 
 ko.components.register('basic-story-module', {
@@ -1710,7 +1734,24 @@ ko.components.register('homePageTool', {
                     $( "#sortableContainer" ).sortable({
                         axis: "y",
                         update: function(event, ui) {
-                            console.log(viewModel.mappingOrder);
+                            //console.log(viewModel.mappingOrder);
+
+                            var childElements = element.querySelectorAll("li");
+                            var elementOrderArry = [];
+                            var uniqueIdOrderArry = [];
+
+                            //console.log('childElements ',childElements)
+                            childElements.forEach((item, index) => {
+                                console.log(item.getAttribute('id'))
+                                //console.log('asds bindingContext ',bindingContext)
+                                //console.log(document.getElementById('sortableContainer').children);
+                                //elementOrderArry.push(item.dataset.type);
+                                //uniqueIdOrderArry.push(item.dataset.id);
+                                //console.log('item ',ko.contextFor(item))
+                            })
+                            //viewModel.selectedModules(elementOrderArry);
+                            //console.log('uniqueIdOrderArry ',uniqueIdOrderArry);
+
                         }
                     });
                 });
@@ -1753,7 +1794,8 @@ ko.components.register('homePageTool', {
         </div>
 
         <ul data-bind="foreach: selectedModules(), sortable" id="sortableContainer">
-            <li data-bind="component: { name: $data, params: { data: $parent } }, attr: { 'data-id': $parent.getUniqueId(), id: $parent.getUniqueId(), 'data-type': $data }"></li>
+
+            <!-- ko component: {name: $data, params: { data: $parent }} --><!-- /ko -->
         </ul>`, synchronous: true
 });
 ko.applyBindings();
