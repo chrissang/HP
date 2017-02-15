@@ -302,7 +302,7 @@ ko.components.register('large-feature-module', {
                             </div>
                         </div>
                         <div class="row fullwidth">
-                            <div class="small-12 large-11 xlarge-10 xxlarge-8 small-centered columns">
+                            <div class="small-12 medium-8 large-6 small-centered columns">
                                 <div class="white-box-container text-center">
                                     <a class="a-secondary" data-bind="attr: { href: addUgDomain(headline.link), 'data-type': 'Headline', 'data-description': headline.description, 'data-itemNumber': item, 'data-cta': cta.text }">
                                         <h1 data-bind="html: headline.text"></h1>

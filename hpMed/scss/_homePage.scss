@@ -52,6 +52,7 @@
         padding: 1rem .75rem;
         margin: 0;
 		border-radius: 3px;
+		margin: -3rem 1.25rem 1rem 1.25rem;
         h1 {
             margin-bottom: 0.5rem;
         }
@@ -79,7 +80,6 @@
 		&:last-of-type {
 			.container {
 				margin-bottom: 0;
-				border-bottom: 0;
 			}
 		}
 	}
@@ -300,6 +300,16 @@ body:before {
 			padding: 0;
 		}
 	}
+	.small-feature-module {
+		.row {
+			&:last-of-type {
+				.container {
+					border-bottom: 0;
+				}
+			}
+		}
+	}
+
 	.basic-story-module {
 	    .container {
 			label {
