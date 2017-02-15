@@ -1,3 +1,4 @@
+//TODO need to add imagePath function to all modules
 var mappingOrder = {};
 var initViewModels = [];
 var load = false;
@@ -66,6 +67,18 @@ class Dependents {
         this.mappingOrder = {};
         this.uniqueIdModified = ko.observable("");
         this.uniqueId = new Date().getTime();
+        this.imagePath = function(image){
+            image = image.replace(/http:\/\/www.uncommongoods.com/g, "\/\/www.uncommongoods.com").replace(/\s+/g,"").replace(/é/g, "e");
+            if (image.indexOf("www.uncommongoods.com/images/items") > -1) {
+                return image;
+            } else if(image.indexOf("/images/items") > -1 && image != '') {
+                return '//www.uncommongoods.com'+image;
+            } else if( image != '' ) {
+                return '//www.uncommongoods.com/images/hp/B/'+image;
+            } else {
+                return '';
+            }
+        }
         this.sortMappingOrder = function() {
             var uniqueIdReordered = this.uniqueIdModified();
             uniqueIdReordered.forEach((el,index) => {
@@ -428,8 +441,10 @@ class Dependents {
                                 },
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                                        // "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
+                                        // "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                                        "small": viewModel.imagePath(viewModel.imageSmallUrl().trim()),
+                                        "large": viewModel.imagePath(viewModel.imageLargeUrl().trim())
                                     },
                                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
