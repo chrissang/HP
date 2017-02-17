@@ -68,6 +68,10 @@
 		color:$primary;
 	}
 }
+.pr-review-engine .pr-page-prev a,
+.pr-review-engine .pr-page-next a{
+    @extend .a-secondary;
+}
 /* WAR */
 #pr-war .p-w-r label{
 	font-weight:normal;
@@ -88,10 +92,22 @@
 	border-color:$active;
 }
 /*Q&A*/
+.prPaAskQuestionLnk{
+    @extend .a-tertiary;
+    
+}
 a.prPaAskQuestionLnk,
 a.prPaAskQuestionLnk span{
 	background-image:none!important;
 	color:$active;
+}
+a.prPaAskQuestionLnk span{
+    display:inline;
+}
+.pr-pa-snippet-questions a.pr-snippet-link,
+.pr-pa-snippet-answers a.pr-snippet-link,
+.pr-pa-snippet-ask-question a.pr-snippet-link{
+    @extend .a-secondary;
 }
 .prPaContainer.prPaNonempty,
 .prPaFooter{

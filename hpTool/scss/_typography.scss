@@ -9,12 +9,16 @@
 }
 
 $header-font-color:$primary;
-h1, h2, h3, h4, h5, h6{
-	color:$primary!important;
-	&.header-info{
-		margin:1rem 0 .25rem 0 !important
-	}
+h1, h2, h3, h4, h5, h6, p, .body{
+	color:$primary;
 }
+
+h1, h2, h3, h4, h5, h6, p, .body{
+    .midnight &{
+	   color:$white;
+    }
+}
+
 
 .ug-PrimaryColor{
 	color:$primary!important;
@@ -61,7 +65,7 @@ h1, h2, h3, h4, h5, h6{
 		font-family:$font-family-serif;
 		font-size: 0.875rem;
 		line-height:rem-calc(20);
-		margin-bottom:.75rem;
+		margin: 0 0 .75rem 0;
 	}
 }
 @mixin pipe($pipe-spacing: .75rem) {
@@ -98,12 +102,12 @@ label, blockquote{
 	font-family:$font-family-serif;
 }
 a{color:inherit}
-div > a:not(.button),
-div > a:not(.button):link,
-div > a:not(.button):visited,
-div > a:not(.button):hover,
-div > a:not(.button):active,
-div > a:not(.button):focus{
+div > a:not(.button):not(.body-small-crumbs),
+div > a:not(.button):not(.body-small-crumbs):link,
+div > a:not(.button):not(.body-small-crumbs):visited,
+div > a:not(.button):not(.body-small-crumbs):hover,
+div > a:not(.button):not(.body-small-crumbs):active,
+div > a:not(.button):not(.body-small-crumbs):focus{
 	color:inherit;
 	text-decoration:none;
 }
@@ -136,12 +140,12 @@ div > a:not(.button):focus{
 	}
 }
 
-a.a-secondary,
-a.a-secondary:link,
-a.a-secondary:visited,
-a.a-tertiary,
-a.a-tertiary:link,
-a.a-tertiary:visited{
+.a-secondary,
+.a-secondary:link,
+.a-secondary:visited,
+.a-tertiary,
+.a-tertiary:link,
+.a-tertiary:visited{
 	text-decoration:none;
 	border-bottom:0;
 	color:inherit;
@@ -149,16 +153,22 @@ a.a-tertiary:visited{
 		@include linkDecor();
 	}
 }
-a.a-tertiary,
-a.a-tertiary:link,
-a.a-tertiary:visited{
+.a-tertiary,
+.a-tertiary:link,
+.a-tertiary:visited{
 	font-style:italic;
 	color:inherit;
+    position: relative;
 	&::after{
 		font-family:UncommonGoods;
 		content: " \58";
-		font-size:.4375rem;
+		font-size:.4375em;
 		font-style:normal;
+        top: 50%;
+        position: absolute;
+        right: -1.5em;
+        line-height: .4375em;
+        transform: translateY(-50%);
 	}
 }
 @mixin noLinkDecor(){
@@ -189,7 +199,6 @@ blockquote::after{
 }
 .body, p{
 	font-family:$font-family-sans-serif;
-	color:$primary-color;
 	font-size:rem-calc(15);
 	line-height:rem-calc(24);
 	margin-bottom:.75rem;
@@ -200,7 +209,7 @@ blockquote::after{
 	}
 	*/
 }
-input[type="radio"]+label, input[type="checkbox"]+label, .moveTo label{
+input[type="radio"]+label, input[type="checkbox"]+label{
 	color:$primary;
 	font-family:$font-family-sans-serif;
 	font-size:rem-calc(14);
@@ -222,25 +231,11 @@ input[type="radio"]:disabled+label, input[type="checkbox"]:disabled+label{
 		line-height:rem-calc(16);
 	}
 }
-a.body-small{
-	font-style:italic;
-	&:after{
-		@include link-decoration;
-		 display: inline-block;
-	}
-}
 .body-small-crumbs{
-	font-family:$font-family-sans-serif;
+    @extend .body-small;
 	color:$secondary-color;
-	font-size:rem-calc(14);
-	line-height:rem-calc(26);
-	margin-bottom:.75rem;
 	white-space:nowrap;
-	@media #{$medium-up} {
-		font-size:rem-calc(12);
-		line-height:rem-calc(18);
-	}		
-	 @include pipe();
+    @include pipe();
 	&:link,
 	&:visited,
 	&:visited:hover,
@@ -250,15 +245,8 @@ a.body-small{
 	}
 }
 .body-small-caps{
-	font-family:$font-family-sans-serif;
+	@extend .body-small;
 	text-transform:uppercase;
-	font-size:rem-calc(14);
-	line-height:rem-calc(18);
-	margin-bottom:.75rem;
-	@media #{$medium-up} {
-		font-size:rem-calc(12);
-		line-height:rem-calc(16);
-	}
 }
 .body-mini, .pr-snippet-read-write a.pr-snippet-link, .pr-snippet-write-first-review p{
 	font-family:$font-family-sans-serif;
@@ -435,10 +423,12 @@ a.body-small{
 	del{
 		color:$inactive;
 		text-decoration:line-through;
+        white-space:nowrap;
 	}
 	ins{
 		color:$highlight;
 		text-decoration:none;
+        white-space:nowrap;
 	}
 }
 .error:not(input){
@@ -473,54 +463,123 @@ a.body-small{
 	.row.pag .current{
 		color:$active!important;
 	}
-	.row.pag .icon-lg{
+	.row.pag .active.icon-lg{
 		color:$active!important;
+        vertical-align:middle;
 	}
 	.row.pag .inactive.icon-lg{
 		color:$inactive!important;
+        vertical-align:middle;
 		&:hover{
 			cursor:default;
 		}
 	}
 /* pagination */
+
+/* progress */
+
+	.progress{
+		display:inline-block;
+		width:1.25rem;
+		height:1.25rem;
+		text-indent:-9999px;
+		border-radius:1000px;
+		position:relative;
+		transition:background-color .5s;
+        background-color:$secondary;
+        .midnight &{
+    		background-color:$active-light-mix;
+        }
+	}
+	.progress::before{
+        transition:all .25s;
+        transition-timing-function:cubic-bezier(.01,.25,.31,1.84)
+    }
+	.progress.present{
+        background-color:$active;
+        .midnight &{
+		  background-color:#FFF;
+        }
+	}
+	.progress.future{
+		background-color:transparent;
+	}
+	.progress::before{
+		content:"";
+		border-radius:1000px;
+		position:absolute;
+		top:-2px;
+		right:-2px;
+		bottom:-2px;
+		left:-2px;
+		border:1px solid $active;
+        .midnight &{
+            border:1px solid #FFF;    
+        }
+	}
+	.progress.future::before,
+	.progress.past::before{
+		top:0;
+		right:0;
+		bottom:0;
+		left:0;
+		border-color:$secondary;
+        .midnight &{
+            border-color:$active-light-mix;    
+        }
+	}
+	.progress.future,
+    .progress.present{
+        pointer-events:none;
+    }
+/*progress*/
 table{
-	border-collapse: collapse; 
+	border-collapse: collapse;
+}
+table input,
+table select,
+table input[type="checkbox"]+label,
+table input[type="radio"]+label,
+table button{
+    margin-bottom:0!important;
 }
 table tr{
 	background-color:$white;	
 }
 table tr.even,
 table tr.alt,
-table tr:nth-of-type(2n){
-	background-color:#F9F9F9;
-}
-#tablesBrand table tr.even,
-#tablesBrand table tr.alt,
-#tablesBrand table tr:nth-of-type(2n){
-	background-color:$offwhite;
+table tr:nth-of-type(even){
+	background-color:$offwhite-light-mix;
 }
 table td,
 table th{
 	@extend .body;
 	font-weight:normal;
 }
-table:not(.noTopLabels):not(.noLabels) tr:first-child td,
-table:not(.noTopLabels):not(.noLabels) tr:first-child th,{
-	border-bottom:1px solid $offwhite;
-	@extend .body-small-caps;
-	color:$secondary;
+table thead th,
+table thead td{
+   border-bottom:1px solid $offwhite; 
 }
-table:not(.noLeftLabels):not(.noLabels) tr td:first-child,
-table:not(.noLeftabels):not(.noLabels) tr th:first-child{
-	border-right:1px solid $offwhite;
-	@extend .body-small-caps;
+table thead th:empty,
+table tbody th{
+    border-right:1px solid $offwhite;
+}
+table tbody th,
+table thead tr td,
+table thead tr th{
+  	@extend .body-small-caps;
 	color:$secondary;
 	background-color:$white;
+    font-weight: normal;
 }
 .accordion{
 	border-top:1px solid $secondary;
 	border-bottom:1px solid $secondary;
 	margin-left:0;
+}
+.accordion .accordion-navigation,
+.accordion dd{
+    border-bottom:1px solid $offwhite;
 }
 .accordion .accordion-navigation > a,
 .accordion dd > a{
@@ -529,7 +588,6 @@ table:not(.noLeftabels):not(.noLabels) tr th:first-child{
 	margin:0;
 	padding:1.5rem 0;
 	background-color:transparent;
-	border-bottom:1px solid $offwhite!important;
 	&::after{
 		font-family:"UncommonGoods";
 		content:"1";
@@ -549,6 +607,10 @@ table:not(.noLeftabels):not(.noLabels) tr th:first-child{
 .accordion .accordion-navigation.active > a::after,
 .accordion dd.active > a::after{
 	content:"3";
+}
+.accordion .accordion-navigation > .content,
+.accordion dd > .content{
+    padding-bottom:1.5rem;
 }
 input[type="checkbox"].readmore, input[type="checkbox"].readmore+label{
 	display:none;
@@ -710,4 +772,25 @@ input[type="checkbox"].readmore, input[type="checkbox"].readmore+label{
 	@media #{$large-up}{
 		width:85.71%;
 	}
+}
+
+.panel{
+    border:2px solid $active-light-mix;
+    background-color:$white;
+    padding:1.25rem;
+    margin-bottom:.75rem;
+    &.panel-secondary{
+        border:none;
+        background-color:$offwhite;
+        padding:1.25rem;
+        .icon-close{
+            padding: .75rem;
+            left: auto;
+            float: right;
+            margin: -1.125rem -1.125rem -.5rem 0;
+            +*{
+                clear:both;
+            }
+        }
+    }
 }

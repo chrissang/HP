@@ -1,0 +1,1 @@
+var mappingOrder = {"A":{"large-feature-module":{"sections":[{"item":"","displayModuleOn":"small","image":{"customImage":{"small":"","large":""},"link":"","description":""},"headline":{"text":"","link":"","description":""},"cta":{"text":"","link":"","description":""}}]}}}

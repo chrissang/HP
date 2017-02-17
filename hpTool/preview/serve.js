@@ -10,14 +10,15 @@ var app = express();
 app.use(express.static(__dirname + '/'));
 
 
-
-//res.header("Access-Control-Allow-Origin", "*");
 app.get('/:simulator', function(req, res){
     var date = req.query.date;
-    request("http://localhost:5000/hp_config/"+date+".js").pipe(fs.createWriteStream("js/mappingOrder.js") );
 
-    console.log('ok');
-    console.log(req.query.date);
+    if (date) {
+        request("http://localhost:5000/hp_config/"+date+".js").pipe(fs.createWriteStream("js/mappingOrder.js") );
+        console.log('ok');
+        console.log(date);
+    }
+
     res.sendFile(__dirname + '/');
 });
 
@@ -26,9 +27,3 @@ var port = process.env.HTTP_PORT || 9000;
 app.listen(port, function() {
   console.log('listening for DEV: on port %s', port);
 });
-
-// function start() {
-//     app.listen(cfg.services.restApiPort);
-//     logger.info("sku service", cfg.services.restApiPort)
-// }
-// module.exports = start;

@@ -1,4 +1,4 @@
-//TODO need to add imagePath function to all modules
+//TODO need to add addImagePath function to all modules
 var mappingOrder = {};
 var initViewModels = [];
 var load = false;
@@ -67,7 +67,7 @@ class Dependents {
         this.mappingOrder = {};
         this.uniqueIdModified = ko.observable("");
         this.uniqueId = new Date().getTime();
-        this.imagePath = function(image){
+        this.addImagePath = function(image){
             image = image.replace(/http:\/\/www.uncommongoods.com/g, "\/\/www.uncommongoods.com").replace(/\s+/g,"").replace(/é/g, "e");
             if (image.indexOf("www.uncommongoods.com/images/items") > -1) {
                 return image;
@@ -77,6 +77,14 @@ class Dependents {
                 return '//www.uncommongoods.com/images/hp/B/'+image;
             } else {
                 return '';
+            }
+        }
+        this.removeImagePath = function(image){
+
+            if (image.indexOf("//www.uncommongoods.com/images/hp/B/") > -1) {
+                return image.split('//www.uncommongoods.com/images/hp/B/')[1];
+            } else {
+                return image;
             }
         }
         this.sortMappingOrder = function() {
@@ -161,8 +169,8 @@ class Dependents {
                                         binding.$data.itemUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.link : '');
                                         binding.$data.selectedModuleScreenSize(!!mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn ? mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn : '');
 
-                                        binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small : '');
-                                        binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large : '');
+                                        binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? viewModel.params.data.removeImagePath(mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small) : '');
+                                        binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? viewModel.params.data.removeImagePath(mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large) : '');
                                         binding.$data.imageDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.description : '');
 
                                         binding.$data.cta(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.text : '');
@@ -178,8 +186,8 @@ class Dependents {
                                         binding.$data.itemUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.link : '');
                                         binding.$data.selectedModuleScreenSize(!!mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn ? mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn : '');
 
-                                        binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small : '');
-                                        binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large : '');
+                                        binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? viewModel.params.data.removeImagePath(mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small) : '');
+                                        binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? viewModel.params.data.removeImagePath(mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large) : '');
                                         binding.$data.imageDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.description : '');
 
                                         binding.$data.cta(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.text : '');
@@ -195,8 +203,8 @@ class Dependents {
                                         binding.$data.itemUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.link : '');
                                         binding.$data.selectedModuleScreenSize(!!mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn ? mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn : '');
 
-                                        binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small : '');
-                                        binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large : '');
+                                        binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? viewModel.params.data.removeImagePath(mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small) : '');
+                                        binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? viewModel.params.data.removeImagePath(mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large) : '');
                                         binding.$data.imageDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.description : '');
 
                                         binding.$data.cta(!!mappingOrder[alphaChar][moduleType]['sections'][i].cta ? mappingOrder[alphaChar][moduleType]['sections'][i].cta.text : '');
@@ -240,8 +248,8 @@ class Dependents {
 
                                             binding.$data.itemNumber(itemNumbers ? itemNumbers : '');
                                             binding.$data.itemUrl(itemUrls ? itemUrls : '');
-                                            binding.$data.imageSmallUrl(smallImageUrls ? smallImageUrls : '');
-                                            binding.$data.imageLargeUrl(largeImageUrls ? largeImageUrls : '');
+                                            binding.$data.imageSmallUrl(smallImageUrls ? viewModel.params.data.removeImagePath(smallImageUrls) : '');
+                                            binding.$data.imageLargeUrl(largeImageUrls ? viewModel.params.data.removeImagePath(largeImageUrls) : '');
                                             binding.$data.imageDescription(imageDescriptions ? imageDescriptions : '');
                                         }
                                     break;
@@ -282,8 +290,8 @@ class Dependents {
 
                                             binding.$data.itemNumber(itemNumbers ? itemNumbers : '');
                                             binding.$data.itemUrl(itemUrls ? itemUrls : '');
-                                            binding.$data.imageSmallUrl(smallImageUrls ? smallImageUrls : '');
-                                            binding.$data.imageLargeUrl(largeImageUrls ? largeImageUrls : '');
+                                            binding.$data.imageSmallUrl(smallImageUrls ? viewModel.params.data.removeImagePath(smallImageUrls) : '');
+                                            binding.$data.imageLargeUrl(largeImageUrls ? viewModel.params.data.removeImagePath(largeImageUrls) : '');
                                             binding.$data.imageDescription(imageDescriptions ? imageDescriptions : '');
                                         }
                                     break;
@@ -358,8 +366,8 @@ class Dependents {
                                         binding.$data.seo2ItemNumber(seo2_items ? seo2_items : '');
                                         binding.$data.seo2ItemUrl(seo2_items_urls ? seo2_items_urls : '');
 
-                                        binding.$data.seo2ImageSmallUrl(seo2_small_images ? seo2_small_images : '');
-                                        binding.$data.seo2ImageLargeUrl(seo2_large_images ? seo2_large_images : '');
+                                        binding.$data.seo2ImageSmallUrl(seo2_small_images ? viewModel.params.data.removeImagePath(seo2_small_images) : '');
+                                        binding.$data.seo2ImageLargeUrl(seo2_large_images ? viewModel.params.data.removeImagePath(seo2_large_images) : '');
                                         binding.$data.seo2ImageDescription(seo2_image_descriptions ? seo2_image_descriptions : '');
                                     break;
                                     default:
@@ -371,8 +379,8 @@ class Dependents {
                                         binding.$data.itemUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.link : '');
                                         binding.$data.selectedModuleScreenSize(!!mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn ? mappingOrder[alphaChar][moduleType]['sections'][i].displayModuleOn : '');
 
-                                        binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small : '');
-                                        binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large : '');
+                                        binding.$data.imageSmallUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? viewModel.params.data.removeImagePath(mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.small) : '');
+                                        binding.$data.imageLargeUrl(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? viewModel.params.data.removeImagePath(mappingOrder[alphaChar][moduleType]['sections'][i].image.customImage.large) : '');
                                         binding.$data.imageDescription(!!mappingOrder[alphaChar][moduleType]['sections'][i].image ? mappingOrder[alphaChar][moduleType]['sections'][i].image.description : '');
 
                                         binding.$data.headline(!!mappingOrder[alphaChar][moduleType]['sections'][i].headline ? mappingOrder[alphaChar][moduleType]['sections'][i].headline.text : '');
@@ -394,13 +402,26 @@ class Dependents {
             },
             update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
                 var uniqueId = viewModel.uniqueId;
-                var position = document.getElementById('sortableContainer').children.length;
+                // var position = document.getElementById('sortableContainer').children.length;
                 var moduleType = bindingContext.$parent;
                 var uniqueIdArry = document.getElementById('sortableContainer').children;
+                var myArray = Array.from(uniqueIdArry);
+                var position;
+
+
+                //console.log('myArray ',myArray);
+                myArray.forEach((el, index) => {
+                    if ('uniqueId-'+uniqueId === el.id) {
+                        position = index;
+                    }
+
+                })
 
                 viewModel.params.data.mappingOrder[uniqueId] = {};
                 viewModel.params.data.mappingOrder[uniqueId][position] = {};
                 viewModel.params.data.mappingOrder[uniqueId][position][moduleType] = {};
+
+                //console.log('mappingOrder ',viewModel.params.data.mappingOrder)
 
                 switch (moduleType) {
                     case 'large-feature-module':
@@ -410,8 +431,8 @@ class Dependents {
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                                        "small": viewModel.addImagePath(viewModel.imageSmallUrl().trim()),
+                                        "large": viewModel.addImagePath(viewModel.imageLargeUrl().trim())
                                     },
                                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
@@ -441,10 +462,8 @@ class Dependents {
                                 },
                                 'image': {
                                     'customImage': {
-                                        // "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        // "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
-                                        "small": viewModel.imagePath(viewModel.imageSmallUrl().trim()),
-                                        "large": viewModel.imagePath(viewModel.imageLargeUrl().trim())
+                                        "small": viewModel.addImagePath(viewModel.imageSmallUrl().trim()),
+                                        "large": viewModel.addImagePath(viewModel.imageLargeUrl().trim())
                                     },
                                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
@@ -474,8 +493,8 @@ class Dependents {
                                 },
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                                        "small": viewModel.addImagePath(viewModel.imageSmallUrl().trim()),
+                                        "large": viewModel.addImagePath(viewModel.imageLargeUrl().trim())
                                     },
                                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
@@ -510,8 +529,8 @@ class Dependents {
                                 },
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                                        "small": viewModel.addImagePath(viewModel.imageSmallUrl().trim()),
+                                        "large": viewModel.addImagePath(viewModel.imageLargeUrl().trim())
                                     },
                                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
@@ -565,8 +584,8 @@ class Dependents {
                                         'item': item.trim(),
                                         'image': {
                                             'customImage': {
-                                                'small': smallImageList[index] === undefined ? '' : smallImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                                'large': largeImageList[index] === undefined ? '' : largeImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                                                'small': smallImageList[index] === undefined ? '' : viewModel.addImagePath(smallImageList[index].trim()),
+                                                'large': largeImageList[index] === undefined ? '' : viewModel.addImagePath(largeImageList[index].trim())
                                             },
                                             'link': itemsUrlList[index] === undefined ? '' : itemsUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                             'description': imageDescriptionList[index] === undefined ? '' : imageDescriptionList[index]
@@ -607,8 +626,8 @@ class Dependents {
                                         'item': item.trim(),
                                         'image': {
                                             'customImage': {
-                                                'small': smallImageList[index] === undefined ? '' : smallImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                                'large': largeImageList[index] === undefined ? '' : largeImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                                                'small': smallImageList[index] === undefined ? '' : viewModel.addImagePath(smallImageList[index].trim()),
+                                                'large': largeImageList[index] === undefined ? '' : viewModel.addImagePath(largeImageList[index].trim())
                                             },
                                             'link': itemsUrlList[index] === undefined ? '' : itemsUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                             'description': imageDescriptionList[index] === undefined ? '' : imageDescriptionList[index]
@@ -630,8 +649,8 @@ class Dependents {
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                                        "small": viewModel.addImagePath(viewModel.imageSmallUrl().trim()),
+                                        "large": viewModel.addImagePath(viewModel.imageLargeUrl().trim())
                                     },
                                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
@@ -656,8 +675,8 @@ class Dependents {
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                                        "small": viewModel.addImagePath(viewModel.imageSmallUrl().trim()),
+                                        "large": viewModel.addImagePath(viewModel.imageLargeUrl().trim())
                                     },
                                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
@@ -682,8 +701,8 @@ class Dependents {
                                 'displayModuleOn': viewModel.selectedModuleScreenSize(),
                                 'image': {
                                     'customImage': {
-                                        "small": viewModel.imageSmallUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                        "large": viewModel.imageLargeUrl().replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                                        "small": viewModel.addImagePath(viewModel.imageSmallUrl().trim()),
+                                        "large": viewModel.addImagePath(viewModel.imageLargeUrl().trim())
                                     },
                                     'link': viewModel.itemUrl().replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                     'description': viewModel.imageDescription()
@@ -746,8 +765,8 @@ class Dependents {
                                         'item': item.trim(),
                                         'image': {
                                             'customImage': {
-                                                'small': seo2SmallImageList[index] === undefined ? '' : seo2SmallImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim(),
-                                                'large': seo2LargeImageList[index] === undefined ? '' : seo2LargeImageList[index].replace(/http:\/\/www.uncommongoods.com/g, "").trim()
+                                                'small': seo2SmallImageList[index] === undefined ? '' : viewModel.addImagePath(seo2SmallImageList[index].trim()),
+                                                'large': seo2LargeImageList[index] === undefined ? '' : viewModel.addImagePath(seo2LargeImageList[index].trim())
                                             },
                                             'link': seo2ItemsUrlList[index] === undefined ? '' : seo2ItemsUrlList[index].replace(/http:\/\/www.uncommongoods.com/g, "").replace(/http:\/\/blog.uncommongoods.com/g, "//blog.uncommongoods.com").replace(/é/g, "e").replace(/\s+/g,""),
                                             'description': seo2ImageDescriptionList[index] === undefined ? '' : seo2ImageDescriptionList[index]
@@ -1817,7 +1836,7 @@ ko.components.register('homePageTool', {
               {name: 'Button Link Double (BD)', value: 'button-link-double-module'},
               {name: 'SEO Links (SEO)', value: 'seo-link-module'}
           ];
-          this.jsonOrder = function(arry) {
+          this.jsonOrder = function(arry, preview) {
               var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
               var hpJson = {};
               var hpDate = this.date();
@@ -1825,14 +1844,16 @@ ko.components.register('homePageTool', {
               arry.forEach((obj, index) => {
                   hpJson[alpha.charAt(index)] = obj;
               })
-
+              console.log('jsonOrder ',hpJson)
               $.ajax({
                   type: "POST",
                   url: "http://localhost:5000/hp_config",
                   data: formToJSON(),
                   dataType: "json",
                   success: function() {
-                     window.open('http://localhost:9000/simulator/?date='+hpDate, '_blank');
+                      if (preview) {
+                          window.open('http://localhost:9000/simulator/?date='+hpDate, '_blank');
+                      }
                   }
               }).done(function(msg) {
                   console.log("Data Saved: " + msg);
@@ -1883,7 +1904,44 @@ ko.components.register('homePageTool', {
               })
 
               duplicateObjects = duplicateObjects.filter(function(n){ return n != '' });
-              this.jsonOrder(duplicateObjects);
+              //console.log('preview duplicateObjects ',duplicateObjects)
+              this.jsonOrder(duplicateObjects, true);
+          }
+          this.saveHomepage = function(e) {
+              var mappingOrderCopy = JSON.parse(JSON.stringify(this.mappingOrder));
+              var removedUniqueIdJson = {};
+              var duplicateModuleNames = [];
+              var duplicateObjects = [];
+              var concatArray = [];
+              var orderedJson = {};
+
+              //removes uniqueIds
+              Object.keys(mappingOrderCopy).forEach(function(key) {
+                 Object.assign(removedUniqueIdJson, mappingOrderCopy[key]);
+              });
+
+              Object.keys(removedUniqueIdJson).sort().forEach(function(key,index) {
+                  orderedJson[key] = removedUniqueIdJson[key];
+              });
+
+              Object.keys(orderedJson).forEach(function(key,index) {
+                  duplicateModuleNames.push(Object.keys(orderedJson[key])[0]);
+                  duplicateObjects.push(orderedJson[key]);
+              });
+
+              var adjecentCombine = reducerFilter([],duplicateModuleNames);
+
+              adjecentCombine.forEach((el,index) => {
+                  var moduleType = Object.keys(duplicateObjects[index])[0];
+                  if (el === 'concat') {
+                      duplicateObjects[index+1][moduleType].sections = duplicateObjects[index][moduleType].sections.concat(duplicateObjects[index+1][moduleType].sections);
+                      duplicateObjects.splice(index,1,'');
+                  }
+              })
+
+              duplicateObjects = duplicateObjects.filter(function(n){ return n != '' });
+              //console.log('save duplicateObjects ',duplicateObjects)
+              this.jsonOrder(duplicateObjects, false);
           }
           this.reRender = function renderLoadedJson() {
               this.selectedModules.removeAll();
@@ -1955,7 +2013,7 @@ ko.components.register('homePageTool', {
                       }
                   })
               })
-              console.log('mappingOrder ',mappingOrder)
+              //console.log('mappingOrder ',mappingOrder)
           };
           this.loadHomePage = function(e) {
               var loadDate = this.date();
@@ -2031,13 +2089,16 @@ ko.components.register('homePageTool', {
             </div>
         </div>
 
-        <div class="row" style="max-width:200px; margin: 0;">
-            <div class="small-2 columns" style="padding-right: 0;">
-                <span class="prefix"><i class="fa fa-calendar" style="line-height: inherit;"></i></span>
+        <div class="row">
+
+            <div class="small-2 columns calIcon">
+                <span class="prefix"><i class="fa fa-calendar"></i></span>
             </div>
-            <div class="small-10 columns" style="padding-left: 0;">
+
+            <div class="small-2 end columns calInput">
                 <input type="text" class="span2" id="dp1" data-bind="datepicker">
             </div>
+
         </div>
 
         <div class="row">
@@ -2047,12 +2108,13 @@ ko.components.register('homePageTool', {
                 <button data-bind="event:{ click: previewHomepage }">Preview Home Page</button>
             </div>
 
-            <div class="small-4 columns">
+            <div class="small-4 columns end">
                 <select data-bind="options: moduleTypes, value: selection ,optionsText: 'name', optionsValue: 'value', optionsCaption: 'Choose Module Type'"></select>
             </div>
 
             <div class="small-8 columns end">
                 <button data-bind="event:{ click: createModule }">Create Module</button>
+                <button data-bind="event:{ click: saveHomepage }">Save</button>
             </div>
         </div>
 
